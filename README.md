@@ -7,7 +7,7 @@
 - 左侧多层课程目录、中间文章、右侧页内目录。
 - 中文/英文全文搜索、浅色/深色切换、代码高亮与复制。
 - 课程与笔记以 Markdown 保存在 docs/，上传到 docs/notes/ 的笔记自动进入导航。
-- Matter.js 物理引擎驱动的 Obsidian 风格关系图：节点拖拽、画布平移、滚轮缩放、搜索高亮、关联筛选、文章跳转、暂停和重置。
+- Matter.js 物理引擎驱动的 Obsidian 风格关系图：连续软排斥、黏性耦合、接触形变、流场漂移、液态/清晰模式切换、节点拖拽、画布平移、滚轮缩放、搜索高亮、关联筛选、文章跳转、暂停和重置。
 - 图谱从文章中的相对 Markdown 链接自动生成；不使用 AI 推测关联。
 - 页面底部链接到 GitHub Discussions，提供可选 Giscus 嵌入模板。
 - 原先的笔记工作台保留为 /workbench/ 草稿辅助工具。
@@ -63,10 +63,11 @@ python -m http.server 8080 --directory site --bind 127.0.0.1
 ## 验证
 
 ```powershell
+python build.py
 python -m unittest discover -s tests -p "test_*.py"
 node tests/core.test.cjs
+node tests/fluid.test.cjs
 node --check docs/assets/graph.js
-python build.py
 ```
 
 图谱使用稳定的目录 URL；节点位置仅用于临时探索，刷新后重新布局。提供文章列表方便键盘操作，系统偏好减少动画时默认暂停运动。

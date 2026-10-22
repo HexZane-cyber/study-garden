@@ -1,0 +1,34 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+const assert=require('node:assert/strict');
+const Matter=require('../docs/assets/vendor/matter.min.js');
+const root=path.join(__dirname,'..');
+let engine,updates=0;
+const physics={...Matter,Engine:{...Matter.Engine,create:options=>(engine=Matter.Engine.create(options)),update:(...args)=>{updates++;return Matter.Engine.update(...args);}}};
+const gradient={addColorStop(){}};
+const ctx=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient},{get:(obj,key)=>key in obj?obj[key]:()=>{}});
+const elements=new Map();
+function element(id){if(!elements.has(id))elements.set(id,{textContent:'',value:'',children:[],events:{},append(...items){this.children.push(...items);},replaceChildren(){this.children=[];},setAttribute(){},addEventListener(type,fn){this.events[type]=fn;},getContext:()=>ctx,getBoundingClientRect:()=>({width:800,height:510,left:0,top:0}),setPointerCapture(){}});return elements.get(id);}
+const frames=[];
+const data=JSON.parse(fs.readFileSync(path.join(root,'docs/assets/graph-data.json'),'utf8'));
+const context=vm.createContext({console,URL,Math,Matter:physics,devicePixelRatio:1,window:{Matter:physics,addEventListener(){}},document:{body:{dataset:{mdColorScheme:'slate'}},hidden:false,currentScript:{src:'https://example.com/study-garden/assets/graph.js'},getElementById:element,createElement:()=>element(`generated-${Math.random()}`),createTextNode:s=>s},matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>data})});
+(async()=>{
+  vm.runInContext(fs.readFileSync(path.join(root,'docs/assets/graph.js'),'utf8'),context);
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(engine.world.bodies.length,data.nodes.length);
+  assert.equal(engine.world.constraints.length,data.edges.length);
+  assert(engine.world.bodies.every(b=>b.collisionFilter.group===-1&&b.restitution===0));
+  for(let i=0;i<600;i++)frames.shift()(i*1000/60);
+  assert(updates>590&&updates<605);
+  assert(engine.world.bodies.every(b=>Number.isFinite(b.position.x)&&Number.isFinite(b.position.y)));
+  assert(engine.world.bodies.every(b=>Math.hypot(b.position.x,b.position.y)<2000));
+  element('graph-pause').onclick();const before=updates;
+  for(let i=600;i<660;i++)frames.shift()(i*1000/60);
+  assert.equal(updates,before);
+  element('graph-mode').onclick({currentTarget:element('graph-mode')});
+  assert.equal(element('graph-mode').textContent,'清晰模式');
+  element('graph-search').events.input({target:{value:'向量与矩阵'}});
+  assert(element('graph-info').children.length>1);
+  console.log(`Fluid graph passed: ${data.nodes.length} bodies, ${data.edges.length} springs, 600 frames, pause and selection.`);
+})().catch(error=>{console.error(error);process.exitCode=1;});
