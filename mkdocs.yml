@@ -1,0 +1,92 @@
+site_name: 知行 · 自学手册
+site_description: 课程、笔记与知识之间的连接。
+site_author: HexZane
+repo_url: https://github.com/HexZane-cyber/study-garden
+repo_name: HexZane-cyber/study-garden
+edit_uri: edit/main/docs/
+docs_dir: docs
+site_dir: site
+theme:
+  name: material
+  language: zh
+  custom_dir: overrides
+  font: false
+  icon:
+    logo: material/book-open-page-variant
+    repo: fontawesome/brands/github
+  palette:
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: 切换浅色模式
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: 切换深色模式
+  features:
+    - navigation.top
+    - navigation.footer
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - content.action.edit
+    - content.code.copy
+plugins:
+  - search:
+      lang: [zh, en]
+hooks:
+  - hooks.py
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.arithmatex:
+      generic: true
+extra_css:
+  - assets/extra.css
+extra_javascript:
+  - assets/vendor/matter.min.js
+  - assets/graph.js
+extra:
+  generator: false
+  giscus:
+    repo_id: ''
+    category_id: ''
+copyright: 知行 · 保持好奇，持续学习。
+nav:
+  - 前言: index.md
+  - 如何使用这本手册: guide.md
+  - 学习路线: roadmap.md
+  - 必学工具:
+      - Git 与知识管理: tools/git.md
+      - Markdown 写作: tools/markdown.md
+  - 数学基础:
+      - 数学基础学习页: courses/math.md
+  - 编程入门:
+      - 计算机科学导论: courses/cs-intro.md
+      - Python 与项目实践: courses/python.md
+  - 数据结构与算法:
+      - 数据结构与算法学习页: courses/algorithms.md
+  - 计算机系统:
+      - 深入理解计算机系统: courses/systems.md
+  - 人工智能:
+      - 机器学习入门: courses/ml.md
+  - 我的笔记:
+      - 笔记索引: notes/index.md
+  - 知识关系图: graph.md
+  - 上传与发布: publish.md
+  - 交流讨论: discussion.md

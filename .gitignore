@@ -1,0 +1,8 @@
+dist/
+__pycache__/
+*.zip
+.deps/
+.pip-tmp/
+.tooling/
+site/
+docs/assets/graph-data.json

@@ -1,0 +1,16 @@
+{% if page.meta.comments != false %}
+<section class="wiki-comment" id="discussion">
+  <h2>讨论与补充</h2>
+  {% if config.extra.giscus.repo_id and config.extra.giscus.category_id %}
+  <script src="https://giscus.app/client.js"
+    data-repo="{{ config.repo_name }}" data-repo-id="{{ config.extra.giscus.repo_id }}"
+    data-category="General" data-category-id="{{ config.extra.giscus.category_id }}"
+    data-mapping="pathname" data-strict="1" data-reactions-enabled="1"
+    data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme"
+    data-lang="zh-CN" crossorigin="anonymous" async></script>
+  {% else %}
+  <p>有疑问、补充或新的理解？可以在仓库中围绕本页发起讨论。</p>
+  <a class="md-button" href="{{ config.repo_url }}/discussions" target="_blank" rel="noopener noreferrer">前往 GitHub Discussions</a>
+  {% endif %}
+</section>
+{% endif %}
