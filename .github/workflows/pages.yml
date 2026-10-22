@@ -26,6 +26,13 @@ jobs:
         run: pip install -r requirements.txt
       - name: Build documentation and knowledge graph
         run: python build.py
+      - name: Validate content, proposals and encryption
+        run: |
+          python -m unittest discover -s tests -p 'test_*.py'
+          node tests/core.test.cjs
+          node tests/fluid.test.cjs
+          node tests/contributions.test.cjs
+          node tests/vault.test.cjs
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site

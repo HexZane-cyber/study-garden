@@ -1,0 +1,60 @@
+name: 课程投稿
+description: 推荐一门课程，审核后由维护者收录到正式目录。
+title: '[课程投稿] '
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: '感谢参与共建。此表单提交课程提案，不会直接改动网站。请勿上传无权分享的课程材料或个人隐私。'
+  - type: input
+    id: course_name
+    attributes:
+      label: 课程名称
+      placeholder: 课程代码、名称及授课学校
+    validations:
+      required: true
+  - type: input
+    id: course_url
+    attributes:
+      label: 官方课程链接
+      placeholder: https://
+    validations:
+      required: true
+  - type: input
+    id: category
+    attributes:
+      label: 课程分类
+      placeholder: 例如：数学基础、编程入门、计算机系统、人工智能
+    validations:
+      required: true
+  - type: input
+    id: prerequisites
+    attributes:
+      label: 先修要求
+      placeholder: 需要哪些知识？是否适合零基础？
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: 推荐理由与学习建议
+      description: 介绍内容、优点、作业和适合的人群，说明你实际学习过的部分。
+    validations:
+      required: true
+  - type: input
+    id: workload
+    attributes:
+      label: 预计投入
+      placeholder: 例如：每周 6 小时，约 10 周（个人估计）
+  - type: textarea
+    id: resources
+    attributes:
+      label: 补充资源
+      description: 可选；请仅分享官方或有权分享的链接。
+  - type: checkboxes
+    id: agreement
+    attributes:
+      label: 投稿确认
+      options:
+        - label: 我确认内容可公开分享，并理解提案需审核后才会成为正式课程。
+          required: true

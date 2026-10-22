@@ -1,0 +1,27 @@
+const assert=require('node:assert/strict');
+global.crypto=require('node:crypto').webcrypto;
+const V=require('../docs/assets/vault-core.js');
+(async()=>{
+ const {space,key}=await V.createSpace('Test private space','correct horse battery staple');
+ assert.equal(key.extractable,false);
+ const other=await V.createSpace('Other isolated space','correct horse battery staple');
+ const unlocked=await V.unlock(space,'correct horse battery staple');
+ await assert.rejects(()=>V.unlock(space,'wrong password'));
+ const plain=V.encoder.encode('PRIVATE TEXTBOOK NAME and private content');
+ const a=await V.encrypt(key,plain,`${space.id}|file|0`),b=await V.encrypt(key,plain,`${space.id}|file|0`);
+ assert.notEqual(V.base64(a.iv),V.base64(b.iv));
+ assert.equal(V.decoder.decode(await V.decrypt(unlocked,a,`${space.id}|file|0`)),V.decoder.decode(plain));
+ assert(!JSON.stringify(V.packRecord(a)).includes('PRIVATE TEXTBOOK'));
+ await assert.rejects(()=>V.decrypt(other.key,a,`${space.id}|file|0`));
+ await assert.rejects(()=>V.decrypt(unlocked,a,`${space.id}|other-file|0`));
+ const bad=new Uint8Array(a.data.slice(0));bad[0]^=1;
+ await assert.rejects(()=>V.decrypt(unlocked,{iv:a.iv,data:bad},`${space.id}|file|0`));
+ const restored=V.unpackRecord(V.packRecord(a));
+ assert.equal(V.decoder.decode(await V.decrypt(key,restored,`${space.id}|file|0`)),V.decoder.decode(plain));
+ const files=[{id:'a',path:'notes/example.md'},{id:'b',path:'images/test.png'},{id:'c',path:'other/duplicate.md'},{id:'d',path:'another/duplicate.md'}];
+ assert.equal(V.resolveLink('example|alias','notes/current.md',files).id,'a');
+ assert.equal(V.resolveLink('../images/test.png','notes/current.md',files).id,'b');
+ assert.equal(V.resolveLink('duplicate','notes/current.md',files),null);
+ await assert.rejects(()=>V.createSpace('space','short'));
+ console.log('Vault checks passed: encrypted round trip, wrong password, tamper detection, file binding, backup record, Obsidian links.');
+})().catch(error=>{console.error(error);process.exitCode=1;});

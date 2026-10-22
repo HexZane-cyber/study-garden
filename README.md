@@ -11,6 +11,23 @@
 - 图谱从文章中的相对 Markdown 链接自动生成；不使用 AI 推测关联。
 - 页面底部链接到 GitHub Discussions，提供可选 Giscus 嵌入模板。
 - 原先的笔记工作台保留为 /workbench/ 草稿辅助工具。
+- 共建课程：站内表单预览 → GitHub Issue → 维护者审核 → 生成课程 Markdown → 正式收录。提案状态不会冒充已发布内容。
+- 本机加密私密空间：PDF、Markdown、TXT、图片与 Obsidian 文件夹导入，基础双向链接浏览，笔记编辑，自动锁定、加密备份与恢复。
+- 收藏文章和最近阅读记录。
+
+## 私密空间的边界
+
+这是浏览器本地加密空间，不是云端账号或跨设备同步服务。每个空间使用 PBKDF2-HMAC-SHA256（600,000 次）派生独立的 AES-256-GCM 密钥；每个 1 MB 分块使用随机 96 位 IV，并通过附加认证数据绑定空间、文件和分块序号。密钥不可导出，不持久化口令。文件名、路径、正文和附件均加密；空间名称在本机列表中可见。
+
+单文件最大 128 MB，单空间最大 256 MB。加密备份为 .sgvault，不含明文文件名和正文；原口令无法找回。清理浏览器数据可能丢失未备份的资料。解锁期间，已控制设备或同源页面脚本仍可能接触明文，不能把它当作对受控设备的保护。
+
+导入 Obsidian 请选择文件夹，支持 [[笔记]]、[[路径|别名]] 和 ![[图片]] 的基础解析；不执行插件或 HTML。改动不会同步回原 Obsidian 文件夹。
+
+## 共建与审核
+
+外部访客使用 /contribute/ 投稿到 GitHub Issue，不能通过投稿表单写入仓库。维护者审核后，使用卡片中的“生成收录草稿”提交 docs/courses/community/issue-N.md。构建自动识别 submission_issue 元数据并更新收录状态。
+
+默认公开仓库不向访客授予写入权限，未配置自动合并或自动发布 Issue 内容。CODEOWNERS 指定维护者，外部 PR 的内容范围检查只允许新增社区课程 Markdown。若以后邀请具有写入权限的协作者，请在 Settings → Branches 开启主分支保护，要求 PR 审核、Code Owner 审核以及 contribution-scope 检查；CODEOWNERS 文件自身不等同于强制分支保护。
 
 ## 本地运行
 
@@ -67,7 +84,16 @@ python build.py
 python -m unittest discover -s tests -p "test_*.py"
 node tests/core.test.cjs
 node tests/fluid.test.cjs
+node tests/contributions.test.cjs
+node tests/vault.test.cjs
 node --check docs/assets/graph.js
 ```
 
 图谱使用稳定的目录 URL；节点位置仅用于临时探索，刷新后重新布局。提供文章列表方便键盘操作，系统偏好减少动画时默认暂停运动。
+
+私密空间完整集成测试（使用内存数据库和虚拟页面，测试数据不进入真实浏览器）：
+
+```powershell
+npm install --prefix tests
+node tests/vault-integration.test.cjs
+```

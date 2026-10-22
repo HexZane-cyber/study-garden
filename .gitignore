@@ -4,5 +4,8 @@ __pycache__/
 .deps/
 .pip-tmp/
 .tooling/
+tests/node_modules/
 site/
 docs/assets/graph-data.json
+docs/assets/published-courses.json
+*-preview.png

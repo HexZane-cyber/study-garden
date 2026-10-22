@@ -61,6 +61,12 @@ extra_css:
 extra_javascript:
   - assets/vendor/matter.min.js
   - assets/graph.js
+  - assets/contribution-model.js
+  - assets/community.js
+  - assets/reading.js
+  - assets/vendor/fflate.min.js
+  - assets/vault-core.js
+  - assets/vault.js
 extra:
   generator: false
   giscus:
@@ -87,6 +93,11 @@ nav:
       - 机器学习入门: courses/ml.md
   - 我的笔记:
       - 笔记索引: notes/index.md
+  - 社区课程:
+      - 已收录课程: courses/community/index.md
+  - 共建课程: contribute.md
+  - 我的书签: library.md
+  - 个人私密空间: private.md
   - 知识关系图: graph.md
   - 上传与发布: publish.md
   - 交流讨论: discussion.md

@@ -1,0 +1,7 @@
+# Review ownership; enforcement requires the protected branch rule.
+* @HexZane-cyber
+/docs/courses/community/ @HexZane-cyber
+/.github/ @HexZane-cyber
+/mkdocs.yml @HexZane-cyber
+/hooks.py @HexZane-cyber
+/docs/assets/ @HexZane-cyber

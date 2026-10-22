@@ -37,6 +37,10 @@ def on_config(config):
     for path in sorted((Path(config['docs_dir']) / 'notes').rglob('*.md')):
         if path.name != 'index.md':
             note_nav.append({title(path): path.relative_to(config['docs_dir']).as_posix()})
+    community_nav = next(item['社区课程'] for item in config['nav'] if '社区课程' in item)
+    for path in sorted((Path(config['docs_dir']) / 'courses/community').glob('*.md')):
+        if path.name != 'index.md':
+            community_nav.append({title(path): path.relative_to(config['docs_dir']).as_posix()})
     return config
 
 def on_pre_build(config):
@@ -44,6 +48,14 @@ def on_pre_build(config):
     path = Path(config['docs_dir']) / 'assets/graph-data.json'
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
+    published = {}
+    for course in (Path(config['docs_dir']) / 'courses/community').glob('*.md'):
+        text = course.read_text(encoding='utf-8')
+        match = re.match(r'\A---\s*\n[\s\S]*?^submission_issue:\s*(\d+)\s*$[\s\S]*?^---\s*$', text, re.MULTILINE)
+        if match:
+            rel = course.relative_to(config['docs_dir']).as_posix()
+            published[match[1]] = rel[:-3] + '/'
+    (path.parent / 'published-courses.json').write_text(json.dumps(published, ensure_ascii=False), encoding='utf-8')
 
 def on_files(files, config):
     from mkdocs.structure.files import File
