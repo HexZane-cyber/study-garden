@@ -36,6 +36,7 @@ jobs:
           node tests/liquid-surface.test.cjs
           node tests/article-activity.test.cjs
           node tests/contributions.test.cjs
+          node tests/vault-formats.test.cjs
           node tests/vault.test.cjs
       - uses: actions/upload-pages-artifact@v3
         with:

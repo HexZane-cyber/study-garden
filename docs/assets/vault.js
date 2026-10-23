@@ -8,7 +8,8 @@
   const ensureSession=gen=>{if(gen!==generation||!key)throw stale();};
   const dirty=()=>editor&&editor.input.value!==editor.original;
   const canLeave=()=>!dirty()||confirm('笔记有尚未加密保存的修改。确定放弃这些修改吗？');
-  const supported=/\.(pdf|md|markdown|txt|png|jpe?g|webp|gif)$/i;
+  const F=window.VaultFormats;
+  $('#vault-file-input').accept=F.accept;
   const uuid=/^[a-f0-9-]{36}$/i;
   const message=text=>{$('#vault-status').textContent=text;};
   const request=req=>new Promise((resolve,reject)=>{req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});
@@ -17,11 +18,11 @@
   async function put(name,record){const tx=db.transaction(name,'readwrite');const done=completed(tx);tx.objectStore(name).put(record);await done;}
   const get=(name,id)=>request(store(name).get(id));
   const all=(name,index,value)=>request(index?store(name).index(index).getAll(value):store(name).getAll());
-  function revoke(){for(const url of urls)URL.revokeObjectURL(url);urls=[];}
+  function revoke(){document.querySelectorAll('#vault-reader audio,#vault-reader video').forEach(media=>{media.pause();media.removeAttribute('src');media.load();});for(const url of urls)URL.revokeObjectURL(url);urls=[];}
   function blobURL(blob){const url=URL.createObjectURL(blob);urls.push(url);return url;}
   function download(name,blob){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
   function formatSize(n){return n<1024*1024?`${Math.round(n/1024)} KB`:`${(n/1024/1024).toFixed(1)} MB`;}
-  function type(f){return /\.(md|markdown|txt)$/i.test(f.path)?'note':/\.pdf$/i.test(f.path)?'pdf':'image';}
+  function type(f){return F.kind(f.path);}
   function controls(){
     document.querySelectorAll('#vault-create button,#vault-unlock button,#vault-open button,#vault-restore').forEach(b=>{
       b.disabled=busy&&b.id!=='vault-lock'&&b.id!=='vault-cancel-import';
@@ -108,7 +109,7 @@
     for(const f of filtered){
       const b=document.createElement('button');b.type='button';b.className='vault-file'+(active===f.id?' active':'');b.setAttribute('aria-current',String(active===f.id));
       const title=document.createElement('strong'),small=document.createElement('small');title.textContent=f.path.split('/').pop();
-      small.textContent=`${type(f)==='pdf'?'PDF':type(f)==='note'?'笔记':'图片'} · ${f.path} · ${formatSize(f.size)}`;
+      small.textContent=`${F.labels[type(f)]} · ${f.path} · ${formatSize(f.size)}`;
       b.append(title,small);b.onclick=()=>{if(canLeave())run(()=>read(f));};fragment.append(b);
     }
     list.append(fragment);controls();
@@ -144,7 +145,7 @@
     for(const file of [...incoming]){
       const source=folder?file.webkitRelativePath||file.name:file.name;
       const path=V.normalizePath(folder?source.split('/').slice(1).join('/')||file.name:source);
-      if(!supported.test(file.name)||source.split('/').some(s=>s.startsWith('.'))||known.has(path)){skipped++;continue;}
+      if(!F.supported(file.name)||source.split('/').some(s=>s.startsWith('.'))||known.has(path)){skipped++;continue;}
       if(file.size>V.MAX_FILE)throw Error(`${file.name} 超过 128 MB，本批尚未导入`);
       known.add(path);accepted.push({file,path});
     }
@@ -205,7 +206,7 @@
   async function read(f){
     const gen=generation;message('正在解密资料…');const blob=await fileBlob(f);ensureSession(gen);
     // Complete asynchronous text decoding before installing any new reader state.
-    const text=type(f)==='note'&&f.size<=4*1024*1024?await blob.text():null;ensureSession(gen);
+    const text=F.text(f.path)&&f.size<=4*1024*1024?await blob.text():null;ensureSession(gen);
     active=f.id;editor=null;revoke();const reader=$('#vault-reader');reader.replaceChildren();
     const h=document.createElement('h2');h.textContent=f.path;reader.append(h);
     const actions=document.createElement('div');actions.className='vault-toolbar';
@@ -215,11 +216,11 @@
       if(!confirm(`删除「${f.path}」？${dirty()?'尚未保存的修改也会丢弃。':''}请确认已有需要的备份。`))return;
       await removeFile(f.id);ensureSession(gen);active=null;editor=null;revoke();readerEmpty();await loadFiles();message('资料已从本浏览器删除。');
     });reader.append(actions);
-    if(type(f)==='note'){
+    if(F.text(f.path)){
       if(text===null){const p=document.createElement('p');p.textContent='笔记超过 4 MB，请下载后用编辑器阅读。';reader.append(p);}
       else{
-        const article=document.createElement('article');article.className='vault-markdown';article.innerHTML=markdown(text,f);reader.append(article);
-        button('编辑笔记',()=>editNote(f,text,article));
+        const article=document.createElement('article');article.className='vault-markdown';if(F.markdown(f.path))article.innerHTML=markdown(text,f);else{const pre=document.createElement('pre');pre.textContent=text;article.append(pre);}reader.append(article);
+        if(type(f)==='note')button('编辑笔记',()=>editNote(f,text,article));
         for(const image of article.querySelectorAll('[data-vault-image]')){
           const target=files.find(x=>x.id===image.dataset.vaultImage);
           if(target){const imageBlob=await fileBlob(target);ensureSession(gen);image.src=blobURL(imageBlob);}
@@ -228,7 +229,11 @@
     }else if(type(f)==='pdf'){
       const iframe=document.createElement('iframe');iframe.title=f.name;iframe.src=blobURL(new Blob([blob],{type:'application/pdf'}));iframe.className='vault-pdf';reader.append(iframe);
       const p=document.createElement('p');p.className='reading-meta';p.textContent='若浏览器不支持 PDF 内嵌预览，请使用“下载原文件”在本机阅读。';reader.append(p);
-    }else{const image=document.createElement('img');image.alt=f.name;image.src=blobURL(blob);image.className='vault-image';reader.append(image);}
+    }else if(type(f)==='image'){const image=document.createElement('img');image.alt=f.name;image.src=blobURL(new Blob([blob],{type:F.mime(f.path)}));image.className='vault-image';reader.append(image);
+    }else if(['audio','video'].includes(type(f))){
+      const media=document.createElement(type(f));media.controls=true;media.preload='metadata';media.src=blobURL(new Blob([blob],{type:F.mime(f.path)}));media.style.maxWidth='100%';media.setAttribute('aria-label',f.name);reader.append(media);
+      const hint=document.createElement('p');hint.textContent='播放支持取决于浏览器及文件编码，无法播放时可下载原文件。';reader.append(hint);
+    }else{const hint=document.createElement('p');hint.textContent='原文件已加密保存。此格式暂不提供网页预览，请点击“下载原文件”，使用本机应用打开。压缩包仅保存原件，不自动解压。';reader.append(hint);}
     renderFiles();message('资料已在本机解密，使用后请锁定空间。');
   }
   async function backup(){

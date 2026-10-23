@@ -10,7 +10,7 @@ SITE = ROOT / 'site'
 FEATURE_SCRIPTS = {
     'graph/index.html': ['assets/vendor/matter.min.js', 'assets/liquid-surface.js', 'assets/graph-appearance.js', 'assets/vendor/graph3d.bundle.js', 'assets/graph.js'],
     'contribute/index.html': ['assets/contribution-model.js', 'assets/community.js'],
-    'private/index.html': ['assets/vendor/fflate.min.js', 'assets/vault-core.js', 'assets/vault.js'],
+    'private/index.html': ['assets/vendor/fflate.min.js', 'assets/vault-core.js', 'assets/vault-formats.js', 'assets/vault.js'],
 }
 ALL_FEATURE_SCRIPTS = {name for names in FEATURE_SCRIPTS.values() for name in names}
 

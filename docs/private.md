@@ -15,11 +15,11 @@ comments: false
 
 <section id="vault-open" hidden>
 <div class="vault-heading"><div><span class="vault-eyebrow">我的资料库</span><strong id="vault-name"></strong><span id="vault-count" class="reading-meta"></span></div><button id="vault-lock" type="button" class="md-button">锁定空间</button></div>
-<div class="vault-toolbar vault-primary-actions"><button id="vault-import" class="md-button md-button--primary" type="button">导入课本 / 笔记</button><button id="vault-folder" class="md-button" type="button">导入 Obsidian 文件夹</button><button id="vault-new" class="md-button" type="button">新建笔记</button><button id="vault-backup" class="md-button" type="button">导出加密备份</button></div>
-<div id="vault-dropzone" class="vault-dropzone" tabindex="0" role="button" aria-label="拖入文件或按回车选择要导入的文件"><strong>把课本与笔记拖到这里</strong><span>PDF · Markdown · TXT · 图片附件。文件夹请使用上方的导入按钮。</span></div>
+<div class="vault-toolbar vault-primary-actions"><button id="vault-import" class="md-button md-button--primary" type="button">导入文件</button><button id="vault-folder" class="md-button" type="button">导入 Obsidian 文件夹</button><button id="vault-new" class="md-button" type="button">新建笔记</button><button id="vault-backup" class="md-button" type="button">导出加密备份</button></div>
+<div id="vault-dropzone" class="vault-dropzone" tabindex="0" role="button" aria-label="拖入文件或按回车选择要导入的文件"><strong>把学习资料拖到这里</strong><span>PDF · Office 文档 · 笔记 · 图片 · 音视频 · 代码 · 压缩包。文件夹请使用上方的导入按钮。</span></div>
 <div id="vault-progress" class="vault-progress" hidden><div class="vault-progress-heading"><span id="vault-progress-label" role="status" aria-live="polite"></span><button id="vault-cancel-import" type="button" class="md-button">停止导入</button></div><progress id="vault-progress-bar" max="100" value="0" aria-label="文件导入进度"></progress></div>
 <div class="vault-library-heading"><div class="vault-storage-meter"><span id="vault-storage" class="reading-meta">每空间最多 256 MB</span><progress id="vault-capacity" max="100" value="0" aria-label="私密空间容量使用比例"></progress></div><button id="vault-focus" class="md-button" type="button" aria-pressed="false">专注阅读</button></div>
-<div class="vault-layout"><div class="vault-browser"><label class="vault-control-label" for="vault-search">查找资料</label><input id="vault-search" type="search" aria-label="搜索私密文件" placeholder="搜索文件名或路径…"><label class="vault-control-label" for="vault-directory">文件夹</label><select id="vault-directory" aria-label="筛选私密文件夹"><option value="">全部文件夹</option></select><div class="vault-filter-row"><label>类型<select id="vault-type" aria-label="筛选私密文件类型"><option value="all">全部资料</option><option value="note">笔记</option><option value="pdf">课本 / PDF</option><option value="image">图片附件</option></select></label><label>排序<select id="vault-sort" aria-label="私密文件排序"><option value="name">名称</option><option value="recent">最近修改</option><option value="size">文件大小</option></select></label></div><p id="vault-result-count" class="reading-meta" aria-live="polite"></p><div id="vault-files"></div></div><section id="vault-reader" class="vault-reader" aria-label="私密资料阅读器"><div class="vault-empty"><span class="vault-empty-kicker">从一份资料开始</span><h2>留一个安静的学习角落</h2><p>在左侧选择课本或笔记，也可以新建一篇笔记，记录今天学到的内容。</p></div></section></div>
+<div class="vault-layout"><div class="vault-browser"><label class="vault-control-label" for="vault-search">查找资料</label><input id="vault-search" type="search" aria-label="搜索私密文件" placeholder="搜索文件名或路径…"><label class="vault-control-label" for="vault-directory">文件夹</label><select id="vault-directory" aria-label="筛选私密文件夹"><option value="">全部文件夹</option></select><div class="vault-filter-row"><label>类型<select id="vault-type" aria-label="筛选私密文件类型"><option value="all">全部资料</option><option value="note">笔记</option><option value="pdf">课本 / PDF</option><option value="image">图片附件</option><option value="document">Word / 文档</option><option value="slides">PPT / 演示</option><option value="sheet">表格</option><option value="ebook">电子书</option><option value="audio">音频</option><option value="video">视频</option><option value="code">代码 / 数据</option><option value="archive">压缩包</option><option value="other">其他文件</option></select></label><label>排序<select id="vault-sort" aria-label="私密文件排序"><option value="name">名称</option><option value="recent">最近修改</option><option value="size">文件大小</option></select></label></div><p id="vault-result-count" class="reading-meta" aria-live="polite"></p><div id="vault-files"></div></div><section id="vault-reader" class="vault-reader" aria-label="私密资料阅读器"><div class="vault-empty"><span class="vault-empty-kicker">从一份资料开始</span><h2>留一个安静的学习角落</h2><p>在左侧选择课本或笔记，也可以新建一篇笔记，记录今天学到的内容。</p></div></section></div>
 <p class="reading-meta vault-limits">单文件上限 128 MB，每空间上限 256 MB。10 分钟未操作自动锁定，请及时加密保存笔记修改。</p>
 <details class="vault-danger vault-management"><summary>存储与空间管理</summary><div class="vault-management-body"><h3>让浏览器保留资料</h3><p id="vault-storage-hint">可请求浏览器优先保留本站的本机资料，是否允许由浏览器决定。仍需定期导出备份。</p><button id="vault-persist" type="button" class="md-button">请求保留本机资料</button><div class="vault-delete-section"><h3>删除当前空间</h3><p>会清除本浏览器中此空间的加密资料。请先导出需要保留的备份。</p><button id="vault-delete-space" type="button" class="md-button">删除当前空间</button></div></div></details>
 </section>
@@ -30,9 +30,22 @@ comments: false
 
 ## 整理与阅读
 
-解锁后可以拖入多个文件，或点击“导入课本 / 笔记”选择文件。导入时会显示进度；停止导入会保留已经完成的资料。使用文件夹、类型筛选和名称、修改时间、大小排序，可以更快找到需要的内容。“专注阅读”收起资料列表，再次点击即可返回。
+解锁后可以拖入多个文件，或点击“导入文件”选择文件。导入时会显示进度；停止导入会保留已经完成的资料。使用文件夹、类型筛选和名称、修改时间、大小排序，可以更快找到需要的内容。“专注阅读”收起资料列表，再次点击即可返回。
 
 编辑笔记后，点击“加密保存修改”才会写入本机空间。切换资料或手动锁定前，页面会提醒尚未保存的修改；自动锁定仍会按时保护空间，请在离开前保存。
+
+## 支持的文件格式
+
+| 类型 | 常见格式 | 阅读方式 |
+| --- | --- | --- |
+| 笔记与课本 | Markdown、TXT、PDF | 站内阅读；小于 4 MB 的笔记可编辑 |
+| 图片 | PNG、JPG、WebP、GIF、BMP、AVIF | 站内预览 |
+| Office 文档 | DOC/DOCX、PPT/PPTX、XLS/XLSX、ODT/ODP/ODS、RTF | 加密保存，下载后用本机应用打开 |
+| 表格与代码 | CSV、TSV、Python、C/C++、Java、JS/TS、JSON、Jupyter、HTML、LaTeX 等 | 小于 4 MB 时按纯文本查看，不执行代码 |
+| 音频与视频 | MP3、WAV、OGG、M4A、FLAC、AAC、MP4、WebM、MOV | 使用浏览器播放器，支持情况取决于编码 |
+| 电子书与压缩包 | EPUB、MOBI、AZW3、ZIP、7Z、RAR、TAR、GZ | 加密保存原件，下载阅读或解压 |
+
+一次可以选择多种文件，也可以拖入多个文件。Office 文件不会发送给第三方在线预览服务。文件夹导入使用同一格式规则，隐藏配置仍会跳过；同路径文件不会覆盖已有资料。
 
 ## 导入 Obsidian 笔记
 

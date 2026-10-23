@@ -19,6 +19,7 @@ const idle=()=>wait(()=>!d.querySelector('#vault-backup').disabled);
 const req=r=>new Promise((resolve,reject)=>{r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});
 (async()=>{
  w.eval(fs.readFileSync(path.join(root,'docs/assets/vault-core.js'),'utf8'));
+ w.eval(fs.readFileSync(path.join(root,'docs/assets/vault-formats.js'),'utf8'));
  w.eval(fs.readFileSync(path.join(root,'docs/assets/vault.js'),'utf8'));
  await wait(()=>d.querySelector('#vault-status').textContent.includes('选择空间解锁'));
  const create=d.querySelector('#vault-create');
@@ -96,6 +97,24 @@ const req=r=>new Promise((resolve,reject)=>{r.onsuccess=()=>resolve(r.result);r.
  await wait(()=>d.querySelector('#vault-status').textContent.includes('冲突'));await idle();
  assert.deepEqual((await req(database.transaction('files').objectStore('files').getAll())).map(f=>f.id).sort(),beforeIds);
  assert.equal((await req(database.transaction('spaces').objectStore('spaces').getAll())).length,1,'restore transaction must roll back');
+ // Mixed file formats use the same encryption path and preserve original bytes.
+ unlock.elements.password.value='test-only-secret-1234';unlock.dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await wait(()=>!d.querySelector('#vault-open').hidden);await idle();
+ w.HTMLMediaElement.prototype.pause=function(){};w.HTMLMediaElement.prototype.load=function(){};
+ const mixed=[['lecture.docx','document'],['slides.pptx','slides'],['table.xlsx','sheet'],['data.csv','sheet'],['book.epub','ebook'],['sound.mp3','audio'],['video.mp4','video'],['code.py','code'],['unsafe.html','code'],['notes.zip','archive']];
+ const raw=new TextEncoder().encode('<script>window.PREVIEW_EXECUTED=true</script> mixed bytes');
+ Object.defineProperty(importInput,'files',{value:[...mixed.map(([name])=>new File([raw],name)),new File(['skip'],'a.exe')],configurable:true});importInput.dispatchEvent(new w.Event('change'));
+ await wait(()=>d.querySelector('#vault-status').textContent.includes('已加密导入 10 个文件'));await idle();
+ const kindSelect=d.querySelector('#vault-type');
+ for(const [name,kind]of mixed){
+  kindSelect.value=kind;kindSelect.dispatchEvent(new w.Event('change'));
+  const item=[...d.querySelectorAll('.vault-file')].find(b=>b.querySelector('strong').textContent===name);assert(item,'file is visible in correct category: '+name);item.click();
+  await wait(()=>d.querySelector('#vault-reader h2')?.textContent===name);await idle();
+  if(name==='unsafe.html'){assert(d.querySelector('#vault-reader pre').textContent.includes('<script>'));assert(!d.querySelector('#vault-reader script'));assert.equal(w.PREVIEW_EXECUTED,undefined);}
+  if(['document','slides','ebook','archive'].includes(kind))assert(d.querySelector('#vault-reader').textContent.includes('暂不提供网页预览'));
+  const downloadButton=[...d.querySelectorAll('#vault-reader button')].find(b=>b.textContent==='下载原文件');downloadButton.click();await idle();assert.deepEqual(new Uint8Array(await downloaded.arrayBuffer()),raw,name+' bytes survive encryption/download');
+ }
+ assert.equal((await req(database.transaction('files').objectStore('files').getAll())).length,14);
+ d.querySelector('#vault-lock').click();assert.equal(d.querySelectorAll('#vault-reader audio,#vault-reader video').length,0);
  database.close();dom.window.close();
  console.log('Private vault integration passed: create, chunked PDF import, Obsidian folder and links, encrypted storage, lock, wrong password, backup, delete and restore.');
 })().catch(error=>{console.error(error);dom.window.close();process.exitCode=1;});
