@@ -33,7 +33,7 @@
  const prefs=read('study-garden-reader-prefs',{});let size=[.9,1,1.1,1.2].includes(prefs.size)?prefs.size:1;
  function apply(){document.documentElement.style.setProperty('--reader-scale',size);write('study-garden-reader-prefs',{size});}
  button('字 −',()=>{size=Math.max(.9,Math.round((size-.1)*10)/10);apply();status.textContent='字号 '+Math.round(size*100)+'%';});button('字 +',()=>{size=Math.min(1.2,Math.round((size+.1)*10)/10);apply();status.textContent='字号 '+Math.round(size*100)+'%';});apply();
- const special=/^(private|graph|library|contribute|workbench)(\/|$)/.test(location.pathname.slice(base.pathname.length));
+ const special=/^(private|graph|library|contribute|workbench|dashboard|catalog)(\/|$)/.test(location.pathname.slice(base.pathname.length));
  if(!special){const focus=button('专注阅读',()=>{const on=document.body.classList.toggle('site-reading-focus');focus.setAttribute('aria-pressed',String(on));focus.textContent=on?'退出专注':'专注阅读';});focus.setAttribute('aria-pressed','false');}
  button('复制链接',async()=>{try{await navigator.clipboard.writeText(location.href);status.textContent='链接已复制';}catch{status.textContent='无法自动复制，请从地址栏复制链接。';}});
  tools.append(status);

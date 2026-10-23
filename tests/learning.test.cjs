@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const M=require('../docs/assets/learning-model.js'),data=require('../docs/assets/course-catalog.json'),courses=data.courses;
+const storage={value:'',getItem(){return this.value;},setItem(key,value){this.value=value;}};
+assert.deepEqual(M.read(storage,courses),{});assert(M.save(storage,{python:'done',math:'learning'}));assert.equal(M.read(storage,courses).python,'done');
+assert.equal(M.missing(courses.find(c=>c.id==='ml'),{python:'done'}).join(','),'math');
+assert.equal(M.filter(courses,{}, {query:'CS50P'}).length,1);assert(M.filter(courses,{}, {ready:true}).every(c=>!c.prerequisites.length));assert(M.filter(courses,{}, {category:'系统',level:'进阶'}).length>=3);
+assert.equal(M.route(data,'机器学习',{tools:'done',python:'done',math:'done'}).next.id,'ml');assert.equal(M.route(data,'机器学习',Object.fromEntries(courses.map(c=>[c.id,'done']))).next,null);
+assert.deepEqual(M.restore(M.backup({python:'done'}),courses),{python:'done'});assert.throws(()=>M.restore('{',courses));assert.throws(()=>M.restore(JSON.stringify({format:'zhixin-learning-progress',version:1,entries:{python:'bad'}}),courses));assert.throws(()=>M.restore('x'.repeat(128*1024+1),courses));
+assert.deepEqual(M.restore(JSON.stringify({format:'zhixin-learning-progress',version:1,entries:{unknown:'done'}}),courses),{});
+assert.equal(M.save({setItem(){throw Error('quota');}},{}),false);
+console.log('Learning model passed: filters, prerequisite readiness, route next steps, progress persistence and validated backup.');

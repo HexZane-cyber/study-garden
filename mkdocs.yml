@@ -62,6 +62,7 @@ extra_javascript:
   - assets/article-activity.js
   - assets/reading.js
   - assets/site-tools.js
+  - assets/appearance.js
 extra:
   generator: false
   giscus:
@@ -69,23 +70,29 @@ extra:
     category_id: ''
 copyright: 之芯 · 保持好奇，持续学习。
 nav:
-  - 前言: index.md
+  - 首页: index.md
+  - 学习工作台: dashboard.md
   - 如何使用这本手册: guide.md
+  - 课程目录: catalog.md
   - 学习路线: roadmap.md
   - 必学工具:
+      - Missing Semester: tools/missing-semester.md
       - Git 与知识管理: tools/git.md
       - Markdown 写作: tools/markdown.md
   - 数学基础:
-      - 数学基础学习页: courses/math.md
+      - MIT 18.06 线性代数: courses/math.md
   - 编程入门:
-      - 计算机科学导论: courses/cs-intro.md
-      - Python 与项目实践: courses/python.md
+      - CS50x 计算机导论: courses/cs-intro.md
+      - CS50P Python: courses/python.md
   - 数据结构与算法:
-      - 数据结构与算法学习页: courses/algorithms.md
+      - MIT 6.006 算法: courses/algorithms.md
   - 计算机系统:
-      - 深入理解计算机系统: courses/systems.md
+      - CMU 15-213 系统: courses/systems.md
+      - 操作系统: courses/os.md
+      - 计算机网络: courses/networks.md
+      - 数据库系统: courses/databases.md
   - 人工智能:
-      - 机器学习入门: courses/ml.md
+      - Google MLCC: courses/ml.md
   - 我的笔记:
       - 笔记索引: notes/index.md
   - 社区课程:

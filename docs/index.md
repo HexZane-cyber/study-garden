@@ -1,9 +1,12 @@
-# 前言
+# 之芯
 
-<div class="wiki-cover">
-<small>HEXZANE'S LEARNING NOTES</small>
-<p><strong>把学过的知识，连成自己的地图。</strong></p>
-<p>一份持续生长的个人自学手册。</p>
+<div class="home-hero">
+<div class="hero-orbit" aria-hidden="true"><i></i><i></i><span>之</span></div>
+<small>ZHIXIN / LEARN · CONNECT · CREATE</small>
+<h2>把零散的知识，<br>连成自己的世界。</h2>
+<p>选一门课，留下一篇笔记。让每一步学习都有迹可循。</p>
+<div class="hero-actions"><a href="dashboard/" class="md-button md-button--primary">进入学习工作台 →</a><a href="catalog/" class="md-button">探索课程</a></div>
+<div class="hero-tags"><span>课程与路线</span><span>本机私密资料</span><span>液态知识图谱</span></div>
 </div>
 
 ## 为什么建立这个网站
@@ -13,12 +16,14 @@
 这里按照学科组织课程，用文章记录理解，用项目验证想法。它不追求收录所有内容，更希望留下值得反复阅读的东西。
 
 !!! note "关于这本手册"
-    页面结构参考 [CS自学指南](https://csdiy.wiki/)，使用相同的 Material for MkDocs 文档主题。本站的文章和目录独立维护，初始课程为待填充的个人学习框架。
+    页面结构参考 [CS自学指南](https://csdiy.wiki/)，使用相同的 Material for MkDocs 文档主题。本站的文章和目录独立维护，课程资源按官方来源整理，学习计划与完成状态保存在本浏览器。
 
 ## 这里有什么
 
 | 栏目 | 用途 |
 | --- | --- |
+| [学习工作台](dashboard.md) | 管理今日任务、继续课程、记录专注时间 |
+| [课程目录](catalog.md) | 按方向、难度、先修和个人状态查找课程 |
 | [学习路线](roadmap.md) | 整理基础知识之间的先后关系 |
 | [必学工具](tools/git.md) | 记录写代码和管理知识需要的工具 |
 | [课程指南](courses/cs-intro.md) | 收藏课程资源，安排练习和项目 |

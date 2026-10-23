@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+function dep(name){try{return require(name);}catch{return require('../.tooling/node_modules/'+name);}}
+const {JSDOM}=dep('jsdom'),root=path.join(__dirname,'..');
+const model=fs.readFileSync(path.join(root,'docs/assets/learning-model.js'),'utf8'),script=fs.readFileSync(path.join(root,'docs/assets/learning.js'),'utf8');
+function setup(page,stored={}){const dom=new JSDOM(fs.readFileSync(path.join(root,'site',page,'index.html'),'utf8'),{url:'https://example.test/study-garden/'+page+'/',runScripts:'outside-only'}),w=dom.window,d=w.document;Object.defineProperty(d,'currentScript',{value:{src:'https://example.test/study-garden/assets/learning.js'}});w.localStorage.setItem('zhixin-learning-progress-v1',JSON.stringify({version:1,entries:stored}));w.eval(model);w.eval(script);return {dom,w,d};}
+const x=setup('catalog');assert.equal(x.d.querySelectorAll('.learning-card').length,10);
+const select=x.d.querySelector('[data-course-id="python"]');select.value='learning';select.dispatchEvent(new x.w.Event('change'));assert.equal(JSON.parse(x.w.localStorage.getItem('zhixin-learning-progress-v1')).entries.python,'learning');
+const query=x.d.querySelector('[aria-label="搜索课程"]');query.value='CS50P';query.dispatchEvent(new x.w.Event('input'));assert.equal(x.d.querySelectorAll('.learning-card').length,1);
+const progress=x.d.querySelector('[aria-label="学习状态"]');progress.value='learning';progress.dispatchEvent(new x.w.Event('change'));const current=x.d.querySelector('[data-course-id="python"]');current.value='done';current.dispatchEvent(new x.w.Event('change'));assert.equal(x.d.querySelectorAll('.learning-card').length,0,'changing a filtered item must safely remove it');x.dom.window.close();
+const y=setup('roadmap',{tools:'done',python:'done',math:'done'});const track=y.d.querySelector('[aria-label="选择学习方向"]');track.value='机器学习';track.dispatchEvent(new y.w.Event('change'));assert(y.d.querySelector('#learning-route').textContent.includes('下一步建议：Google MLCC'));assert.equal(y.d.querySelector('progress').value,3);y.dom.window.close();
+const z=setup('courses/python',{python:'planned'});assert.equal(z.d.querySelector('[data-course-id="python"]').value,'planned');assert(z.d.querySelector('#course-progress').textContent.includes('我的课程进度'));z.dom.window.close();
+console.log('Learning UI passed: catalog filters, cross-page saved status, filtered updates, course progress and route recommendation.');

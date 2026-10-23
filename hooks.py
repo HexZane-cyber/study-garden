@@ -64,3 +64,51 @@ def on_files(files, config):
     for path in (ROOT / 'content').glob('*.json'):
         files.append(File.generated(config, 'workbench/content/' + path.name, abs_src_path=str(path)))
     return files
+
+
+def load_course_catalog(docs):
+    data = json.loads((Path(docs) / 'assets/course-catalog.json').read_text(encoding='utf-8'))
+    if data.get('version') != 1 or not isinstance(data.get('courses'), list):
+        raise ValueError('Invalid course catalog')
+    ids = set()
+    for course in data['courses']:
+        cid = course['id']
+        if not re.fullmatch(r'[a-z0-9-]+', cid) or cid in ids:
+            raise ValueError('Duplicate or invalid course ID')
+        ids.add(cid)
+        rel = course['path']
+        if '..' in rel.split('/') or not rel.endswith('.md') or not (Path(docs) / rel).is_file():
+            raise ValueError('Course guide is missing')
+        if course['url'] != rel[:-3] + '/' or not course['official'].startswith('https://'):
+            raise ValueError('Invalid course URL')
+    dependencies = {c['id']: c['prerequisites'] for c in data['courses']}
+    def visit(cid, stack):
+        if cid in stack or cid not in ids:
+            raise ValueError('Unknown or circular prerequisite')
+        for parent in dependencies[cid]:
+            visit(parent, stack | {cid})
+    for cid in ids:
+        visit(cid, set())
+    for route in data['tracks'].values():
+        if any(cid not in ids for cid in route) or len(route) != len(set(route)):
+            raise ValueError('Invalid learning route')
+    return data
+
+
+def on_page_context(context, page, config, nav):
+    data = load_course_catalog(config['docs_dir'])
+    paths = {c['path'] for c in data['courses']} | {'catalog.md', 'roadmap.md', 'dashboard.md'}
+    if page.file.src_uri in paths:
+        context['learning_catalog'] = json.dumps(data, ensure_ascii=False).replace('<', '\u003c')
+    return context
+
+
+def on_page_markdown(markdown, page, config, files):
+    if page.file.src_uri == 'catalog.md':
+        data = load_course_catalog(config['docs_dir'])
+        lines = ['<details id="course-catalog-fallback" markdown="1"><summary>按列表浏览全部课程（无需脚本）</summary>', '', '| 课程 | 方向 | 难度 |', '| --- | --- | --- |']
+        for c in data['courses']:
+            lines.append(f"| [{c['title']}]({c['path']}) | {c['category']} | {c['level']} |")
+        lines.extend(['', '</details>'])
+        return markdown.replace('<!-- course-catalog-fallback -->', '\n'.join(lines))
+    return markdown

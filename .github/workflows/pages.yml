@@ -29,6 +29,8 @@ jobs:
       - name: Validate content, proposals and encryption
         run: |
           python -m unittest discover -s tests -p 'test_*.py'
+          node tests/planner.test.cjs
+          node tests/learning.test.cjs
           node tests/core.test.cjs
           node tests/fluid.test.cjs
           node tests/graph3d.test.cjs

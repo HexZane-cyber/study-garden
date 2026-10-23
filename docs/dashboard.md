@@ -1,0 +1,19 @@
+---
+comments: false
+---
+
+# 学习工作台
+
+<div class="study-intro"><span class="study-kicker">ONE STEP AT A TIME</span><p>把今天要做的事，放在看得见的地方。</p><span>课程、任务与专注时间，都从这里继续。</span></div>
+
+<div id="study-dashboard"></div>
+
+可以点击“给我一个学习挑战”生成一条任务草稿，检查后再加入计划。它只使用内置提示，不会把任务发到外部 AI 服务。
+
+## 数据与使用
+
+任务、课程状态和计时记录保存在本浏览器，不会自动同步。离开页面后正在运行的计时会继续，重新打开可以暂停或结束；单次最多记录 4 小时，少于 1 分钟不计入统计。任务和统计不是加密文档，私人课本和笔记仍放在[个人私密空间](private.md)。
+
+工作台备份为明文 JSON，仅包含任务与计时。课程状态使用[课程目录](catalog.md)中的进度备份单独导出。
+
+<noscript>工作台交互需要 JavaScript。你仍可直接阅读[课程目录](catalog.md)、[学习路线](roadmap.md)和各篇文章。</noscript>

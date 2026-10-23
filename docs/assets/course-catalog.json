@@ -1,0 +1,233 @@
+{
+  "version": 1,
+  "courses": [
+    {
+      "id": "cs-intro",
+      "title": "CS50x · 计算机科学导论",
+      "path": "courses/cs-intro.md",
+      "url": "courses/cs-intro/",
+      "category": "编程入门",
+      "level": "入门",
+      "provider": "Harvard",
+      "official": "https://cs50.harvard.edu/x/",
+      "prerequisites": [],
+      "tracks": [
+        "基础起步",
+        "系统方向",
+        "机器学习"
+      ],
+      "hours": 8,
+      "summary": "从计算思维进入 C、内存、数据结构及 Web，适合希望理解计算机全貌的初学者。",
+      "edition": "CS50x 当前主页，随开课年份更新",
+      "checked": "2026-10-23"
+    },
+    {
+      "id": "python",
+      "title": "CS50P · Python 与项目实践",
+      "path": "courses/python.md",
+      "url": "courses/python/",
+      "category": "编程入门",
+      "level": "入门",
+      "provider": "Harvard",
+      "official": "https://cs50.harvard.edu/python/",
+      "prerequisites": [],
+      "tracks": [
+        "基础起步",
+        "机器学习"
+      ],
+      "hours": 6,
+      "summary": "围绕 Python 语言与测试练习组织学习，用一个可运行的小工具检验掌握程度。",
+      "edition": "CS50P 官方开放课程",
+      "checked": "2026-10-23"
+    },
+    {
+      "id": "math",
+      "title": "MIT 18.06 · 线性代数",
+      "path": "courses/math.md",
+      "url": "courses/math/",
+      "category": "数学基础",
+      "level": "基础",
+      "provider": "MIT",
+      "official": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+      "prerequisites": [],
+      "tracks": [
+        "基础起步",
+        "机器学习"
+      ],
+      "hours": 6,
+      "summary": "用矩阵、向量空间与线性变换建立数学直觉，为机器学习与数值计算打底。",
+      "edition": "MIT OCW Spring 2010 归档",
+      "checked": "2026-10-23"
+    },
+    {
+      "id": "algorithms",
+      "title": "MIT 6.006 · 数据结构与算法",
+      "path": "courses/algorithms.md",
+      "url": "courses/algorithms/",
+      "category": "算法",
+      "level": "基础",
+      "provider": "MIT",
+      "official": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/",
+      "prerequisites": [
+        "python"
+      ],
+      "tracks": [
+        "基础起步",
+        "系统方向"
+      ],
+      "hours": 8,
+      "summary": "把数据结构、复杂度分析与算法正确性结合起来，训练解释解法的能力。",
+      "edition": "MIT OCW Spring 2020 归档",
+      "checked": "2026-10-23"
+    },
+    {
+      "id": "systems",
+      "title": "CMU 15-213 · 计算机系统",
+      "path": "courses/systems.md",
+      "url": "courses/systems/",
+      "category": "系统",
+      "level": "进阶",
+      "provider": "CMU",
+      "official": "https://www.cs.cmu.edu/~213/",
+      "prerequisites": [
+        "cs-intro"
+      ],
+      "tracks": [
+        "系统方向"
+      ],
+      "hours": 10,
+      "summary": "从程序员视角理解机器代码、内存、性能与系统接口，为内核和网络学习建立基础。",
+      "edition": "CMU 15-213 官方主页；实验须匹配所选学期",
+      "checked": "2026-10-23"
+    },
+    {
+      "id": "ml",
+      "title": "Google MLCC · 机器学习入门",
+      "path": "courses/ml.md",
+      "url": "courses/ml/",
+      "category": "人工智能",
+      "level": "基础",
+      "provider": "Google",
+      "official": "https://developers.google.com/machine-learning/crash-course",
+      "prerequisites": [
+        "python",
+        "math"
+      ],
+      "tracks": [
+        "机器学习"
+      ],
+      "hours": 6,
+      "summary": "通过回归、分类和模型评估理解机器学习的基本流程，并建立防止数据泄漏的习惯。",
+      "edition": "Google Machine Learning Crash Course 官方模块",
+      "checked": "2026-10-23"
+    },
+    {
+      "id": "tools",
+      "title": "Missing Semester · 开发工具",
+      "path": "tools/missing-semester.md",
+      "url": "tools/missing-semester/",
+      "category": "开发工具",
+      "level": "入门",
+      "provider": "MIT",
+      "official": "https://missing.csail.mit.edu/",
+      "prerequisites": [],
+      "tracks": [
+        "基础起步",
+        "系统方向",
+        "机器学习"
+      ],
+      "hours": 3,
+      "summary": "练习命令行、版本控制和调试，把工具变成日常学习流程的一部分。",
+      "edition": "Missing Semester 官方主页，当前入口会随年份变化",
+      "checked": "2026-10-23"
+    },
+    {
+      "id": "os",
+      "title": "MIT 6.1810 · 操作系统",
+      "path": "courses/os.md",
+      "url": "courses/os/",
+      "category": "系统",
+      "level": "进阶",
+      "provider": "MIT",
+      "official": "https://pdos.csail.mit.edu/6.1810/2024/schedule.html",
+      "prerequisites": [
+        "systems",
+        "tools"
+      ],
+      "tracks": [
+        "系统方向"
+      ],
+      "hours": 10,
+      "summary": "配合 xv6 教材和实验理解系统调用、地址空间与并发，而不只背诵操作系统概念。",
+      "edition": "MIT 6.1810 Fall 2024 归档日程",
+      "checked": "2026-10-23"
+    },
+    {
+      "id": "networks",
+      "title": "Stanford CS144 · 计算机网络",
+      "path": "courses/networks.md",
+      "url": "courses/networks/",
+      "category": "系统",
+      "level": "进阶",
+      "provider": "Stanford",
+      "official": "https://cs144.github.io/",
+      "prerequisites": [
+        "systems",
+        "tools"
+      ],
+      "tracks": [
+        "系统方向"
+      ],
+      "hours": 8,
+      "summary": "从数据传输、可靠性与网络分层建立连接，把协议解释落实到代码和实验。",
+      "edition": "CS144 官方主页，日程与实验按当前学期提供",
+      "checked": "2026-10-23"
+    },
+    {
+      "id": "databases",
+      "title": "CMU 15-445 · 数据库系统",
+      "path": "courses/databases.md",
+      "url": "courses/databases/",
+      "category": "系统",
+      "level": "进阶",
+      "provider": "CMU",
+      "official": "https://15445.courses.cs.cmu.edu/fall2024/",
+      "prerequisites": [
+        "systems",
+        "algorithms"
+      ],
+      "tracks": [
+        "系统方向"
+      ],
+      "hours": 10,
+      "summary": "从存储、索引、查询执行和事务认识数据库实现，逐步连接理论与系统工程。",
+      "edition": "CMU 15-445 Fall 2024 归档",
+      "checked": "2026-10-23"
+    }
+  ],
+  "tracks": {
+    "基础起步": [
+      "tools",
+      "python",
+      "cs-intro",
+      "math",
+      "algorithms"
+    ],
+    "系统方向": [
+      "tools",
+      "cs-intro",
+      "python",
+      "algorithms",
+      "systems",
+      "os",
+      "networks",
+      "databases"
+    ],
+    "机器学习": [
+      "tools",
+      "python",
+      "math",
+      "ml"
+    ]
+  }
+}

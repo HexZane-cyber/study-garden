@@ -18,4 +18,14 @@
     <script src="{{ 'assets/vault-formats.js' | url }}" defer></script>
     <script src="{{ 'assets/vault.js' | url }}" defer></script>
   {% endif %}
+  {% if learning_catalog %}
+    <script type="application/json" id="learning-data">{{ learning_catalog | safe }}</script>
+    <script src="{{ 'assets/learning-model.js' | url }}" defer></script>
+    {% if page.file.src_uri == 'dashboard.md' %}
+    <script src="{{ 'assets/planner-model.js' | url }}" defer></script>
+    <script src="{{ 'assets/planner.js' | url }}" defer></script>
+    {% else %}
+    <script src="{{ 'assets/learning.js' | url }}" defer></script>
+    {% endif %}
+  {% endif %}
 {% endblock %}

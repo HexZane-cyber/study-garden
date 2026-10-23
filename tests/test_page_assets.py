@@ -50,6 +50,7 @@ class PageAssetsTest(unittest.TestCase):
                 scripts = [name for name, _ in self.scripts(path)]
                 self.assertIn('assets/reading.js', scripts)
                 self.assertIn('assets/site-tools.js', scripts)
+                self.assertIn('assets/appearance.js', scripts)
                 self.assertNotIn('data-md-component="source"', (SITE / path).read_text(encoding='utf-8'))
                 self.assertFalse(ALL_FEATURE_SCRIPTS.intersection(scripts))
 
