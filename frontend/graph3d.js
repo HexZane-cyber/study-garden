@@ -7,7 +7,8 @@ import Physics from './graph3d-physics.cjs';
 
 export function createScene(canvas,data,onSelect,onError){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'default'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.25));
+  renderer.transmissionResolutionScale=.5;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;
   const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(42,1,.05,120);
   camera.position.set(9,6,12);
@@ -34,7 +35,7 @@ export function createScene(canvas,data,onSelect,onError){
     const mesh=new THREE.Mesh(geometry,liquidMaterial);mesh.userData.id=n.id;scene.add(mesh);
     const marker=new THREE.Mesh(markerGeometry,(markerMaterials.get(n.group)||markerMaterials.get('guide')).clone());scene.add(marker);
     const label=document.createElement('button');label.type='button';label.className='graph3d-label';label.textContent=n.title;label.setAttribute('aria-label','选择 '+n.title);label.onclick=()=>onSelect(n.id);layer.append(label);
-    return {n,mesh,marker,geometry,base,label,glass:liquidMaterial,solid,norm:1,phase:n.seed,labelWidth:Math.min(250,measure.measureText(n.title).width+14),angle:new THREE.Quaternion()};
+    return {n,mesh,marker,geometry,base,label,glass:liquidMaterial,solid,norm:1,phase:n.seed,radii:new Float32Array(base.length/3),weights:Float32Array.from(base.filter((_,i)=>i%3===1),y=>Math.max(.01,Math.sqrt(Math.max(0,1-y*y)))),labelWidth:Math.min(250,measure.measureText(n.title).width+14),angle:new THREE.Quaternion()};
   });
   const segments=20,positionArray=new Float32Array(model.edges.length*segments*6),lineGeometry=new THREE.BufferGeometry();
   lineGeometry.setAttribute('position',new THREE.BufferAttribute(positionArray,3));
@@ -43,7 +44,7 @@ export function createScene(canvas,data,onSelect,onError){
   const beadGeometry=new THREE.SphereGeometry(.026,6,4),beadMaterial=new THREE.MeshBasicMaterial({color:0xf7adbf});
   const beads=model.edges.map(()=>{const bead=new THREE.Mesh(beadGeometry,beadMaterial);scene.add(bead);return bead;});
   const fused=new Map(),fusionMaterial=glass.clone();fusionMaterial.vertexColors=true;fusionMaterial.color.set(0xffffff);fusionMaterial.attenuationColor.set(0xffffff);
-  let lastFusion=-1;
+  let lastFusion=-1,lastLabels=-1;
   const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2(),plane=new THREE.Plane(),point=new THREE.Vector3(),dragOffset=new THREE.Vector3(),direction=new THREE.Vector3(),up=new THREE.Vector3(0,1,0);
   let active=false,disposed=false,frameId=null,last=null,accumulator=0,hover=null,gesture=null,lastShape=-1,lastShapeTime=-1,width=1,height=1;
   const linked=n=>!state.selected||n.id===state.selected||adjacency.get(state.selected)?.has(n.id);
@@ -62,10 +63,10 @@ export function createScene(canvas,data,onSelect,onError){
   function deform(shape){
     const {n,base,geometry}=shape,pos=geometry.attributes.position;
     const phase=n.seed+model.time*.2*state.flow*n.localFlow;let sum=0,weights=0;
-    const radii=new Float32Array(base.length/3);
+    const radii=shape.radii;
     for(let i=0;i<base.length;i+=3){const x=base[i],y=base[i+1],z=base[i+2];
       const radius=Visuals.radial(x,y,z,n.seed,phase);
-      radii[i/3]=radius;const w=Math.max(.01,Math.sin(phi));sum+=radius**3*w;weights+=w;
+      radii[i/3]=radius;const w=shape.weights[i/3];sum+=radius**3*w;weights+=w;
     }
     const norm=Math.cbrt(sum/weights);shape.norm=norm;shape.phase=phase;
     for(let i=0;i<base.length;i+=3){const r=radii[i/3]/norm;pos.setXYZ(i/3,base[i]*r,base[i+1]*r,base[i+2]*r);}
@@ -85,11 +86,11 @@ export function createScene(canvas,data,onSelect,onError){
       if(group.length<2)continue;
       const id=group.map(s=>s.n.id).sort().join('|');live.add(id);
       let item=fused.get(id);
-      if(!item){const res=group.length<=3?40:group.length<=8?48:56;const effect=new MarchingCubes(res,fusionMaterial,false,true,16000);effect.isolation=0;effect.frustumCulled=false;scene.add(effect);item={effect,res,signature:''};fused.set(id,item);}
+      if(!item){const res=group.length<=3?28:group.length<=8?32:36;const effect=new MarchingCubes(res,fusionMaterial,false,true,16000);effect.isolation=0;effect.frustumCulled=false;scene.add(effect);item={effect,res,signature:''};fused.set(id,item);}
       item.effect.visible=true;
       for(const shape of group)shape.mesh.visible=false;
       const signature=group.map(s=>[s.mesh.position.x,s.mesh.position.y,s.mesh.position.z,s.mesh.quaternion.x,s.mesh.quaternion.y,s.mesh.quaternion.z,s.mesh.quaternion.w,s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z,s.phase].map(v=>v.toFixed(3)).join(',')).join(';')+JSON.stringify(state.nodeColors);
-      if(signature===item.signature||(item.signature&&now-lastFusion<1000/30))continue;
+      if(signature===item.signature||(item.signature&&now-lastFusion<1000/(gesture?24:30)))continue;
       item.signature=signature;
       const box=new THREE.Box3();
       for(const s of group){const reach=Math.max(s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z)*1.7+.2;box.expandByPoint(s.mesh.position.clone().addScalar(reach));box.expandByPoint(s.mesh.position.clone().addScalar(-reach));}
@@ -99,7 +100,7 @@ export function createScene(canvas,data,onSelect,onError){
       item.effect.position.copy(center);item.effect.scale.setScalar(half);item.effect.update();
     }
     for(const [id,item]of fused)if(!live.has(id)){scene.remove(item.effect);item.effect.geometry.dispose();fused.delete(id);}
-    if(now-lastFusion>=1000/30)lastFusion=now;
+    if(now-lastFusion>=1000/(gesture?24:30))lastFusion=now;
   }
   function labels(){
     const occupied=[],rank=n=>(n.id===state.selected?10000:0)+(n.id===hover?9000:0)+(state.query&&n.title.toLowerCase().includes(state.query)?8000:0)+(state.selected&&linked(n)?100:0)+(adjacency.get(n.id)?.size||0);
@@ -144,7 +145,7 @@ export function createScene(canvas,data,onSelect,onError){
       beads[i].visible=visible&&state.liquid;beads[i].position.set(p.x,p.y,p.z);
     });lineGeometry.attributes.position.needsUpdate=true;
     fusion(now);
-    renderer.render(scene,camera);labels();frameId=requestAnimationFrame(render);
+    renderer.render(scene,camera);if(now-lastLabels>1000/30){labels();lastLabels=now;}frameId=requestAnimationFrame(render);
   }
   function ray(event){const rect=canvas.getBoundingClientRect();pointer.set((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1);raycaster.setFromCamera(pointer,camera);}
   function hit(event){ray(event);return raycaster.intersectObjects(shapes.filter(s=>shown(s.n)).map(s=>s.mesh),false)[0]?.object.userData.id||null;}
@@ -155,7 +156,7 @@ export function createScene(canvas,data,onSelect,onError){
     }
   }
   function move(event){
-    if(!gesture){hover=hit(event);canvas.style.cursor=hover?'grab':'move';return;}
+    if(!gesture){if(event.timeStamp-(move.lastHover||0)<50)return;move.lastHover=event.timeStamp;hover=hit(event);canvas.style.cursor=hover?'grab':'move';return;}
     if(event.pointerId!==gesture.pointerId)return;
     if(Math.hypot(event.clientX-gesture.x,event.clientY-gesture.y)>4)gesture.moved=true;
     if(gesture.id){event.stopImmediatePropagation();ray(event);if(raycaster.ray.intersectPlane(plane,point)){

@@ -25,3 +25,14 @@ config=A.apply(config,'line','#abcdef');assert.equal(config.line,'#abcdef');asse
 assert.throws(()=>A.apply(config,'node','#ffffff',null));assert.throws(()=>A.apply(config,'line','url(javascript:bad)'));
 storage.set(A.KEY,'broken');assert.deepEqual(A.load(fake),A.defaults());
 console.log('Graph visuals passed: curved paths and endpoints, smooth surface union/separation, contact color blending, palette scope, validation and persistence.');
+
+// Execute the actual rendering deformation path to catch runtime-only regressions.
+{
+ const source=require('node:fs').readFileSync(require('node:path').join(__dirname,'../frontend/graph3d.js'),'utf8');
+ const body=source.split('function deform(shape){')[1].split('  function fusion(')[0].trim().replace(/}$/, '');
+ const deform=new Function('shape','Visuals','model','state',body);
+ const base=new Float32Array([1,0,0,0,1,0,0,0,1]);const output=[];
+ const shape={n:{seed:1,localFlow:1},base,radii:new Float32Array(3),weights:new Float32Array([1,.01,1]),geometry:{attributes:{position:{setXYZ(i,x,y,z){output.push(x,y,z);}}},computeVertexNormals(){},computeBoundingSphere(){}}};
+ deform(shape,require('../frontend/graph-visuals.cjs'),{time:1},{flow:.55});
+ assert.equal(output.length,9);assert(output.every(Number.isFinite));assert(shape.norm>0);
+}
