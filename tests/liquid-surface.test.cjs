@@ -16,4 +16,13 @@ for(const scenario of [joined,squashed,together,contours([drop(-5,20),drop(299,1
  for(const loop of scenario){assert(loop.length>=6);assert(new Set(loop.map(p=>p.id)).size===loop.length);assert(loop.every(p=>Number.isFinite(p.x+p.y)&&p.x>=0&&p.y>=0&&p.x<=304&&p.y<=204));}
 }
 assert.deepEqual(contours([],300,200),[]);
+// An isolated node can remain asymmetric without relying on neighboring nodes.
+for(const profile of [{skew:.22,wave2:.08,wave3:.05,phase:0},{skew:.03,wave2:.12,wave3:.16,phase:1.2},{skew:-.1,wave2:.15,wave3:.11,phase:2.1}]){
+ const loops=contours([{...drop(100),...profile}],300,200,1.5);assert.equal(loops.length,1);
+ assert(Math.abs(area(loops[0])-area(single[0]))/area(single[0])<.025,'arbitrary shapes preserve approximate area');
+ const radii=loops[0].map(p=>Math.hypot(p.x-100,p.y-100));
+ assert(Math.max(...radii)-Math.min(...radii)>6,'isolated shape must be visibly noncircular');
+ const next=contours([{...drop(100),...profile,phase:profile.phase+.01}],300,200,1.5);
+ assert.equal(next.length,1);assert(Math.abs(area(next[0])-area(loops[0]))/area(loops[0])<.01,'small parameter changes stay smooth');
+}
 console.log('Liquid surfaces passed: closed contours, merge/split topology, overlap, rotation, area-preserving compression and viewport edges.');

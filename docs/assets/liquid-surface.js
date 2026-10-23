@@ -10,10 +10,16 @@
     for(const p of particles){
       if(!Number.isFinite(p.x+p.y+p.rx+p.ry)||p.rx<=0||p.ry<=0)continue;
       const c=Math.cos(p.angle||0),s=Math.sin(p.angle||0),reach=2.5*Math.max(p.rx,p.ry);
+      const skew=p.skew||0,wave2=p.wave2||0,wave3=p.wave3||0,phase=p.phase||0;
+      // Polar harmonics make smooth asymmetric drops, not preset polygons.
+      // Normalization preserves the area of an isolated drop as it changes shape.
+      const normal=Math.sqrt(1+(skew*skew+wave2*wave2+wave3*wave3)/2);
       const left=Math.max(0,Math.floor((p.x-reach)/step)),right=Math.min(cols-1,Math.ceil((p.x+reach)/step));
       const top=Math.max(0,Math.floor((p.y-reach)/step)),bottom=Math.min(rows-1,Math.ceil((p.y+reach)/step));
       for(let y=top;y<=bottom;y++)for(let x=left;x<=right;x++){
-        const dx=x*step-p.x,dy=y*step-p.y,u=(dx*c+dy*s)/p.rx,v=(-dx*s+dy*c)/p.ry,q=u*u+v*v;
+        const dx=x*step-p.x,dy=y*step-p.y,u=(dx*c+dy*s)/p.rx,v=(-dx*s+dy*c)/p.ry;
+        const theta=Math.atan2(v,u),radial=(1+skew*Math.cos(theta)+wave2*Math.cos(2*theta)+wave3*Math.cos(3*theta+phase))/normal;
+        const q=(u*u+v*v)/(radial*radial);
         if(q<6.25)field[y*cols+x]+=Math.exp(-1.5*q);
       }
     }
