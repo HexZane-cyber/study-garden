@@ -11,6 +11,7 @@ FEATURE_SCRIPTS = {
     'graph/index.html': ['assets/vendor/matter.min.js', 'assets/liquid-surface.js', 'assets/graph-appearance.js', 'assets/vendor/graph3d.bundle.js', 'assets/graph.js'],
     'contribute/index.html': ['assets/contribution-model.js', 'assets/community.js'],
     'private/index.html': ['assets/vendor/fflate.min.js', 'assets/vault-core.js', 'assets/vault-formats.js', 'assets/vault.js'],
+    'review/index.html': ['assets/review-model.js', 'assets/review.js'],
 }
 ALL_FEATURE_SCRIPTS = {name for names in FEATURE_SCRIPTS.values() for name in names}
 
@@ -63,6 +64,11 @@ class PageAssetsTest(unittest.TestCase):
                 for name, attrs in features:
                     self.assertIn('defer', attrs, name)
                     self.assertNotIn('async', attrs, name)
+
+    def test_dashboard_only_downloads_review_model(self):
+        scripts = [name for name, _ in self.scripts('dashboard/index.html')]
+        self.assertIn('assets/review-model.js', scripts)
+        self.assertNotIn('assets/review.js', scripts)
 
 
 if __name__ == '__main__':

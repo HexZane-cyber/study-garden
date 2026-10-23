@@ -8,6 +8,8 @@ comments: false
 
 <div id="study-dashboard"></div>
 
+[打开复习卡：回忆读过的内容 →](review.md)
+
 可以点击“给我一个学习挑战”生成一条任务草稿，检查后再加入计划。它只使用内置提示，不会把任务发到外部 AI 服务。
 
 ## 数据与使用

@@ -18,6 +18,12 @@
     <script src="{{ 'assets/vault-formats.js' | url }}" defer></script>
     <script src="{{ 'assets/vault.js' | url }}" defer></script>
   {% endif %}
+  {% if page and page.file.src_uri in ['review.md', 'dashboard.md'] %}
+    <script src="{{ 'assets/review-model.js' | url }}" defer></script>
+    {% if page.file.src_uri == 'review.md' %}
+    <script src="{{ 'assets/review.js' | url }}" defer></script>
+    {% endif %}
+  {% endif %}
   {% if learning_catalog %}
     <script type="application/json" id="learning-data">{{ learning_catalog | safe }}</script>
     <script src="{{ 'assets/learning-model.js' | url }}" defer></script>
