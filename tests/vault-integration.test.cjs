@@ -64,6 +64,38 @@ const req=r=>new Promise((resolve,reject)=>{r.onsuccess=()=>resolve(r.result);r.
  await wait(()=>d.querySelector('[data-vault-open]'));await idle();d.querySelector('[data-vault-open]').click();
  await wait(()=>d.querySelector('#vault-reader').textContent.includes('从这里记录你的想法'));await idle();
  assert(d.querySelector('#vault-status').textContent.includes('本机解密'));
+ // Folder/type filters and size ordering operate on the decrypted in-memory catalog.
+ const directory=d.querySelector('#vault-directory');directory.value='images';directory.dispatchEvent(new w.Event('change'));
+ assert.equal(d.querySelectorAll('.vault-file').length,1);
+ directory.value='';directory.dispatchEvent(new w.Event('change'));
+ const sort=d.querySelector('#vault-sort');sort.value='size';sort.dispatchEvent(new w.Event('change'));
+ assert.equal(d.querySelector('.vault-file strong').textContent,'textbook.pdf');
+ d.querySelector('#vault-focus').click();assert(d.querySelector('#vault-open').classList.contains('vault-focus'));d.querySelector('#vault-focus').click();
+ const action=label=>[...d.querySelectorAll('#vault-reader button')].find(b=>b.textContent===label);
+ action('编辑笔记').click();await idle();
+ const edit=d.querySelector('.vault-editor');edit.value='# Saved revision\n\nprivate changed text';edit.dispatchEvent(new w.Event('input'));
+ w.confirm=()=>false;d.querySelector('#vault-lock').click();assert(!d.querySelector('#vault-open').hidden,'dirty edits must prompt before manual lock');
+ edit.dispatchEvent(new w.KeyboardEvent('keydown',{key:'s',ctrlKey:true,bubbles:true,cancelable:true}));
+ await wait(()=>d.querySelector('#vault-status').textContent.includes('笔记已加密保存'));await idle();
+ assert(d.querySelector('#vault-reader').textContent.includes('private changed text'));
+ assert.equal((await req(database.transaction('files').objectStore('files').getAll())).length,4,'edit atomically replaces one file');
+ w.confirm=()=>true;
+ // A delayed text decode must never put plaintext back after an immediate lock.
+ const originalText=Blob.prototype.text;let releaseText,started=false;
+ Blob.prototype.text=function(){const blob=this;started=true;return new Promise(resolve=>{releaseText=async()=>resolve(await originalText.call(blob));});};
+ [...d.querySelectorAll('.vault-file')].find(b=>b.querySelector('strong').textContent==='test.md').click();
+ await wait(()=>started);assert(!d.querySelector('#vault-lock').disabled,'lock remains available during reads');
+ d.querySelector('#vault-lock').click();await releaseText();await idle();Blob.prototype.text=originalText;
+ assert(d.querySelector('#vault-open').hidden);assert.equal(d.querySelector('#vault-reader').textContent,'');assert.equal(d.querySelector('#vault-files').textContent,'');
+ // Malformed backups may not overwrite globally keyed records in another space.
+ const collision={...manifest,space:{...manifest.space,id:webcrypto.randomUUID()}};
+ archive['manifest.json']=new TextEncoder().encode(JSON.stringify(collision));
+ const badBackup=fflate.zipSync(archive,{level:0});
+ const beforeIds=(await req(database.transaction('files').objectStore('files').getAll())).map(f=>f.id).sort();
+ Object.defineProperty(input,'files',{value:[new File([badBackup],'collision.sgvault')],configurable:true});input.dispatchEvent(new w.Event('change'));
+ await wait(()=>d.querySelector('#vault-status').textContent.includes('冲突'));await idle();
+ assert.deepEqual((await req(database.transaction('files').objectStore('files').getAll())).map(f=>f.id).sort(),beforeIds);
+ assert.equal((await req(database.transaction('spaces').objectStore('spaces').getAll())).length,1,'restore transaction must roll back');
  database.close();dom.window.close();
  console.log('Private vault integration passed: create, chunked PDF import, Obsidian folder and links, encrypted storage, lock, wrong password, backup, delete and restore.');
 })().catch(error=>{console.error(error);dom.window.close();process.exitCode=1;});

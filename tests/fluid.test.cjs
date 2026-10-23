@@ -4,31 +4,63 @@ const vm=require('node:vm');
 const assert=require('node:assert/strict');
 const Matter=require('../docs/assets/vendor/matter.min.js');
 const root=path.join(__dirname,'..');
-let engine,updates=0;
-const physics={...Matter,Engine:{...Matter.Engine,create:options=>(engine=Matter.Engine.create(options)),update:(...args)=>{updates++;return Matter.Engine.update(...args);}}};
-const gradient={addColorStop(){}};
-const ctx=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient},{get:(obj,key)=>key in obj?obj[key]:()=>{}});
-const elements=new Map();
-function element(id){if(!elements.has(id))elements.set(id,{textContent:'',value:'',children:[],events:{},append(...items){this.children.push(...items);},replaceChildren(){this.children=[];},setAttribute(){},addEventListener(type,fn){this.events[type]=fn;},getContext:()=>ctx,getBoundingClientRect:()=>({width:800,height:510,left:0,top:0}),setPointerCapture(){}});return elements.get(id);}
-const frames=[];
+const source=fs.readFileSync(path.join(root,'docs/assets/graph.js'),'utf8');
 const data=JSON.parse(fs.readFileSync(path.join(root,'docs/assets/graph-data.json'),'utf8'));
-const context=vm.createContext({console,URL,Math,Matter:physics,devicePixelRatio:1,window:{Matter:physics,addEventListener(){}},document:{body:{dataset:{mdColorScheme:'slate'}},hidden:false,currentScript:{src:'https://example.com/study-garden/assets/graph.js'},getElementById:element,createElement:()=>element(`generated-${Math.random()}`),createTextNode:s=>s},matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>data})});
+
+async function simulation(graph=data){
+  let engine,updates=0,now=0;
+  const physics={...Matter,Engine:{...Matter.Engine,create:options=>(engine=Matter.Engine.create(options)),update:(...args)=>{updates++;return Matter.Engine.update(...args);}}};
+  const gradient={addColorStop(){}};
+  const ctx=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient},{get:(obj,key)=>key in obj?obj[key]:()=>{}});
+  const elements=new Map(),frames=[],documentEvents={};
+  function element(id){if(!elements.has(id))elements.set(id,{textContent:'',value:'',children:[],events:{},append(...items){this.children.push(...items);},replaceChildren(){this.children=[];},setAttribute(){},addEventListener(type,fn){this.events[type]=fn;},getContext:()=>ctx,getBoundingClientRect:()=>({width:800,height:510,left:0,top:0}),setPointerCapture(){}});return elements.get(id);}
+  const document={body:{dataset:{mdColorScheme:'slate'}},hidden:false,currentScript:{src:'https://example.com/study-garden/assets/graph.js'},getElementById:element,createElement:()=>element(`generated-${Math.random()}`),createTextNode:s=>s,addEventListener:(type,fn)=>{documentEvents[type]=fn;}};
+  const context=vm.createContext({console,URL,Math,Matter:physics,devicePixelRatio:1,window:{Matter:physics,addEventListener(){}},document,matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>graph})});
+  vm.runInContext(source,context);await new Promise(resolve=>setImmediate(resolve));
+  const frame=delta=>{now+=delta;assert(frames.length===1,'Only one animation loop should be scheduled');frames.shift()(now);};
+  frame(0);
+  return {engine,element,document,documentEvents,frame,get updates(){return updates;},steps:(n,delta=1000/120)=>{for(let i=0;i<n;i++)frame(delta);},flow:value=>element('graph-flow').oninput({target:{value}})};
+}
+const minimal=count=>({nodes:Array.from({length:count},(_,i)=>({id:`node-${i}`,title:`Node ${i}`,group:'course',url:`notes/${i}/`})),edges:[]});
+const kinetic=bodies=>bodies.reduce((energy,b)=>energy+b.mass*(b.velocity.x**2+b.velocity.y**2)/2,0);
+
 (async()=>{
-  vm.runInContext(fs.readFileSync(path.join(root,'docs/assets/graph.js'),'utf8'),context);
-  await new Promise(resolve=>setImmediate(resolve));
-  assert.equal(engine.world.bodies.length,data.nodes.length);
-  assert.equal(engine.world.constraints.length,data.edges.length);
-  assert(engine.world.bodies.every(b=>b.collisionFilter.group===-1&&b.restitution===0));
-  for(let i=0;i<600;i++)frames.shift()(i*1000/60);
-  assert(updates>590&&updates<605);
-  assert(engine.world.bodies.every(b=>Number.isFinite(b.position.x)&&Number.isFinite(b.position.y)));
-  assert(engine.world.bodies.every(b=>Math.hypot(b.position.x,b.position.y)<2000));
-  element('graph-pause').onclick();const before=updates;
-  for(let i=600;i<660;i++)frames.shift()(i*1000/60);
-  assert.equal(updates,before);
-  element('graph-mode').onclick({currentTarget:element('graph-mode')});
-  assert.equal(element('graph-mode').textContent,'清晰模式');
-  element('graph-search').events.input({target:{value:'向量与矩阵'}});
-  assert(element('graph-info').children.length>1);
-  console.log(`Fluid graph passed: ${data.nodes.length} bodies, ${data.edges.length} springs, 600 frames, pause and selection.`);
+  const actual=await simulation();
+  assert.equal(actual.engine.world.bodies.length,data.nodes.length);
+  assert.equal(actual.engine.world.constraints.length,data.edges.length);
+  assert(actual.engine.world.bodies.every(b=>b.collisionFilter.group===-1&&b.restitution===0));
+  actual.steps(600,1000/60);
+  assert.equal(actual.updates,1200);
+  assert(actual.engine.world.bodies.every(b=>Number.isFinite(b.position.x)&&Number.isFinite(b.position.y)&&Math.hypot(b.position.x,b.position.y)<2000));
+  actual.element('graph-pause').onclick();const before=actual.updates;actual.steps(60,1000/60);assert.equal(actual.updates,before);
+  actual.element('graph-mode').onclick({currentTarget:actual.element('graph-mode')});assert.equal(actual.element('graph-mode').textContent,'清晰模式');
+  actual.element('graph-search').events.input({target:{value:'向量与矩阵'}});assert(actual.element('graph-info').children.length>1);
+
+  // Identical simulated time at common refresh rates must produce the same state.
+  const states=[];
+  for(const hz of [30,60,144]){const s=await simulation(minimal(3));s.steps(hz*3,1000/hz);assert.equal(s.updates,360);states.push(s.engine.world.bodies.map(b=>({...b.position})));}
+  for(const state of states.slice(1))state.forEach((p,i)=>assert(Math.hypot(p.x-states[0][i].x,p.y-states[0][i].y)<1e-8));
+
+  // A head-on approach must dissipate kinetic energy and retain distinct centers.
+  const collision=await simulation(minimal(2));collision.flow(0);const [a,b]=collision.engine.world.bodies;
+  Matter.Body.setPosition(a,{x:-34,y:0});Matter.Body.setPosition(b,{x:34,y:0});Matter.Body.setVelocity(a,{x:6,y:0});Matter.Body.setVelocity(b,{x:-6,y:0});
+  const initialEnergy=kinetic([a,b]);let closest=Infinity,maxSpeed=0;
+  for(let i=0;i<240;i++){collision.frame(1000/120);closest=Math.min(closest,Math.hypot(a.position.x-b.position.x,a.position.y-b.position.y));maxSpeed=Math.max(maxSpeed,a.speed,b.speed);}
+  assert(closest>15,`Contacts interpenetrated too far: ${closest}`);assert(maxSpeed<=6.1,`Contact added excess energy: ${maxSpeed}`);assert(kinetic([a,b])<initialEnergy*.02);
+  // Exact coincident centers must separate without NaN or an arbitrary zero force.
+  Matter.Body.setPosition(a,{x:0,y:0});Matter.Body.setPosition(b,{x:0,y:0});Matter.Body.setVelocity(a,{x:0,y:0});Matter.Body.setVelocity(b,{x:0,y:0});collision.steps(120);
+  assert(Math.hypot(a.position.x-b.position.x,a.position.y-b.position.y)>20);
+
+  // Drag follows a spring, keeps finite mass, and releases with damped inertia.
+  const dragged=await simulation(minimal(1));dragged.flow(0);const body=dragged.engine.world.bodies[0],canvas=dragged.element('knowledge-graph'),origin={...body.position};
+  const pointer=(type,x,y)=>canvas.events[type]({type,pointerId:1,clientX:400+x,clientY:255+y});
+  pointer('pointerdown',origin.x,origin.y);pointer('pointermove',origin.x+100,origin.y);
+  assert.equal(body.isStatic,false);assert.equal(body.position.x,origin.x,'Pointer events must not teleport dynamic bodies');
+  for(let i=1;i<=30;i++){pointer('pointermove',origin.x+i*4,origin.y);dragged.frame(1000/120);}
+  assert(body.position.x>origin.x+60);const releaseVelocity=body.velocity.x;assert(releaseVelocity>1&&releaseVelocity<=18);
+  pointer('pointerup',origin.x+120,origin.y);assert.equal(body.velocity.x,releaseVelocity,'Release must preserve inertia');
+  const releasedAt=body.position.x;dragged.steps(6);assert(body.position.x>releasedAt);dragged.steps(240);assert(Math.abs(body.velocity.x)<releaseVelocity*.1);
+  const beforeGap=dragged.updates;dragged.frame(5000);assert(dragged.updates-beforeGap<=6,'Long stalls must not trigger unbounded catch-up');
+  dragged.document.hidden=true;const beforeHidden=dragged.updates;dragged.frame(1000);assert.equal(dragged.updates,beforeHidden);
+  console.log(`Fluid graph passed: ${data.nodes.length} bodies, 120 Hz physics, refresh-rate invariance, dissipative contacts (minimum separation ${closest.toFixed(1)} px), coincidence recovery, spring drag, release inertia, bounded catch-up, pause and selection.`);
 })().catch(error=>{console.error(error);process.exitCode=1;});

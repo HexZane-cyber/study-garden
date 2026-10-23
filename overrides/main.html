@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+  {{ super() }}
+  {# Keep feature scripts on their owning page. Deferred dependencies execute in order. #}
+  {% if page and page.file.src_uri == "graph.md" %}
+    <script src="{{ 'assets/vendor/matter.min.js' | url }}" defer></script>
+    <script src="{{ 'assets/graph.js' | url }}" defer></script>
+  {% elif page and page.file.src_uri == "contribute.md" %}
+    <script src="{{ 'assets/contribution-model.js' | url }}" defer></script>
+    <script src="{{ 'assets/community.js' | url }}" defer></script>
+  {% elif page and page.file.src_uri == "private.md" %}
+    <script src="{{ 'assets/vendor/fflate.min.js' | url }}" defer></script>
+    <script src="{{ 'assets/vault-core.js' | url }}" defer></script>
+    <script src="{{ 'assets/vault.js' | url }}" defer></script>
+  {% endif %}
+{% endblock %}

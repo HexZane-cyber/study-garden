@@ -59,14 +59,7 @@ markdown_extensions:
 extra_css:
   - assets/extra.css
 extra_javascript:
-  - assets/vendor/matter.min.js
-  - assets/graph.js
-  - assets/contribution-model.js
-  - assets/community.js
   - assets/reading.js
-  - assets/vendor/fflate.min.js
-  - assets/vault-core.js
-  - assets/vault.js
 extra:
   generator: false
   giscus:
