@@ -114,6 +114,16 @@ const req=r=>new Promise((resolve,reject)=>{r.onsuccess=()=>resolve(r.result);r.
   const downloadButton=[...d.querySelectorAll('#vault-reader button')].find(b=>b.textContent==='下载原文件');downloadButton.click();await idle();assert.deepEqual(new Uint8Array(await downloaded.arrayBuffer()),raw,name+' bytes survive encryption/download');
  }
  assert.equal((await req(database.transaction('files').objectStore('files').getAll())).length,14);
+ // Duplicate decisions are honored by the real import/storage flow.
+ const importMixed=async(bytes)=>{Object.defineProperty(importInput,'files',{value:[new File([bytes],'code.py')],configurable:true});importInput.dispatchEvent(new w.Event('change'));await idle();};
+ d.querySelector('#vault-conflict').value='keep';await importMixed('kept copy');
+ kindSelect.value='code';kindSelect.dispatchEvent(new w.Event('change'));assert([...d.querySelectorAll('.vault-file strong')].some(e=>e.textContent==='code (2).py'));
+ const originalRecords=await req(database.transaction('files').objectStore('files').getAll());assert.equal(originalRecords.length,15);
+ d.querySelector('#vault-conflict').value='replace';await importMixed('updated original');
+ const replacedRecords=await req(database.transaction('files').objectStore('files').getAll());assert.equal(replacedRecords.length,15);assert(originalRecords.some(f=>!replacedRecords.some(r=>r.id===f.id)),'replacement retires exactly the old record');
+ [...d.querySelectorAll('.vault-file')].find(b=>b.querySelector('strong').textContent==='code.py').click();await wait(()=>d.querySelector('#vault-reader pre')?.textContent==='updated original');await idle();
+ d.querySelector('#vault-conflict').value='skip';await importMixed('must not overwrite');assert(d.querySelector('#vault-status').textContent.includes('已加密导入 0 个文件'));
+ const beforeSkipIds=replacedRecords.map(r=>r.id).sort();assert.deepEqual((await req(database.transaction('files').objectStore('files').getAll())).map(r=>r.id).sort(),beforeSkipIds);
  d.querySelector('#vault-lock').click();assert.equal(d.querySelectorAll('#vault-reader audio,#vault-reader video').length,0);
  database.close();dom.window.close();
  console.log('Private vault integration passed: create, chunked PDF import, Obsidian folder and links, encrypted storage, lock, wrong password, backup, delete and restore.');

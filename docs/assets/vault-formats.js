@@ -9,5 +9,23 @@
  const text=path=>['note','code'].includes(kind(path))||['csv','tsv'].includes(extension(path));
  const markdown=path=>['md','markdown'].includes(extension(path));
  const mime=path=>({pdf:'application/pdf',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',gif:'image/gif',bmp:'image/bmp',avif:'image/avif',mp3:'audio/mpeg',wav:'audio/wav',ogg:'audio/ogg',m4a:'audio/mp4',flac:'audio/flac',aac:'audio/aac',mp4:'video/mp4',webm:'video/webm',mov:'video/quicktime',m4v:'video/mp4'})[extension(path)]||'application/octet-stream';
- return {groups,labels,kind,supported,text,markdown,mime,accept:[...lookup.keys()].map(ext=>'.'+ext).join(',')};
+ function planImport(incoming,existing,mode='keep',folder=false){
+  if(!['keep','replace','skip'].includes(mode))throw Error('未知的重名处理方式');
+  const known=new Map(existing.map(f=>[f.path,f])),accepted=new Map();let skipped=0,renamed=0;
+  for(const file of incoming){
+   const source=folder?file.webkitRelativePath||file.name:file.name;
+   if(!supported(file.name)||source.split('/').some(p=>p.startsWith('.'))){skipped++;continue;}
+   let path=(folder?source.split('/').slice(1).join('/')||file.name:source).replace(/\\/g,'/');
+   if(path.split('/').some(p=>!p||p==='..'||p==='.')||path.includes('\0'))throw Error('文件路径不正确');
+   const original=known.get(path);let replace=null;
+   if(original||accepted.has(path)){
+    if(mode==='skip'){skipped++;continue;}
+    if(mode==='replace')replace=original||null;
+    else{const dot=path.lastIndexOf('.'),slash=path.lastIndexOf('/'),stem=dot>slash?path.slice(0,dot):path,ext=dot>slash?path.slice(dot):'';let n=2;while(known.has(path)||accepted.has(path))path=stem+' ('+(n++)+')'+ext;renamed++;}
+   }
+   accepted.set(path,{file,path,replace});
+  }
+  return {accepted:[...accepted.values()],skipped,renamed};
+ }
+ return {groups,labels,kind,supported,text,markdown,mime,planImport,accept:[...lookup.keys()].map(ext=>'.'+ext).join(',')};
 });

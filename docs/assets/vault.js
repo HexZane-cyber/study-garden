@@ -29,6 +29,7 @@
     });
     $('#vault-open').setAttribute('aria-busy',String(busy));
     if(editor)editor.input.readOnly=busy;
+    $('#vault-conflict').disabled=busy;
   }
   async function run(task){
     if(busy)return;
@@ -128,7 +129,7 @@
         await put('chunks',{id:`${id}:${i}`,space:currentSpace.id,file:id,index:i,...encrypted});
         onProgress?.(Math.min(file.size,(i+1)*V.CHUNK_SIZE));
       }
-      const now=new Date().toISOString(),metadata={path:V.normalizePath(path),name:file.name,mime:file.type||'',size:file.size,chunks,added:replace?.added||now,updated:now};
+      const now=new Date().toISOString(),metadata={path:V.normalizePath(path),name:path.split('/').pop(),mime:file.type||'',size:file.size,chunks,added:replace?.added||now,updated:now};
       const meta=await V.encrypt(currentKey,V.encoder.encode(JSON.stringify(metadata)),`${currentSpace.id}|${id}|meta`);
       const oldChunks=replace?await request(store('chunks').index('file').getAllKeys(replace.id)):[];check();
       // Commit the new metadata and remove the old revision in one transaction.
@@ -140,28 +141,26 @@
     }catch(error){if(!committed)await removeFile(id);throw error;}
   }
   async function importFiles(incoming,folder=false){
-    const gen=generation;ensureSession(gen);let skipped=0,added=0,processed=0;
-    const known=new Set(files.map(f=>f.path)),accepted=[];
-    for(const file of [...incoming]){
-      const source=folder?file.webkitRelativePath||file.name:file.name;
-      const path=V.normalizePath(folder?source.split('/').slice(1).join('/')||file.name:source);
-      if(!F.supported(file.name)||source.split('/').some(s=>s.startsWith('.'))||known.has(path)){skipped++;continue;}
-      if(file.size>V.MAX_FILE)throw Error(`${file.name} 超过 128 MB，本批尚未导入`);
-      known.add(path);accepted.push({file,path});
-    }
+    if(!canLeave())return;
+    const gen=generation;ensureSession(gen);let added=0,processed=0,updated=0;
+    const {accepted,skipped,renamed}=F.planImport([...incoming],files,$('#vault-conflict').value,folder);
     if(accepted.length>1000)throw Error('一次最多导入 1000 个文件，请分批导入');
+    for(const {file}of accepted)if(file.size>V.MAX_FILE)throw Error(`${file.name} 超过 128 MB，本批尚未导入`);
     const size=accepted.reduce((s,x)=>s+x.file.size,0);
-    if(size+files.reduce((s,f)=>s+f.size,0)>V.MAX_TOTAL)throw Error('导入后会超过 256 MB，请分批整理');
+    const growth=accepted.reduce((s,x)=>s+x.file.size-(x.replace?.size||0),0);
+    if(growth+files.reduce((s,f)=>s+f.size,0)>V.MAX_TOTAL)throw Error('导入后会超过 256 MB，请分批整理');
+    // Commit shrinking replacements first so a full vault can accept same-size updates.
+    accepted.sort((a,b)=>(a.file.size-(a.replace?.size||0))-(b.file.size-(b.replace?.size||0)));
     importing=true;cancelImport=false;$('#vault-progress').hidden=false;$('#vault-progress-bar').value=0;
     try{
-      for(const {file,path} of accepted){
+      for(const {file,path,replace} of accepted){
         ensureSession(gen);if(cancelImport)break;
         const label=`正在加密 ${added+1}/${accepted.length}：${file.name}`;message(label);$('#vault-progress-label').textContent=label;
-        await saveFile(file,path,null,bytes=>{if(gen===generation)$('#vault-progress-bar').value=size?(processed+bytes)/size*100:100;});
-        processed+=file.size;added++;renderFiles();
+        await saveFile(file,path,replace,bytes=>{if(gen===generation)$('#vault-progress-bar').value=size?(processed+bytes)/size*100:100;});
+        processed+=file.size;added++;if(replace){updated++;if(active===replace.id){active=null;editor=null;revoke();readerEmpty();}}renderFiles();
       }
       ensureSession(gen);
-      message(cancelImport?`导入已取消，已完成的 ${added} 个文件已保留。`:`已加密导入 ${added} 个文件，跳过 ${skipped} 个重复、隐藏或不支持的文件。`);
+      message(cancelImport?`导入已取消，已完成的 ${added} 个文件已保留。`:`已加密导入 ${added} 个文件，其中更新 ${updated} 个，重命名保留 ${renamed} 个；跳过 ${skipped} 个重复、隐藏或不支持的文件。`);
     }catch(error){
       if(error.name==='ImportCancelled')message(`导入已取消，已完成的 ${added} 个文件已保留，未完成的文件已清理。`);
       else if(error.name==='AbortError')throw error;

@@ -16,6 +16,7 @@ comments: false
 <section id="vault-open" hidden>
 <div class="vault-heading"><div><span class="vault-eyebrow">我的资料库</span><strong id="vault-name"></strong><span id="vault-count" class="reading-meta"></span></div><button id="vault-lock" type="button" class="md-button">锁定空间</button></div>
 <div class="vault-toolbar vault-primary-actions"><button id="vault-import" class="md-button md-button--primary" type="button">导入文件</button><button id="vault-folder" class="md-button" type="button">导入 Obsidian 文件夹</button><button id="vault-new" class="md-button" type="button">新建笔记</button><button id="vault-backup" class="md-button" type="button">导出加密备份</button></div>
+<label class="vault-control-label">遇到同路径文件时 <select id="vault-conflict" aria-label="导入重名文件处理"><option value="keep">保留两份（自动重命名）</option><option value="replace">更新原文件</option><option value="skip">跳过已有文件</option></select></label>
 <div id="vault-dropzone" class="vault-dropzone" tabindex="0" role="button" aria-label="拖入文件或按回车选择要导入的文件"><strong>把学习资料拖到这里</strong><span>PDF · Office 文档 · 笔记 · 图片 · 音视频 · 代码 · 压缩包。文件夹请使用上方的导入按钮。</span></div>
 <div id="vault-progress" class="vault-progress" hidden><div class="vault-progress-heading"><span id="vault-progress-label" role="status" aria-live="polite"></span><button id="vault-cancel-import" type="button" class="md-button">停止导入</button></div><progress id="vault-progress-bar" max="100" value="0" aria-label="文件导入进度"></progress></div>
 <div class="vault-library-heading"><div class="vault-storage-meter"><span id="vault-storage" class="reading-meta">每空间最多 256 MB</span><progress id="vault-capacity" max="100" value="0" aria-label="私密空间容量使用比例"></progress></div><button id="vault-focus" class="md-button" type="button" aria-pressed="false">专注阅读</button></div>
@@ -45,7 +46,7 @@ comments: false
 | 音频与视频 | MP3、WAV、OGG、M4A、FLAC、AAC、MP4、WebM、MOV | 使用浏览器播放器，支持情况取决于编码 |
 | 电子书与压缩包 | EPUB、MOBI、AZW3、ZIP、7Z、RAR、TAR、GZ | 加密保存原件，下载阅读或解压 |
 
-一次可以选择多种文件，也可以拖入多个文件。Office 文件不会发送给第三方在线预览服务。文件夹导入使用同一格式规则，隐藏配置仍会跳过；同路径文件不会覆盖已有资料。
+一次可以选择多种文件，也可以拖入多个文件。Office 文件不会发送给第三方在线预览服务。文件夹导入使用同一格式规则，隐藏配置仍会跳过；同路径文件默认自动重命名、保留两份；也可以在导入前选择“更新原文件”或“跳过已有文件”。更新只有在新文件完成加密后才替换旧记录，未完成的更新保留旧文件。
 
 ## 导入 Obsidian 笔记
 

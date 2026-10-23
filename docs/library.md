@@ -6,6 +6,9 @@ comments: false
 
 收藏的文章和最近阅读记录保存在当前浏览器。使用任意文章标题下的“收藏本页”，把常用课程放到这里。
 
+[导入我的资料](private.md){ .md-button .md-button--primary }
+[浏览知识图谱](graph.md){ .md-button }
+
 <div id="reading-library"></div>
 
 这里是个人阅读记录，不会作为社区投稿公开，也不会自动同步到其他设备。
