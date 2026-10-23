@@ -10,16 +10,17 @@ const data=JSON.parse(fs.readFileSync(path.join(root,'docs/assets/graph-data.jso
 async function simulation(graph=data){
   let engine,updates=0,now=0;
   const physics={...Matter,Engine:{...Matter.Engine,create:options=>(engine=Matter.Engine.create(options)),update:(...args)=>{updates++;return Matter.Engine.update(...args);}}};
-  const gradient={addColorStop(){}};
-  const ctx=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient},{get:(obj,key)=>key in obj?obj[key]:()=>{}});
+  const gradient={addColorStop(){}};let labelBoxes=[];
+  const classes=()=>({toggle(){},contains(){return false;}});
+  const ctx=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient,measureText:text=>({width:Array.from(text).length*8}),clearRect:()=>{labelBoxes=[];},fillRect:(x,y,w,h)=>labelBoxes.push({x,y,w,h})},{get:(obj,key)=>key in obj?obj[key]:()=>{}});
   const elements=new Map(),frames=[],documentEvents={};
-  function element(id){if(!elements.has(id))elements.set(id,{textContent:'',value:'',children:[],events:{},append(...items){this.children.push(...items);},replaceChildren(){this.children=[];},setAttribute(){},addEventListener(type,fn){this.events[type]=fn;},getContext:()=>ctx,getBoundingClientRect:()=>({width:800,height:510,left:0,top:0}),setPointerCapture(){}});return elements.get(id);}
-  const document={body:{dataset:{mdColorScheme:'slate'}},hidden:false,currentScript:{src:'https://example.com/study-garden/assets/graph.js'},getElementById:element,createElement:()=>element(`generated-${Math.random()}`),createTextNode:s=>s,addEventListener:(type,fn)=>{documentEvents[type]=fn;}};
+  function element(id){if(!elements.has(id))elements.set(id,{textContent:'',value:'',classList:classes(),closest:()=>element('graph-wrap'),focus(){},attributes:{},children:[],events:{},append(...items){this.children.push(...items);},replaceChildren(){this.children=[];},setAttribute(name,value){this.attributes[name]=value;},addEventListener(type,fn){this.events[type]=fn;},getContext:()=>ctx,getBoundingClientRect:()=>({width:800,height:510,left:0,top:0}),setPointerCapture(){}});return elements.get(id);}
+  const document={body:{classList:classes(),dataset:{mdColorScheme:'slate'}},hidden:false,currentScript:{src:'https://example.com/study-garden/assets/graph.js'},getElementById:element,createElement:()=>element(`generated-${Math.random()}`),createTextNode:s=>s,addEventListener:(type,fn)=>{documentEvents[type]=fn;}};
   const context=vm.createContext({console,URL,Math,Matter:physics,devicePixelRatio:1,window:{Matter:physics,addEventListener(){}},document,matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>graph})});
   vm.runInContext(source,context);await new Promise(resolve=>setImmediate(resolve));
   const frame=delta=>{now+=delta;assert(frames.length===1,'Only one animation loop should be scheduled');frames.shift()(now);};
   frame(0);
-  return {engine,element,document,documentEvents,frame,get updates(){return updates;},steps:(n,delta=1000/120)=>{for(let i=0;i<n;i++)frame(delta);},flow:value=>element('graph-flow').oninput({target:{value}})};
+  return {engine,element,document,documentEvents,frame,get boxes(){return labelBoxes;},get updates(){return updates;},steps:(n,delta=1000/120)=>{for(let i=0;i<n;i++)frame(delta);},flow:value=>element('graph-flow').oninput({target:{value}})};
 }
 const minimal=count=>({nodes:Array.from({length:count},(_,i)=>({id:`node-${i}`,title:`Node ${i}`,group:'course',url:`notes/${i}/`})),edges:[]});
 const kinetic=bodies=>bodies.reduce((energy,b)=>energy+b.mass*(b.velocity.x**2+b.velocity.y**2)/2,0);
@@ -35,6 +36,23 @@ const kinetic=bodies=>bodies.reduce((energy,b)=>energy+b.mass*(b.velocity.x**2+b
   actual.element('graph-pause').onclick();const before=actual.updates;actual.steps(60,1000/60);assert.equal(actual.updates,before);
   actual.element('graph-mode').onclick({currentTarget:actual.element('graph-mode')});assert.equal(actual.element('graph-mode').textContent,'清晰模式');
   actual.element('graph-search').events.input({target:{value:'向量与矩阵'}});assert(actual.element('graph-info').children.length>1);
+
+  // Smart labels stay inside the canvas and do not overlap one another.
+  const labels=await simulation();labels.steps(120);
+  assert(labels.boxes.length>0&&labels.boxes.length<=data.nodes.length);
+  for(let i=0;i<labels.boxes.length;i++){
+    const a=labels.boxes[i];assert(a.x>=0&&a.y>=0&&a.x+a.w<=800&&a.y+a.h<=510);
+    for(const b of labels.boxes.slice(i+1))assert(!(a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y));
+  }
+  labels.element('graph-labels').onchange({target:{value:'off'}});labels.frame(1000/60);assert.equal(labels.boxes.length,0);
+  labels.element('graph-labels').onchange({target:{value:'smart'}});
+  labels.element('graph-search').events.input({target:{value:'向量与矩阵'}});
+  assert(!labels.element('graph-focus').disabled);
+  const related=labels.element('graph-info').children.find(x=>x.className==='graph-related');assert(related&&related.children.length>0);
+  labels.element('graph-focus').onclick();assert.equal(labels.element('graph-focus').attributes['aria-pressed'],'true');
+  labels.element('graph-fit').onclick();labels.frame(1000/60);assert(labels.boxes.length>=1);
+  labels.element('graph-expand').onclick();assert.equal(labels.element('graph-expand').attributes['aria-pressed'],'true');
+  labels.documentEvents.keydown({key:'Escape'});assert.equal(labels.element('graph-expand').attributes['aria-pressed'],'false');
 
   // Identical simulated time at common refresh rates must produce the same state.
   const states=[];

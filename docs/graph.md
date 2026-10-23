@@ -9,6 +9,7 @@ comments: false
 <div class="graph-wrap">
 <div class="graph-toolbar"><input id="graph-search" aria-label="搜索知识节点" placeholder="搜索节点，例如：Python、矩阵…"><button id="graph-mode" type="button" aria-pressed="true">液态模式</button><button id="graph-pause" type="button">暂停运动</button><button id="graph-reset" type="button">重置视图</button></div>
 <div class="flow-control"><span>FLOW / 流动强度</span><input id="graph-flow" aria-label="流动强度" type="range" min="0" max="100" value="55"><span id="graph-flow-value">55%</span></div>
+<div class="graph-tools"><label>标题<select id="graph-labels"><option value="smart">智能避让</option><option value="all">显示全部</option><option value="off">仅选中与悬停</option></select></label><button id="graph-focus" type="button" aria-pressed="false" disabled>只看直接关联</button><button id="graph-fit" type="button">适应画布</button><button id="graph-expand" type="button" aria-pressed="false">大画布</button><span id="graph-hint">点击节点查看关联，拖动空白处平移</span></div>
 <canvas id="knowledge-graph" role="img" aria-label="可拖拽的课程与笔记关系图。键盘用户可使用下方的文章列表。" tabindex="0"></canvas>
 <div class="graph-legend"><span><i style="background:#ef5467"></i>课程</span><span><i style="background:#ff9a81"></i>笔记</span><span><i style="background:#d69767"></i>工具</span><span><i style="background:#9e919b"></i>指南</span></div>
 <div id="graph-info" class="graph-info" aria-live="polite">正在加载知识图谱…</div>
@@ -21,6 +22,8 @@ comments: false
 在[笔记](notes/index.md)中添加到其他文章的 Markdown 链接，提交后构建会重新生成连接。节点位置只是探索时的临时布局，不影响文章结构。
 
 支持鼠标拖拽、触屏单指拖动、滚轮缩放；键盘可以通过文章列表打开正文。
+
+标题默认智能避让，优先显示选中、悬停和搜索匹配的文章。点击一个节点后，下方会列出可以直接打开的关联文章；开启“只看直接关联”可收起其他节点，连线仍代表真实文章链接。“适应画布”把当前可见节点放回视野，“大画布”提供更宽的探索空间，按 Escape 可退出。以上操作不会改变文章内容或知识关系。
 
 ## 液态模式
 
