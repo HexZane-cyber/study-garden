@@ -5,6 +5,7 @@ __pycache__/
 .pip-tmp/
 .tooling/
 tests/node_modules/
+frontend/node_modules/
 site/
 docs/assets/graph-data.json
 docs/assets/published-courses.json

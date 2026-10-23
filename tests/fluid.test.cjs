@@ -9,7 +9,7 @@ const LiquidSurface=require('../docs/assets/liquid-surface.js');
 const source=fs.readFileSync(path.join(root,'docs/assets/graph.js'),'utf8');
 const data=JSON.parse(fs.readFileSync(path.join(root,'docs/assets/graph-data.json'),'utf8'));
 
-async function simulation(graph=data,usage={}){
+async function simulation(graph=data,usage={},three){
   let engine,updates=0,now=0;
   const physics={...Matter,Engine:{...Matter.Engine,create:options=>(engine=Matter.Engine.create(options)),update:(...args)=>{updates++;return Matter.Engine.update(...args);}}};
   const gradient={addColorStop(){}};let labelBoxes=[];
@@ -18,7 +18,7 @@ async function simulation(graph=data,usage={}){
   const elements=new Map(),frames=[],documentEvents={};
   function element(id){if(!elements.has(id))elements.set(id,{textContent:'',value:'',classList:classes(),closest:()=>element('graph-wrap'),focus(){},attributes:{},children:[],events:{},append(...items){this.children.push(...items);},replaceChildren(){this.children=[];},setAttribute(name,value){this.attributes[name]=value;},addEventListener(type,fn){this.events[type]=fn;},getContext:()=>ctx,getBoundingClientRect:()=>({width:800,height:510,left:0,top:0}),setPointerCapture(){}});return elements.get(id);}
   const document={body:{classList:classes(),dataset:{mdColorScheme:'slate'}},hidden:false,currentScript:{src:'https://example.com/study-garden/assets/graph.js'},getElementById:element,createElement:()=>element(`generated-${Math.random()}`),createTextNode:s=>s,addEventListener:(type,fn)=>{documentEvents[type]=fn;}};
-  const context=vm.createContext({console,URL,Math,LiquidSurface,ArticleActivity,localStorage:{getItem:()=>JSON.stringify({version:1,entries:usage})}, Matter:physics,devicePixelRatio:1,window:{Matter:physics,addEventListener(){}},document,matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>graph})});
+  const context=vm.createContext({console,URL,Math,LiquidSurface,ArticleActivity,Graph3D:three,localStorage:{getItem:()=>JSON.stringify({version:1,entries:usage})}, Matter:physics,devicePixelRatio:1,window:{Matter:physics,Graph3D:three,addEventListener(){}},document,matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>graph})});
   vm.runInContext(source,context);await new Promise(resolve=>setImmediate(resolve));
   const frame=delta=>{now+=delta;assert(frames.length===1,'Only one animation loop should be scheduled');frames.shift()(now);};
   frame(0);
@@ -63,6 +63,17 @@ const kinetic=bodies=>bodies.reduce((energy,b)=>energy+b.mass*(b.velocity.x**2+b
   assert(distance(frequent)>distance(rare)*2,'frequent articles should have stronger local flow');
   frequent.element('graph-activity').onchange({target:{checked:false}});
   assert.equal(frequent.element('graph-flow').value,'','activity control must not alter the global slider');
+
+  // A failed WebGL constructor must leave a working 2D graph.
+  const fallback=await simulation(minimal(2),{},{createScene(){throw Error('WebGL unavailable');}});
+  assert.equal(fallback.element('graph-view').value,'2d');assert.equal(fallback.element('knowledge-graph').hidden,false);
+  assert.equal(fallback.element('graph-render-status').hidden,false);fallback.steps(5);assert(fallback.updates>0);
+  let sceneState={},sceneVisible=false,selected3d;
+  const bridge=await simulation(minimal(2),{},{createScene(c,data,select){selected3d=select;return {setState:state=>sceneState=state,setVisible:value=>sceneVisible=value,fit(){},reset(){}};}});
+  assert.equal(bridge.element('graph-view').value,'3d');assert(sceneVisible);bridge.steps(10);assert.equal(bridge.updates,0,'2D physics must stop while 3D is active');
+  selected3d('node-0');assert.equal(sceneState.selected,'node-0');
+  bridge.element('graph-pause').onclick();assert(sceneState.paused);
+  bridge.element('graph-view').onchange({target:{value:'2d'}});assert(!sceneVisible);assert.equal(bridge.element('knowledge-graph-3d').hidden,true);
 
   // Identical simulated time at common refresh rates must produce the same state.
   const states=[];

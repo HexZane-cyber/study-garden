@@ -105,3 +105,18 @@ node tests/vault-integration.test.cjs
 私密空间支持拖入普通文件、目录筛选、类型筛选、名称/修改时间/大小排序、可中止导入和专注阅读。编辑支持 Ctrl/Command + S 加密保存，切换与手动锁定前提醒未保存修改。持久存储请求取决于浏览器，不替代备份。集成测试还覆盖锁定与异步读取竞争、原子编辑和备份冲突回滚。
 
 液态图谱使用等密度轮廓生成连续液面，支持液颈融合与分离、速度拉伸和接触形变。按本机文章阅读次数与最近阅读时间分配各节点流动强度，频率记录存于本地，不统计私密空间内容；可在图谱页关闭。新增纯函数测试：`node tests/liquid-surface.test.cjs`、`node tests/article-activity.test.cjs`。
+
+## 三维图谱
+
+默认使用 Three.js 0.186.1 的 WebGL 三维视图，支持轨道旋转、缩放、平移、液滴弹性拖拽、三轴软接触和阅读频率流场。可切回二维，WebGL 初始化失败自动使用二维。所有库和光照场景均随站点打包，不依赖第三方 CDN、模型或图片。
+
+三维前端源码在 frontend/；发布用打包文件已提交在 docs/assets/vendor/graph3d.bundle.js，MkDocs 构建不需要 Node 依赖。修改三维源码后重新生成：
+
+```powershell
+npm ci --prefix frontend
+npm run build --prefix frontend
+python build.py
+node tests/graph3d.test.cjs
+```
+
+三维物理测试覆盖深度分布、布局稳定、软接触、重叠分离、拖拽惯性、频率流动和重置；图谱集成测试覆盖三维控制同步及 WebGL 失败回退。

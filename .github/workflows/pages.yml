@@ -31,6 +31,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_*.py'
           node tests/core.test.cjs
           node tests/fluid.test.cjs
+          node tests/graph3d.test.cjs
           node tests/liquid-surface.test.cjs
           node tests/article-activity.test.cjs
           node tests/contributions.test.cjs
