@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {MarchingCubes} from 'three/addons/objects/MarchingCubes.js';
+import Visuals from './graph-visuals.cjs';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import Physics from './graph3d-physics.cjs';
 
@@ -19,7 +21,7 @@ export function createScene(canvas,data,onSelect,onError){
   for(let i=0;i<160;i++)model.step(1/120,0);
   for(const n of model.nodes){n.vx*=.15;n.vy*=.15;n.vz*=.15;}
   const palette={course:0xef5467,note:0xff9a81,tool:0xd69767,guide:0x9e919b};
-  const state={paused:false,flow:.55,adaptive:true,transparency:.74,liquid:true,selected:null,query:'',focusOnly:false,labels:'smart',activities:{}};
+  const state={paused:false,flow:.55,adaptive:true,transparency:.74,liquid:true,selected:null,query:'',focusOnly:false,labels:'smart',activities:{},nodeColors:{},lineColor:'#a94f6b',bend:.28};
   const adjacency=new Map(model.nodes.map(n=>[n.id,new Set()]));for(const e of model.edges){adjacency.get(e.a.id).add(e.b.id);adjacency.get(e.b.id).add(e.a.id);}
   const glass=new THREE.MeshPhysicalMaterial({color:0xe9b1c3,roughness:.1,metalness:0,transmission:.93,thickness:.7,ior:1.33,clearcoat:.45,clearcoatRoughness:.08,attenuationColor:0xee6a8c,attenuationDistance:2,envMapIntensity:.48});
   const solidMaterials=new Map(Object.entries(palette).map(([group,color])=>[group,new THREE.MeshStandardMaterial({color,roughness:.36})]));
@@ -28,18 +30,20 @@ export function createScene(canvas,data,onSelect,onError){
   const measure=document.createElement('canvas').getContext('2d');measure.font='11px system-ui,"Microsoft YaHei",sans-serif';
   const shapes=model.nodes.map(n=>{
     const geometry=new THREE.SphereGeometry(1,24,16),base=geometry.attributes.position.array.slice();
-    const mesh=new THREE.Mesh(geometry,glass);mesh.userData.id=n.id;scene.add(mesh);
-    const marker=new THREE.Mesh(markerGeometry,markerMaterials.get(n.group)||markerMaterials.get('guide'));scene.add(marker);
+    const liquidMaterial=glass.clone(),solid=(solidMaterials.get(n.group)||solidMaterials.get('guide')).clone();
+    const mesh=new THREE.Mesh(geometry,liquidMaterial);mesh.userData.id=n.id;scene.add(mesh);
+    const marker=new THREE.Mesh(markerGeometry,(markerMaterials.get(n.group)||markerMaterials.get('guide')).clone());scene.add(marker);
     const label=document.createElement('button');label.type='button';label.className='graph3d-label';label.textContent=n.title;label.setAttribute('aria-label','选择 '+n.title);label.onclick=()=>onSelect(n.id);layer.append(label);
-    return {n,mesh,marker,geometry,base,label,labelWidth:Math.min(250,measure.measureText(n.title).width+14),angle:new THREE.Quaternion()};
+    return {n,mesh,marker,geometry,base,label,glass:liquidMaterial,solid,norm:1,phase:n.seed,labelWidth:Math.min(250,measure.measureText(n.title).width+14),angle:new THREE.Quaternion()};
   });
-  const positionArray=new Float32Array(model.edges.length*6),lineGeometry=new THREE.BufferGeometry();
+  const segments=20,positionArray=new Float32Array(model.edges.length*segments*6),lineGeometry=new THREE.BufferGeometry();
   lineGeometry.setAttribute('position',new THREE.BufferAttribute(positionArray,3));
   const lineMaterial=new THREE.LineBasicMaterial({color:0x6c3b4d});
   const lines=new THREE.LineSegments(lineGeometry,lineMaterial);lines.frustumCulled=false;scene.add(lines);
   const beadGeometry=new THREE.SphereGeometry(.026,6,4),beadMaterial=new THREE.MeshBasicMaterial({color:0xf7adbf});
   const beads=model.edges.map(()=>{const bead=new THREE.Mesh(beadGeometry,beadMaterial);scene.add(bead);return bead;});
-  const bridges=new Map(),bridgeGeometry=new THREE.CylinderGeometry(1,1,1,12,1,true);
+  const fused=new Map(),fusionMaterial=glass.clone();fusionMaterial.vertexColors=true;fusionMaterial.color.set(0xffffff);fusionMaterial.attenuationColor.set(0xffffff);
+  let lastFusion=-1;
   const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2(),plane=new THREE.Plane(),point=new THREE.Vector3(),dragOffset=new THREE.Vector3(),direction=new THREE.Vector3(),up=new THREE.Vector3(0,1,0);
   let active=false,disposed=false,frameId=null,last=null,accumulator=0,hover=null,gesture=null,lastShape=-1,lastShapeTime=-1,width=1,height=1;
   const linked=n=>!state.selected||n.id===state.selected||adjacency.get(state.selected)?.has(n.id);
@@ -59,13 +63,43 @@ export function createScene(canvas,data,onSelect,onError){
     const {n,base,geometry}=shape,pos=geometry.attributes.position;
     const phase=n.seed+model.time*.2*state.flow*n.localFlow;let sum=0,weights=0;
     const radii=new Float32Array(base.length/3);
-    for(let i=0;i<base.length;i+=3){const x=base[i],y=base[i+1],z=base[i+2],theta=Math.atan2(z,x),phi=Math.acos(Math.max(-1,Math.min(1,y)));
-      const radius=1+.16*Math.sin(theta+n.seed)*Math.sin(phi)+.09*Math.cos(3*theta+phase)*Math.sin(phi)**2+.065*Math.sin(2*phi+n.seed);
+    for(let i=0;i<base.length;i+=3){const x=base[i],y=base[i+1],z=base[i+2];
+      const radius=Visuals.radial(x,y,z,n.seed,phase);
       radii[i/3]=radius;const w=Math.max(.01,Math.sin(phi));sum+=radius**3*w;weights+=w;
     }
-    const norm=Math.cbrt(sum/weights);
+    const norm=Math.cbrt(sum/weights);shape.norm=norm;shape.phase=phase;
     for(let i=0;i<base.length;i+=3){const r=radii[i/3]/norm;pos.setXYZ(i/3,base[i]*r,base[i+1]*r,base[i+2]*r);}
     pos.needsUpdate=true;geometry.computeVertexNormals();geometry.computeBoundingSphere();
+  }
+  function fusion(now){
+    if(!state.liquid){for(const item of fused.values())item.effect.visible=false;return;}
+    const available=shapes.filter(s=>shown(s.n)),parents=available.map((_,i)=>i);
+    const root=i=>{while(parents[i]!==i){parents[i]=parents[parents[i]];i=parents[i];}return i;};
+    for(let i=0;i<available.length;i++)for(let j=i+1;j<available.length;j++){
+      const a=available[i],b=available[j],ar=Math.max(a.mesh.scale.x,a.mesh.scale.y,a.mesh.scale.z)*1.5,br=Math.max(b.mesh.scale.x,b.mesh.scale.y,b.mesh.scale.z)*1.5;
+      if(a.mesh.position.distanceTo(b.mesh.position)<ar+br+.16)parents[root(j)]=root(i);
+    }
+    const groups=new Map();available.forEach((shape,i)=>{const key=root(i);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(shape);});
+    const live=new Set();
+    for(const group of groups.values()){
+      if(group.length<2)continue;
+      const id=group.map(s=>s.n.id).sort().join('|');live.add(id);
+      let item=fused.get(id);
+      if(!item){const res=group.length<=3?40:group.length<=8?48:56;const effect=new MarchingCubes(res,fusionMaterial,false,true,16000);effect.isolation=0;effect.frustumCulled=false;scene.add(effect);item={effect,res,signature:''};fused.set(id,item);}
+      item.effect.visible=true;
+      for(const shape of group)shape.mesh.visible=false;
+      const signature=group.map(s=>[s.mesh.position.x,s.mesh.position.y,s.mesh.position.z,s.mesh.quaternion.x,s.mesh.quaternion.y,s.mesh.quaternion.z,s.mesh.quaternion.w,s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z,s.phase].map(v=>v.toFixed(3)).join(',')).join(';')+JSON.stringify(state.nodeColors);
+      if(signature===item.signature||(item.signature&&now-lastFusion<1000/30))continue;
+      item.signature=signature;
+      const box=new THREE.Box3();
+      for(const s of group){const reach=Math.max(s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z)*1.7+.2;box.expandByPoint(s.mesh.position.clone().addScalar(reach));box.expandByPoint(s.mesh.position.clone().addScalar(-reach));}
+      const center=box.getCenter(new THREE.Vector3()),extent=box.getSize(new THREE.Vector3()),half=Math.max(extent.x,extent.y,extent.z)/2;
+      const drops=group.map(s=>{const q=s.mesh.quaternion,color=s.glass.color;return {x:s.n.x,y:s.n.y,z:s.n.z,sx:s.mesh.scale.x,sy:s.mesh.scale.y,sz:s.mesh.scale.z,inverse:[-q.x,-q.y,-q.z,q.w],seed:s.n.seed,phase:s.phase,norm:s.norm,color:[color.r,color.g,color.b]};});
+      item.effect.reset();Visuals.fillUnion(item.effect.field,item.effect.palette,item.res,center,half,drops,.18);
+      item.effect.position.copy(center);item.effect.scale.setScalar(half);item.effect.update();
+    }
+    for(const [id,item]of fused)if(!live.has(id)){scene.remove(item.effect);item.effect.geometry.dispose();fused.delete(id);}
+    if(now-lastFusion>=1000/30)lastFusion=now;
   }
   function labels(){
     const occupied=[],rank=n=>(n.id===state.selected?10000:0)+(n.id===hover?9000:0)+(state.query&&n.title.toLowerCase().includes(state.query)?8000:0)+(state.selected&&linked(n)?100:0)+(adjacency.get(n.id)?.size||0);
@@ -95,7 +129,7 @@ export function createScene(canvas,data,onSelect,onError){
     const updateShape=lastShape<0||(model.time!==lastShapeTime&&now-lastShape>1000/30);
     for(const shape of shapes){const {n,mesh,marker}=shape;
       mesh.visible=marker.visible=shown(n);mesh.position.set(n.x,n.y,n.z);marker.position.copy(mesh.position);
-      mesh.material=state.liquid?glass:(solidMaterials.get(n.group)||solidMaterials.get('guide'));
+      mesh.material=state.liquid?shape.glass:shape.solid;shape.glass.transmission=glass.transmission;shape.glass.attenuationDistance=glass.attenuationDistance;
       const speed=Math.hypot(n.vx,n.vy,n.vz),stretch=1+.12*Math.sin(n.seed)+Math.min(.3,speed*.07);
       mesh.scale.set(n.r*stretch,n.r*(1-n.squeeze)/Math.sqrt(stretch),n.r/((1-n.squeeze)*Math.sqrt(stretch)));
       direction.set(n.vx,n.vy,n.vz);if(direction.lengthSq()>.01)shape.angle.setFromUnitVectors(up,direction.normalize());else shape.angle.setFromAxisAngle(up,n.seed);
@@ -103,18 +137,13 @@ export function createScene(canvas,data,onSelect,onError){
       if(updateShape)deform(shape);
     }
     if(updateShape){lastShape=now;lastShapeTime=model.time;}
+    fusionMaterial.transmission=glass.transmission;fusionMaterial.attenuationDistance=glass.attenuationDistance;
     model.edges.forEach((e,i)=>{const visible=shown(e.a)&&shown(e.b),a=visible?e.a:{x:0,y:0,z:0},b=visible?e.b:a;
-      positionArray.set([a.x,a.y,a.z,b.x,b.y,b.z],i*6);const t=(model.time*.13+i*.618)%1;
-      beads[i].visible=visible&&state.liquid;beads[i].position.set(a.x+(b.x-a.x)*t,a.y+(b.y-a.y)*t,a.z+(b.z-a.z)*t);
+      for(let j=0;j<segments;j++){const p=Visuals.curvePoint(a,b,j/segments,i,model.time,state.bend),q=Visuals.curvePoint(a,b,(j+1)/segments,i,model.time,state.bend);positionArray.set([p.x,p.y,p.z,q.x,q.y,q.z],(i*segments+j)*6);}
+      const t=(model.time*.13+i*.618)%1,p=Visuals.curvePoint(a,b,t,i,model.time,state.bend);
+      beads[i].visible=visible&&state.liquid;beads[i].position.set(p.x,p.y,p.z);
     });lineGeometry.attributes.position.needsUpdate=true;
-    // Short liquid necks appear only at nearby surfaces, independently of article links.
-    const live=new Set();if(state.liquid)for(let i=0;i<shapes.length;i++)for(let j=i+1;j<shapes.length;j++){
-      const a=shapes[i],b=shapes[j];if(!a.mesh.visible||!b.mesh.visible)continue;
-      const distance=a.mesh.position.distanceTo(b.mesh.position),reach=(a.n.r+b.n.r)*1.48;if(distance>=reach||distance<.001)continue;
-      const id=i+':'+j;live.add(id);let bridge=bridges.get(id);if(!bridge){bridge=new THREE.Mesh(bridgeGeometry,glass);scene.add(bridge);bridges.set(id,bridge);}
-      bridge.visible=true;bridge.position.addVectors(a.mesh.position,b.mesh.position).multiplyScalar(.5);direction.subVectors(b.mesh.position,a.mesh.position).normalize();bridge.quaternion.setFromUnitVectors(up,direction);
-      const radius=Math.min(a.n.r,b.n.r)*.7*Math.sqrt(1-distance/reach);bridge.scale.set(radius,distance,radius);
-    }for(const [id,bridge] of bridges)if(!live.has(id))bridge.visible=false;
+    fusion(now);
     renderer.render(scene,camera);labels();frameId=requestAnimationFrame(render);
   }
   function ray(event){const rect=canvas.getBoundingClientRect();pointer.set((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1);raycaster.setFromCamera(pointer,camera);}
@@ -146,8 +175,13 @@ export function createScene(canvas,data,onSelect,onError){
   };canvas.addEventListener('keydown',keydown);
   const visibility=()=>{last=null;accumulator=0;if(document.hidden){gesture=null;model.setDrag(null);controls.enabled=true;}};document.addEventListener('visibilitychange',visibility);
   function setVisible(value){active=value;layer.hidden=!value;last=null;accumulator=0;if(frameId!==null)cancelAnimationFrame(frameId);frameId=null;if(value){resize();frameId=requestAnimationFrame(render);}else{gesture=null;model.setDrag(null);controls.enabled=true;}}
-  function setState(patch){Object.assign(state,patch);for(const n of model.nodes)n.targetFlow=state.activities[n.id]||.2;}
+  function setState(patch){
+    Object.assign(state,patch);for(const n of model.nodes)n.targetFlow=state.activities[n.id]||.2;
+    const color=new THREE.Color();
+    for(const shape of shapes){color.set(state.nodeColors[shape.n.id]||palette[shape.n.group]||palette.guide);shape.glass.attenuationColor.copy(color);shape.solid.color.copy(color);shape.marker.material.color.copy(color);shape.glass.color.copy(color).lerp(new THREE.Color(0xffffff),.67);}
+    lineMaterial.color.set(state.lineColor).multiplyScalar(.6);beadMaterial.color.set(state.lineColor).lerp(new THREE.Color(0xffffff),.4);
+  }
   function reset(){model.reset();for(let i=0;i<160;i++)model.step(1/120,0);for(const n of model.nodes){n.vx*=.15;n.vy*=.15;n.vz*=.15;}controls.target.set(0,0,0);camera.position.set(9,6,12);fit();}
-  function dispose(){disposed=true;setVisible(false);observer.disconnect();canvas.removeEventListener('pointerdown',down,true);canvas.removeEventListener('pointermove',move,true);for(const type of ['pointerup','pointercancel','lostpointercapture'])canvas.removeEventListener(type,release,true);canvas.removeEventListener('keydown',keydown);canvas.removeEventListener('webglcontextlost',lost);document.removeEventListener('visibilitychange',visibility);controls.dispose();layer.remove();renderer.dispose();envMap.dispose();glass.dispose();markerGeometry.dispose();lineGeometry.dispose();lineMaterial.dispose();beadGeometry.dispose();beadMaterial.dispose();bridgeGeometry.dispose();for(const shape of shapes)shape.geometry.dispose();for(const m of [...solidMaterials.values(),...markerMaterials.values()])m.dispose();}
+  function dispose(){disposed=true;setVisible(false);observer.disconnect();canvas.removeEventListener('pointerdown',down,true);canvas.removeEventListener('pointermove',move,true);for(const type of ['pointerup','pointercancel','lostpointercapture'])canvas.removeEventListener(type,release,true);canvas.removeEventListener('keydown',keydown);canvas.removeEventListener('webglcontextlost',lost);document.removeEventListener('visibilitychange',visibility);controls.dispose();layer.remove();renderer.dispose();envMap.dispose();glass.dispose();markerGeometry.dispose();lineGeometry.dispose();lineMaterial.dispose();beadGeometry.dispose();beadMaterial.dispose();fusionMaterial.dispose();for(const item of fused.values())item.effect.geometry.dispose();for(const shape of shapes){shape.geometry.dispose();shape.glass.dispose();shape.solid.dispose();shape.marker.material.dispose();}for(const m of [...solidMaterials.values(),...markerMaterials.values()])m.dispose();}
   resize();fit();return {setVisible,setState,fit,reset,dispose,model};
 }

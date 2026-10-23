@@ -4,6 +4,7 @@ const vm=require('node:vm');
 const assert=require('node:assert/strict');
 const Matter=require('../docs/assets/vendor/matter.min.js');
 const root=path.join(__dirname,'..');
+const GraphAppearance=require('../docs/assets/graph-appearance.js');
 const ArticleActivity=require('../docs/assets/article-activity.js');
 const LiquidSurface=require('../docs/assets/liquid-surface.js');
 const source=fs.readFileSync(path.join(root,'docs/assets/graph.js'),'utf8');
@@ -18,7 +19,7 @@ async function simulation(graph=data,usage={},three){
   const elements=new Map(),frames=[],documentEvents={};
   function element(id){if(!elements.has(id))elements.set(id,{textContent:'',value:'',classList:classes(),closest:()=>element('graph-wrap'),focus(){},attributes:{},children:[],events:{},append(...items){this.children.push(...items);},replaceChildren(){this.children=[];},setAttribute(name,value){this.attributes[name]=value;},addEventListener(type,fn){this.events[type]=fn;},getContext:()=>ctx,getBoundingClientRect:()=>({width:800,height:510,left:0,top:0}),setPointerCapture(){}});return elements.get(id);}
   const document={body:{classList:classes(),dataset:{mdColorScheme:'slate'}},hidden:false,currentScript:{src:'https://example.com/study-garden/assets/graph.js'},getElementById:element,createElement:()=>element(`generated-${Math.random()}`),createTextNode:s=>s,addEventListener:(type,fn)=>{documentEvents[type]=fn;}};
-  const context=vm.createContext({console,URL,Math,LiquidSurface,ArticleActivity,Graph3D:three,localStorage:{getItem:()=>JSON.stringify({version:1,entries:usage})}, Matter:physics,devicePixelRatio:1,window:{Matter:physics,Graph3D:three,addEventListener(){}},document,matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>graph})});
+  const context=vm.createContext({console,URL,Math,LiquidSurface,ArticleActivity,GraphAppearance,Graph3D:three,localStorage:{getItem:()=>JSON.stringify({version:1,entries:usage})}, Matter:physics,devicePixelRatio:1,window:{Matter:physics,Graph3D:three,addEventListener(){}},document,matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>graph})});
   vm.runInContext(source,context);await new Promise(resolve=>setImmediate(resolve));
   const frame=delta=>{now+=delta;assert(frames.length===1,'Only one animation loop should be scheduled');frames.shift()(now);};
   frame(0);
