@@ -44,4 +44,16 @@ function fillUnion(field,palette,res,center,half,drops,k=.18){
     }
   }
 }
-module.exports={curvePoint,radial,distance,fillUnion};
+// A separate release threshold prevents contact membership chattering at the boundary.
+function contactGroups(drops,previous=new Set()){
+ const parents=drops.map((_,i)=>i),contacts=new Set();
+ const root=i=>{while(parents[i]!==i){parents[i]=parents[parents[i]];i=parents[i];}return i;};
+ for(let i=0;i<drops.length;i++)for(let j=i+1;j<drops.length;j++){
+  const a=drops[i],b=drops[j],key=JSON.stringify([a.id,b.id].sort());
+  const threshold=(a.radius+b.radius)*1.5+.16+(previous.has(key)?.24:0);
+  if(Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z)<threshold){contacts.add(key);parents[root(j)]=root(i);}
+ }
+ const groups=new Map();drops.forEach((d,i)=>{const key=root(i);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(i);});
+ return {groups:[...groups.values()],contacts};
+}
+module.exports={curvePoint,radial,distance,fillUnion,contactGroups};

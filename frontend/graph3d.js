@@ -44,7 +44,7 @@ export function createScene(canvas,data,onSelect,onError){
   const beadGeometry=new THREE.SphereGeometry(.026,6,4),beadMaterial=new THREE.MeshBasicMaterial({color:0xf7adbf});
   const beads=model.edges.map(()=>{const bead=new THREE.Mesh(beadGeometry,beadMaterial);scene.add(bead);return bead;});
   const fused=new Map(),fusionMaterial=glass.clone();fusionMaterial.vertexColors=true;fusionMaterial.color.set(0xffffff);fusionMaterial.attenuationColor.set(0xffffff);
-  let lastFusion=-1,lastLabels=-1;
+  let lastLabels=-1,contacts=new Set();
   const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2(),plane=new THREE.Plane(),point=new THREE.Vector3(),dragOffset=new THREE.Vector3(),direction=new THREE.Vector3(),up=new THREE.Vector3(0,1,0);
   let active=false,disposed=false,frameId=null,last=null,accumulator=0,hover=null,gesture=null,lastShape=-1,lastShapeTime=-1,width=1,height=1;
   const linked=n=>!state.selected||n.id===state.selected||adjacency.get(state.selected)?.has(n.id);
@@ -74,33 +74,34 @@ export function createScene(canvas,data,onSelect,onError){
   }
   function fusion(now){
     if(!state.liquid){for(const item of fused.values())item.effect.visible=false;return;}
-    const available=shapes.filter(s=>shown(s.n)),parents=available.map((_,i)=>i);
-    const root=i=>{while(parents[i]!==i){parents[i]=parents[parents[i]];i=parents[i];}return i;};
-    for(let i=0;i<available.length;i++)for(let j=i+1;j<available.length;j++){
-      const a=available[i],b=available[j],ar=Math.max(a.mesh.scale.x,a.mesh.scale.y,a.mesh.scale.z)*1.5,br=Math.max(b.mesh.scale.x,b.mesh.scale.y,b.mesh.scale.z)*1.5;
-      if(a.mesh.position.distanceTo(b.mesh.position)<ar+br+.16)parents[root(j)]=root(i);
-    }
-    const groups=new Map();available.forEach((shape,i)=>{const key=root(i);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(shape);});
+    const available=shapes.filter(s=>shown(s.n));
+    const grouped=Visuals.contactGroups(available.map(s=>({id:s.n.id,...s.mesh.position,radius:Math.max(s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z)})),contacts);
+    contacts=grouped.contacts;
+    const groups=grouped.groups.map(indices=>indices.map(i=>available[i]));
     const live=new Set();
-    for(const group of groups.values()){
+    for(const group of groups){
       if(group.length<2)continue;
       const id=group.map(s=>s.n.id).sort().join('|');live.add(id);
       let item=fused.get(id);
-      if(!item){const res=group.length<=3?28:group.length<=8?32:36;const effect=new MarchingCubes(res,fusionMaterial,false,true,16000);effect.isolation=0;effect.frustumCulled=false;scene.add(effect);item={effect,res,signature:''};fused.set(id,item);}
-      item.effect.visible=true;
-      for(const shape of group)shape.mesh.visible=false;
+      if(!item){const res=group.length<=3?28:group.length<=8?32:36;const effect=new MarchingCubes(res,fusionMaterial,false,true,16000);effect.isolation=0;effect.frustumCulled=false;scene.add(effect);item={effect,res,signature:'',updated:-Infinity};fused.set(id,item);}
+
       const signature=group.map(s=>[s.mesh.position.x,s.mesh.position.y,s.mesh.position.z,s.mesh.quaternion.x,s.mesh.quaternion.y,s.mesh.quaternion.z,s.mesh.quaternion.w,s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z,s.phase].map(v=>v.toFixed(3)).join(',')).join(';')+JSON.stringify(state.nodeColors);
-      if(signature===item.signature||(item.signature&&now-lastFusion<1000/(gesture?24:30)))continue;
-      item.signature=signature;
+      const dragging=group.some(s=>s.n.id===gesture?.id);
+      if(signature===item.signature||(item.signature&&!dragging&&now-item.updated<1000/30)){item.effect.visible=true;for(const shape of group)shape.mesh.visible=false;continue;}
+      item.signature=signature;item.updated=now;
       const box=new THREE.Box3();
       for(const s of group){const reach=Math.max(s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z)*1.7+.2;box.expandByPoint(s.mesh.position.clone().addScalar(reach));box.expandByPoint(s.mesh.position.clone().addScalar(-reach));}
-      const center=box.getCenter(new THREE.Vector3()),extent=box.getSize(new THREE.Vector3()),half=Math.max(extent.x,extent.y,extent.z)/2;
+      let center=box.getCenter(new THREE.Vector3());const extent=box.getSize(new THREE.Vector3());let half=Math.max(extent.x,extent.y,extent.z)/2;
+      if(item.volume&&box.min.x>item.volume.center.x-item.volume.half&&box.max.x<item.volume.center.x+item.volume.half&&box.min.y>item.volume.center.y-item.volume.half&&box.max.y<item.volume.center.y+item.volume.half&&box.min.z>item.volume.center.z-item.volume.half&&box.max.z<item.volume.center.z+item.volume.half){center=item.volume.center;half=item.volume.half;}
+      else {half*=1.12;item.volume={center:center.clone(),half};}
       const drops=group.map(s=>{const q=s.mesh.quaternion,color=s.glass.color;return {x:s.n.x,y:s.n.y,z:s.n.z,sx:s.mesh.scale.x,sy:s.mesh.scale.y,sz:s.mesh.scale.z,inverse:[-q.x,-q.y,-q.z,q.w],seed:s.n.seed,phase:s.phase,norm:s.norm,color:[color.r,color.g,color.b]};});
       item.effect.reset();Visuals.fillUnion(item.effect.field,item.effect.palette,item.res,center,half,drops,.18);
       item.effect.position.copy(center);item.effect.scale.setScalar(half);item.effect.update();
+      item.effect.visible=item.effect.count>0;
+      if(item.effect.visible)for(const shape of group)shape.mesh.visible=false;
     }
     for(const [id,item]of fused)if(!live.has(id)){scene.remove(item.effect);item.effect.geometry.dispose();fused.delete(id);}
-    if(now-lastFusion>=1000/(gesture?24:30))lastFusion=now;
+
   }
   function labels(){
     const occupied=[],rank=n=>(n.id===state.selected?10000:0)+(n.id===hover?9000:0)+(state.query&&n.title.toLowerCase().includes(state.query)?8000:0)+(state.selected&&linked(n)?100:0)+(adjacency.get(n.id)?.size||0);

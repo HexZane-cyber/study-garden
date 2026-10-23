@@ -36,3 +36,16 @@ console.log('Graph visuals passed: curved paths and endpoints, smooth surface un
  deform(shape,require('../frontend/graph-visuals.cjs'),{time:1},{flow:.55});
  assert.equal(output.length,9);assert(output.every(Number.isFinite));assert(shape.norm>0);
 }
+
+// Near-contact motion must not alternate between individual and merged surfaces.
+{
+ const {contactGroups}=require('../frontend/graph-visuals.cjs');
+ const a={id:'front',x:0,y:0,z:0,radius:.4},b={id:'back',x:0,y:0,z:1.3,radius:.4};
+ let state=contactGroups([a,b]);assert.equal(state.groups.length,1);
+ for(let i=0;i<120;i++){b.z=1.36+Math.sin(i)*.08;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,1);}
+ b.z=1.7;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,2);
+ b.z=1.4;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,2);
+ b.z=1.3;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,1);
+ b.z=3;assert.equal(contactGroups([a,b],state.contacts).groups.length,2,'screen overlap alone must not merge depth-separated nodes');
+ assert.equal(contactGroups([a],state.contacts).contacts.size,0,'filtered nodes cannot retain stale contacts');
+}
