@@ -61,6 +61,7 @@ extra_css:
 extra_javascript:
   - assets/article-activity.js
   - assets/reading.js
+  - assets/site-tools.js
 extra:
   generator: false
   giscus:

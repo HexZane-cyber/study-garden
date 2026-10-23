@@ -49,6 +49,8 @@ class PageAssetsTest(unittest.TestCase):
             with self.subTest(page=path):
                 scripts = [name for name, _ in self.scripts(path)]
                 self.assertIn('assets/reading.js', scripts)
+                self.assertIn('assets/site-tools.js', scripts)
+                self.assertNotIn('data-md-component="source"', (SITE / path).read_text(encoding='utf-8'))
                 self.assertFalse(ALL_FEATURE_SCRIPTS.intersection(scripts))
 
     def test_feature_dependencies_are_ordered_deferred_and_exclusive(self):
