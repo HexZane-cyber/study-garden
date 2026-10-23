@@ -4,19 +4,21 @@ const vm=require('node:vm');
 const assert=require('node:assert/strict');
 const Matter=require('../docs/assets/vendor/matter.min.js');
 const root=path.join(__dirname,'..');
+const ArticleActivity=require('../docs/assets/article-activity.js');
+const LiquidSurface=require('../docs/assets/liquid-surface.js');
 const source=fs.readFileSync(path.join(root,'docs/assets/graph.js'),'utf8');
 const data=JSON.parse(fs.readFileSync(path.join(root,'docs/assets/graph-data.json'),'utf8'));
 
-async function simulation(graph=data){
+async function simulation(graph=data,usage={}){
   let engine,updates=0,now=0;
   const physics={...Matter,Engine:{...Matter.Engine,create:options=>(engine=Matter.Engine.create(options)),update:(...args)=>{updates++;return Matter.Engine.update(...args);}}};
   const gradient={addColorStop(){}};let labelBoxes=[];
   const classes=()=>({toggle(){},contains(){return false;}});
-  const ctx=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient,measureText:text=>({width:Array.from(text).length*8}),clearRect:()=>{labelBoxes=[];},fillRect:(x,y,w,h)=>labelBoxes.push({x,y,w,h})},{get:(obj,key)=>key in obj?obj[key]:()=>{}});
+  const ctx=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient,measureText:text=>({width:Array.from(text).length*8}),clearRect:()=>{labelBoxes=[];},fillRect:(x,y,w,h)=>{if(h===19)labelBoxes.push({x,y,w,h});}},{get:(obj,key)=>key in obj?obj[key]:()=>{}});
   const elements=new Map(),frames=[],documentEvents={};
   function element(id){if(!elements.has(id))elements.set(id,{textContent:'',value:'',classList:classes(),closest:()=>element('graph-wrap'),focus(){},attributes:{},children:[],events:{},append(...items){this.children.push(...items);},replaceChildren(){this.children=[];},setAttribute(name,value){this.attributes[name]=value;},addEventListener(type,fn){this.events[type]=fn;},getContext:()=>ctx,getBoundingClientRect:()=>({width:800,height:510,left:0,top:0}),setPointerCapture(){}});return elements.get(id);}
   const document={body:{classList:classes(),dataset:{mdColorScheme:'slate'}},hidden:false,currentScript:{src:'https://example.com/study-garden/assets/graph.js'},getElementById:element,createElement:()=>element(`generated-${Math.random()}`),createTextNode:s=>s,addEventListener:(type,fn)=>{documentEvents[type]=fn;}};
-  const context=vm.createContext({console,URL,Math,Matter:physics,devicePixelRatio:1,window:{Matter:physics,addEventListener(){}},document,matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>graph})});
+  const context=vm.createContext({console,URL,Math,LiquidSurface,ArticleActivity,localStorage:{getItem:()=>JSON.stringify({version:1,entries:usage})}, Matter:physics,devicePixelRatio:1,window:{Matter:physics,addEventListener(){}},document,matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>graph})});
   vm.runInContext(source,context);await new Promise(resolve=>setImmediate(resolve));
   const frame=delta=>{now+=delta;assert(frames.length===1,'Only one animation loop should be scheduled');frames.shift()(now);};
   frame(0);
@@ -53,6 +55,14 @@ const kinetic=bodies=>bodies.reduce((energy,b)=>energy+b.mass*(b.velocity.x**2+b
   labels.element('graph-fit').onclick();labels.frame(1000/60);assert(labels.boxes.length>=1);
   labels.element('graph-expand').onclick();assert.equal(labels.element('graph-expand').attributes['aria-pressed'],'true');
   labels.documentEvents.keydown({key:'Escape'});assert.equal(labels.element('graph-expand').attributes['aria-pressed'],'false');
+
+  // Frequent local reads increase forcing without moving the user slider.
+  const rare=await simulation(minimal(1)),frequent=await simulation(minimal(1),{'/study-garden/notes/0/':{count:20,last:Date.now()}});
+  for(const s of [rare,frequent]){Matter.Body.setPosition(s.engine.world.bodies[0],{x:0,y:0});Matter.Body.setVelocity(s.engine.world.bodies[0],{x:0,y:0});s.steps(120);}
+  const distance=s=>Math.hypot(s.engine.world.bodies[0].position.x,s.engine.world.bodies[0].position.y);
+  assert(distance(frequent)>distance(rare)*2,'frequent articles should have stronger local flow');
+  frequent.element('graph-activity').onchange({target:{checked:false}});
+  assert.equal(frequent.element('graph-flow').value,'','activity control must not alter the global slider');
 
   // Identical simulated time at common refresh rates must produce the same state.
   const states=[];

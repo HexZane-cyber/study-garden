@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict'),A=require('../docs/assets/article-activity.js');
+const base='https://example.test/study-garden/',now=1800000000000;
+const data=new Map(),storage={getItem:key=>data.get(key)||null,setItem:(key,value)=>data.set(key,value)};
+assert.equal(A.pathKey('notes/math/?query=1#section',base),'/study-garden/notes/math/');
+assert.equal(A.pathKey('https://other.test/notes/math/',base),null);
+for(const path of ['private/','private/secret.md','graph/','workbench/'])assert.equal(A.pathKey(path,base),null);
+assert(A.record(storage,'notes/math/',base,now));
+assert(!A.record(storage,'notes/math/',base,now+1000),'quick refresh is not another read');
+assert(A.record(storage,'notes/math/',base,now+3600000));
+assert.equal(A.read(storage,now+3600000)['/study-garden/notes/math/'].count,2);
+assert(A.strength({count:10,last:now},now)>A.strength({count:1,last:now},now));
+assert(A.strength({count:10,last:now},now+90*86400000)<A.strength({count:10,last:now},now));
+assert.equal(A.strength(null),.2);
+assert(!A.record(storage,'private/my-vault/',base,now));
+data.set(A.KEY,'corrupt data');assert.deepEqual(A.read(storage,now),{});
+assert(!A.record({getItem(){throw Error('disabled');},setItem(){throw Error('disabled');}},'notes/math/',base,now));
+console.log('Article activity passed: local counts, refresh deduplication, recent-use decay, private-route exclusion and unavailable storage.');

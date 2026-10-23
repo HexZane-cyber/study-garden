@@ -2,6 +2,7 @@
   'use strict';
   const title=document.querySelector('.md-content h1');if(!title)return;
   const script=document.currentScript,base=new URL('../',script.src),key='study-garden-reading-v1';
+  try{window.ArticleActivity?.record(localStorage,location.href,base.href);}catch{}
   let state={bookmarks:[],recent:[]};try{state={...state,...JSON.parse(localStorage.getItem(key)||'{}')};}catch{}
   const safe=item=>{try{const u=new URL(item.url);return u.origin===base.origin&&u.pathname.startsWith(base.pathname)&&typeof item.title==='string';}catch{return false;}};
   state.bookmarks=(Array.isArray(state.bookmarks)?state.bookmarks:[]).filter(safe);state.recent=(Array.isArray(state.recent)?state.recent:[]).filter(safe);

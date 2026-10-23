@@ -5,6 +5,7 @@
   {# Keep feature scripts on their owning page. Deferred dependencies execute in order. #}
   {% if page and page.file.src_uri == "graph.md" %}
     <script src="{{ 'assets/vendor/matter.min.js' | url }}" defer></script>
+    <script src="{{ 'assets/liquid-surface.js' | url }}" defer></script>
     <script src="{{ 'assets/graph.js' | url }}" defer></script>
   {% elif page and page.file.src_uri == "contribute.md" %}
     <script src="{{ 'assets/contribution-model.js' | url }}" defer></script>

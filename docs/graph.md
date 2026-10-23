@@ -8,7 +8,7 @@ comments: false
 
 <div class="graph-wrap">
 <div class="graph-toolbar"><input id="graph-search" aria-label="搜索知识节点" placeholder="搜索节点，例如：Python、矩阵…"><button id="graph-mode" type="button" aria-pressed="true">液态模式</button><button id="graph-pause" type="button">暂停运动</button><button id="graph-reset" type="button">重置视图</button></div>
-<div class="flow-control"><span>FLOW / 流动强度</span><input id="graph-flow" aria-label="流动强度" type="range" min="0" max="100" value="55"><span id="graph-flow-value">55%</span></div>
+<div class="flow-control"><span>FLOW / 流动强度</span><input id="graph-flow" aria-label="流动强度" type="range" min="0" max="100" value="55"><span id="graph-flow-value">55%</span><label class="graph-glass-control">通透度 <input id="graph-transparency" aria-label="液面通透度" type="range" min="35" max="90" value="74"><span id="graph-transparency-value">74%</span></label><label class="graph-activity-toggle"><input id="graph-activity" type="checkbox" checked> 按阅读频率调节</label></div>
 <div class="graph-tools"><label>标题<select id="graph-labels"><option value="smart">智能避让</option><option value="all">显示全部</option><option value="off">仅选中与悬停</option></select></label><button id="graph-focus" type="button" aria-pressed="false" disabled>只看直接关联</button><button id="graph-fit" type="button">适应画布</button><button id="graph-expand" type="button" aria-pressed="false">大画布</button><span id="graph-hint">点击节点查看关联，拖动空白处平移</span></div>
 <canvas id="knowledge-graph" role="img" aria-label="可拖拽的课程与笔记关系图。键盘用户可使用下方的文章列表。" tabindex="0"></canvas>
 <div class="graph-legend"><span><i style="background:#ef5467"></i>课程</span><span><i style="background:#ff9a81"></i>笔记</span><span><i style="background:#d69767"></i>工具</span><span><i style="background:#9e919b"></i>指南</span></div>
@@ -27,7 +27,9 @@ comments: false
 
 ## 液态模式
 
-拖拽时，液滴以柔软的牵引跟随指针；松手保留当前速度，并在黏性阻力下逐渐减速。液滴相撞时先挤压、传递动量，再缓慢恢复形状。降低“流动强度”可以减少持续漂移，方便阅读连接和标题；调到 0% 后，手动拖拽和接触仍然有效。
+拖拽时，液滴以柔软的牵引跟随指针；松手保留当前速度，并在黏性阻力下逐渐减速。液滴相撞时先挤压、传递动量，再缓慢恢复形状。相邻液滴使用连续密度场生成共同的液面轮廓，靠近时形成液颈，拉开后自然分离；速度与接触压力影响轮廓的拉伸、压缩，液面采用半透明浅红材质，细高光沿边缘变化，后方文章连线仍然可见；“通透度”滑块可调整液面填色浓度，向右更通透。液面相融只是视觉效果，不会新增文章链接。
+
+默认按本浏览器的文章阅读频率分配流动强度：经常阅读、近期打开的文章更活跃，少读或很久未读的文章更安静。记录仅保存在本机，不统计私密空间内容；快速刷新不重复计数。关闭“按阅读频率调节”可统一使用整体流动强度。降低“流动强度”可以减少持续漂移，方便阅读连接和标题；调到 0% 后，手动拖拽和接触仍然有效。
 
 Matter.js 以固定的 120 Hz 步长积分运动并处理连线弹性。连续接触压力、邻域黏性和阻尼共同控制碰撞，变形采用渐进恢复，液滴挤扁时向两侧展开。不同屏幕刷新率使用同一运动节奏，回到后台页面时不会突然加速补算。连线始终对应文章之间的链接。
 

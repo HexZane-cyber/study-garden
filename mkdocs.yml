@@ -59,6 +59,7 @@ markdown_extensions:
 extra_css:
   - assets/extra.css
 extra_javascript:
+  - assets/article-activity.js
   - assets/reading.js
 extra:
   generator: false

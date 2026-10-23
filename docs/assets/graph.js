@@ -19,15 +19,13 @@
   const STEP=1000/120,DT=STEP/1000,MAX_SPEED=18;
   const pauseButton=document.getElementById('graph-pause');
   const adjacency=new Map();
+  let activityEnabled=true,activity={},transparency=.74;
+  document.getElementById('graph-transparency').oninput=e=>{transparency=Math.max(.35,Math.min(.9,Number(e.target.value)/100||.74));document.getElementById('graph-transparency-value').textContent=`${Math.round(transparency*100)}%`;};
+  function refreshActivity(){try{activity=ArticleActivity.read(localStorage);}catch{activity={};}for(const n of nodes){const path=ArticleActivity.pathKey(new URL(n.url,base).href,base.href);n.usage=path?activity[path]:null;n.flowFactor=ArticleActivity.strength(n.usage);}}
+  document.getElementById('graph-activity').onchange=e=>{activityEnabled=e.target.checked;refreshActivity();if(selected)select(selected);};
+  window.addEventListener('storage',e=>{if(e.key===ArticleActivity.KEY){refreshActivity();if(selected)select(selected);}});
+  window.addEventListener('focus',refreshActivity);
   function drawLiquid(dark){
-    // Translucent necks suggest coalescence without obscuring article identities.
-    for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
-      const a=nodes[i],b=nodes[j];if(!visible(a)||!visible(b))continue;const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),reach=a.r+b.r+42;
-      if(d>=reach)continue;
-      const t=1-d/reach,gradient=ctx.createLinearGradient(a.x,a.y,b.x,b.y);
-      gradient.addColorStop(0,colors[a.group]);gradient.addColorStop(1,colors[b.group]);
-      ctx.globalAlpha=(isLinked(a)&&isLinked(b)?.16:.025)*t;ctx.strokeStyle=gradient;ctx.lineWidth=(a.r+b.r+10)*Math.sqrt(t);ctx.lineCap='round';ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo((a.x+b.x)/2+Math.sin(phase)*4,(a.y+b.y)/2,a.x+dx,a.y+dy);ctx.stroke();
-    }
     ctx.lineCap='round';
     for(let i=0;i<edges.length;i++){
       const e=edges[i];if(!visible(e.a)||!visible(e.b))continue;const dx=e.b.x-e.a.x,dy=e.b.y-e.a.y,d=Math.max(1,Math.hypot(dx,dy));
@@ -36,25 +34,56 @@
       const active=!selected||e.a===selected||e.b===selected;
       const gradient=ctx.createLinearGradient(e.a.x,e.a.y,e.b.x,e.b.y);
       gradient.addColorStop(0,colors[e.a.group]);gradient.addColorStop(1,colors[e.b.group]);
-      ctx.strokeStyle=gradient;ctx.globalAlpha=active?(dark?.09:.07):.02;ctx.lineWidth=(4+flow*5)/Math.sqrt(zoom);
+      ctx.strokeStyle=gradient;ctx.globalAlpha=active?(dark?.09:.07):.015;ctx.lineWidth=2/Math.sqrt(zoom);
       ctx.beginPath();ctx.moveTo(e.a.x,e.a.y);ctx.quadraticCurveTo(mx,my,e.b.x,e.b.y);ctx.stroke();
-      ctx.globalAlpha=active?.33:.04;ctx.lineWidth=.8/zoom;ctx.stroke();
-      for(let j=0;j<2;j++){
+      ctx.globalAlpha=active?.36:.05;ctx.lineWidth=.65/zoom;ctx.stroke();
+      for(let j=0;j<1;j++){
         const t=(phase*(.07+flow*.08)+i*.618+j*.5)%1,u=1-t;
         const x=u*u*e.a.x+2*u*t*mx+t*t*e.b.x,y=u*u*e.a.y+2*u*t*my+t*t*e.b.y;
-        ctx.globalAlpha=active?Math.sin(t*Math.PI)*.8:.06;ctx.fillStyle=colors[e.a.group];ctx.beginPath();ctx.arc(x,y,(1.1+flow)/Math.sqrt(zoom),0,Math.PI*2);ctx.fill();
+        ctx.globalAlpha=active?Math.sin(t*Math.PI)*.45:.03;ctx.fillStyle=colors[e.a.group];ctx.beginPath();ctx.arc(x,y,(1.1+flow)/Math.sqrt(zoom),0,Math.PI*2);ctx.fill();
       }
     }
-    for(const n of nodes){
-      if(!visible(n))continue;
-      const active=isLinked(n)&&matchesQuery(n);
-      const r=n.r+10+flow*5;
-      const glow=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,r*2.4);glow.addColorStop(0,colors[n.group]+'60');glow.addColorStop(1,colors[n.group]+'00');
-      ctx.globalAlpha=active?.65:.08;ctx.fillStyle=glow;ctx.beginPath();ctx.arc(n.x,n.y,r*2.4,0,Math.PI*2);ctx.fill();
-      ctx.globalAlpha=active?.16:.025;ctx.fillStyle=colors[n.group];ctx.beginPath();
-      for(let k=0;k<=32;k++){const a=k*Math.PI*2/32,rr=r*(1+Math.sin(a*3+phase*1.2+n.x*.013)*.06*flow+Math.cos(a*2-phase*.8)*.05*flow),compression=1-n.squeeze,local=a-n.contactAngle;const u=Math.cos(local)*rr*compression,v=Math.sin(local)*rr/compression;const x=n.x+u*Math.cos(n.contactAngle)-v*Math.sin(n.contactAngle),y=n.y+u*Math.sin(n.contactAngle)+v*Math.cos(n.contactAngle);if(k===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.closePath();ctx.fill();
-      ctx.globalAlpha=active?.38:.04;ctx.strokeStyle=colors[n.group];ctx.lineWidth=.7/zoom;ctx.stroke();
+    drawSurface(dark);
+  }
+  function drawSurface(dark){
+    const drops=nodes.filter(visible).map(n=>{
+      const velocity=Math.hypot(n.body.velocity.x,n.body.velocity.y);
+      const contact=n.squeeze>.025,angle=contact?n.contactAngle:Math.atan2(n.body.velocity.y,n.body.velocity.x);
+      const stretch=contact?1-n.squeeze:1+Math.min(.28,velocity*.025);
+      const radius=(n.r+13)*zoom;
+      return {x:width/2+offset.x+n.x*zoom,y:height/2+offset.y+n.y*zoom,rx:radius*stretch,ry:radius/stretch,angle};
+    });
+    const loops=LiquidSurface.contours(drops,width,height,3.5);
+    if(!loops.length)return;
+    const dpr=canvas.width/width;ctx.save();ctx.setTransform(dpr,0,0,dpr,0,0);
+    function path(){
+      ctx.beginPath();
+      for(const points of loops){
+        const last=points[points.length-1],first=points[0];ctx.moveTo((last.x+first.x)/2,(last.y+first.y)/2);
+        for(let i=0;i<points.length;i++){const a=points[i],b=points[(i+1)%points.length];ctx.quadraticCurveTo(a.x,a.y,(a.x+b.x)/2,(a.y+b.y)/2);}ctx.closePath();
+      }
     }
+    ctx.save();path();ctx.clip('evenodd');
+    for(const points of loops){
+      const xs=points.map(p=>p.x),ys=points.map(p=>p.y),left=Math.min(...xs),right=Math.max(...xs),top=Math.min(...ys),bottom=Math.max(...ys);
+      ctx.beginPath();const last=points[points.length-1],first=points[0];ctx.moveTo((last.x+first.x)/2,(last.y+first.y)/2);
+      for(let i=0;i<points.length;i++){const a=points[i],b=points[(i+1)%points.length];ctx.quadraticCurveTo(a.x,a.y,(a.x+b.x)/2,(a.y+b.y)/2);}ctx.closePath();
+      // A solid, shaded interface replaces fuzzy halos and rigid inner spheres.
+      const body=ctx.createLinearGradient(left,top,right,bottom);
+      body.addColorStop(0,'#ffc5d2');body.addColorStop(.18,'#e67b96');body.addColorStop(.48,'#96294d');body.addColorStop(.75,dark?'#4b2438':'#bb6b87');body.addColorStop(1,'#f5b5ca');
+      ctx.globalAlpha=(1-transparency)*(dark?1:.88);ctx.fillStyle=body;ctx.shadowColor='#08020933';ctx.shadowBlur=3;ctx.shadowOffsetY=1.5;ctx.fill();ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+      const rim=ctx.createLinearGradient(left,top,right,bottom);rim.addColorStop(0,'#fff1f3dc');rim.addColorStop(.3,'#f5afc369');rim.addColorStop(.65,'#ef9fba18');rim.addColorStop(1,'#ffdae580');
+      ctx.strokeStyle=rim;ctx.lineWidth=.85;ctx.globalAlpha=.75;ctx.stroke();
+    }
+    ctx.restore();
+    // Highlights are clipped to the common liquid surface, including the neck.
+    ctx.save();path();ctx.clip('evenodd');
+    for(const p of drops){
+      const glow=ctx.createRadialGradient(p.x-p.rx*.34,p.y-p.ry*.42,0,p.x-p.rx*.15,p.y-p.ry*.25,Math.max(p.rx,p.ry)*.88);
+      glow.addColorStop(0,'#fff5f780');glow.addColorStop(.22,'#ffdce926');glow.addColorStop(1,'#ffcbd900');
+      ctx.globalAlpha=.36;ctx.fillStyle=glow;ctx.fillRect(p.x-p.rx*2,p.y-p.ry*2,p.rx*4,p.ry*4);
+    }
+    ctx.restore();ctx.restore();
   }
   document.getElementById('graph-mode').onclick=e=>{liquid=!liquid;e.currentTarget.textContent=liquid?'液态模式':'清晰模式';e.currentTarget.setAttribute('aria-pressed',String(liquid));for(const n of nodes)Sleeping.set(n.body,false);};
   document.getElementById('graph-flow').oninput=e=>{flow=Number(e.target.value)/100;document.getElementById('graph-flow-value').textContent=`${Math.round(flow*100)}%`;for(const n of nodes)Sleeping.set(n.body,false);};
@@ -63,7 +92,7 @@
   function position(event){const r=canvas.getBoundingClientRect();return {x:(event.clientX-r.left-width/2-offset.x)/zoom,y:(event.clientY-r.top-height/2-offset.y)/zoom};}
   function matchesQuery(n){return focusOnly||!query||n.title.toLowerCase().includes(query);}
   function visible(n){return !focusOnly||!selected||isLinked(n);}
-  function hit(p){let found=null,best=Infinity;for(const n of nodes){if(!visible(n))continue;const d=Math.hypot(n.x-p.x,n.y-p.y);if(d<n.r+10/zoom&&d<best){found=n;best=d;}}return found;}
+  function hit(p){let found=null,best=Infinity;for(const n of nodes){if(!visible(n))continue;const d=Math.hypot(n.x-p.x,n.y-p.y);if(d<(liquid?n.r+15:n.r+10/zoom)&&d<best){found=n;best=d;}}return found;}
   function isLinked(n){return !selected||n===selected||adjacency.get(selected.id)?.has(n.id);}
   function fit(){
     const shown=nodes.filter(visible);if(!shown.length||!width||!height)return;
@@ -89,6 +118,8 @@
     }
     if(!linked.length){const empty=document.createElement('p');empty.textContent='暂时没有直接关联，可在文章中添加 Markdown 链接。';list.append(empty);}
     info.append(list);
+    const activityNote=document.createElement('p');activityNote.className='graph-activity-detail';
+    activityNote.textContent=activityEnabled?`本机阅读 ${n.usage?.count||0} 次 · 流动权重 ${Math.round((n.flowFactor||.2)*100)}%（再乘整体强度）`:'已关闭按阅读频率调节，所有节点使用整体强度';info.append(activityNote);
   }
   function drawLabels(dark){
     ctx.save();ctx.font='11px system-ui,"Microsoft YaHei",sans-serif';ctx.textBaseline='middle';ctx.textAlign='center';ctx.lineJoin='round';
@@ -96,7 +127,7 @@
     const priority=n=>(n===selected?10000:0)+(n===hover?9000:0)+(query&&n.title.toLowerCase().includes(query)?8000:0)+(selected&&isLinked(n)?100:0)+(adjacency.get(n.id)?.size||0);
     const ordered=shown.slice().sort((a,b)=>priority(b)-priority(a)||a.id.localeCompare(b.id));
     const intersects=(a,b)=>a.x<b.x+b.w+4&&a.x+a.w+4>b.x&&a.y<b.y+b.h+3&&a.y+a.h+3>b.y;
-    const circles=shown.map(n=>({node:n,x:width/2+offset.x+n.x*zoom,y:height/2+offset.y+n.y*zoom,r:n.r*zoom+4}));
+    const circles=shown.map(n=>({node:n,x:width/2+offset.x+n.x*zoom,y:height/2+offset.y+n.y*zoom,r:(liquid?n.r+13:n.r)*zoom+4}));
     for(const n of ordered){
       const important=n===selected||n===hover;
       if(labelMode==='off'&&!important)continue;
@@ -104,7 +135,7 @@
       if(!matchesQuery(n)&&!important)continue;
       let text=n.title,maxWidth=Math.min(260,width-24);
       while(text.length>1&&ctx.measureText(text).width>maxWidth)text=text.slice(0,-2)+'…';
-      const w=ctx.measureText(text).width+10,h=19,x=width/2+offset.x+n.x*zoom,y=height/2+offset.y+n.y*zoom,r=n.r*zoom+7;
+      const w=ctx.measureText(text).width+10,h=19,x=width/2+offset.x+n.x*zoom,y=height/2+offset.y+n.y*zoom,r=(liquid?n.r+13:n.r)*zoom+7;
       const choices=[{x:x-w/2,y:y+r},{x:x-w/2,y:y-r-h},{x:x+r,y:y-h/2},{x:x-r-w,y:y-h/2}];
       let box;
       for(const candidate of choices){
@@ -147,7 +178,8 @@
         const strength=Math.hypot(ax,ay);if(strength>.026){ax*=.026/strength;ay*=.026/strength;}
         Body.applyForce(n.body,n.body.position,{x:ax*n.body.mass,y:ay*n.body.mass});
       }
-      if(liquid&&flow>0){const fx=Math.sin(n.y*.007+phase*.35)+Math.cos(n.x*.004-phase*.25),fy=Math.cos(n.x*.007-phase*.3)-Math.sin(n.y*.005+phase*.2);Body.applyForce(n.body,n.body.position,{x:fx*.000025*n.body.mass*flow,y:fy*.000025*n.body.mass*flow});}
+      const targetFlow=activityEnabled?(n.flowFactor||.2):1;n.localFlow+=(targetFlow-n.localFlow)*(1-Math.exp(-2*DT));
+      if(liquid&&flow>0){const fx=Math.sin(n.y*.007+phase*.35)+Math.cos(n.x*.004-phase*.25),fy=Math.cos(n.x*.007-phase*.3)-Math.sin(n.y*.005+phase*.2);Body.applyForce(n.body,n.body.position,{x:fx*.000025*n.body.mass*flow*n.localFlow,y:fy*.000025*n.body.mass*flow*n.localFlow});}
       Body.applyForce(n.body,n.body.position,{x:-n.x*.00000013*n.body.mass,y:-n.y*.00000013*n.body.mass});
     }
     for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
@@ -180,7 +212,7 @@
       n.x=n.body.position.x;n.y=n.body.position.y;
     }
   }
-  function draw(now){if(!running)return;const delta=last===null?0:Math.max(0,Math.min(now-last,50));last=now;if(!paused&&!document.hidden){accumulator+=delta;let steps=0;while(accumulator+1e-7>=STEP&&steps<6){phase+=DT;physics();accumulator-=STEP;steps++;}}else accumulator=0;ctx.clearRect(0,0,width,height);const dark=document.body.dataset.mdColorScheme==='slate';ctx.save();ctx.translate(width/2+offset.x,height/2+offset.y);ctx.scale(zoom,zoom);if(liquid)drawLiquid(dark);if(!liquid)for(const e of edges){if(!visible(e.a)||!visible(e.b))continue;const active=selected&&(e.a===selected||e.b===selected);ctx.strokeStyle=active?'#ef5467':dark?'#673b45':'#e8c9cf';ctx.globalAlpha=selected && !active ? .18 : .65;ctx.lineWidth=(active?1.7:1)/zoom;ctx.beginPath();ctx.moveTo(e.a.x,e.a.y);ctx.lineTo(e.b.x,e.b.y);ctx.stroke();}for(const n of nodes){if(!visible(n))continue;const match=matchesQuery(n);ctx.globalAlpha=match&&isLinked(n)?1:.16;ctx.fillStyle=colors[n.group];if(n===selected||n===hover){ctx.beginPath();ctx.arc(n.x,n.y,n.r+7/zoom,0,Math.PI*2);ctx.globalAlpha*=.18;ctx.fill();ctx.globalAlpha=match&&isLinked(n)?1:.16;}ctx.beginPath();ctx.ellipse(n.x,n.y,n.r*(1-n.squeeze),n.r/(1-n.squeeze),n.contactAngle,0,Math.PI*2);ctx.fill();if(n===selected){ctx.strokeStyle=dark?'#f4bdc7':'#a62b40';ctx.lineWidth=2/zoom;ctx.stroke();}}ctx.restore();drawLabels(dark);requestAnimationFrame(draw);}
+  function draw(now){if(!running)return;const delta=last===null?0:Math.max(0,Math.min(now-last,50));last=now;if(!paused&&!document.hidden){accumulator+=delta;let steps=0;while(accumulator+1e-7>=STEP&&steps<6){phase+=DT;physics();accumulator-=STEP;steps++;}}else accumulator=0;ctx.clearRect(0,0,width,height);const dark=document.body.dataset.mdColorScheme==='slate';ctx.save();ctx.translate(width/2+offset.x,height/2+offset.y);ctx.scale(zoom,zoom);if(liquid)drawLiquid(dark);if(!liquid)for(const e of edges){if(!visible(e.a)||!visible(e.b))continue;const active=selected&&(e.a===selected||e.b===selected);ctx.strokeStyle=active?'#ef5467':dark?'#673b45':'#e8c9cf';ctx.globalAlpha=selected && !active ? .18 : .65;ctx.lineWidth=(active?1.7:1)/zoom;ctx.beginPath();ctx.moveTo(e.a.x,e.a.y);ctx.lineTo(e.b.x,e.b.y);ctx.stroke();}for(const n of nodes){if(!visible(n))continue;const match=matchesQuery(n);ctx.globalAlpha=match&&isLinked(n)?1:.16;ctx.fillStyle=colors[n.group];if(n===selected||n===hover){ctx.beginPath();ctx.arc(n.x,n.y,n.r+7/zoom,0,Math.PI*2);ctx.globalAlpha*=.18;ctx.fill();ctx.globalAlpha=match&&isLinked(n)?1:.16;}ctx.beginPath();ctx.ellipse(n.x,n.y,(liquid?2.1/zoom:n.r)*(1-n.squeeze),(liquid?2.1/zoom:n.r)/(1-n.squeeze),n.contactAngle,0,Math.PI*2);ctx.fill();if(n===selected){ctx.strokeStyle=dark?'#f4bdc7':'#a62b40';ctx.lineWidth=1.2/zoom;ctx.stroke();}}ctx.restore();drawLabels(dark);requestAnimationFrame(draw);}
   canvas.addEventListener('pointerdown',e=>{if(pan)return;canvas.setPointerCapture(e.pointerId);const p=position(e);drag=hit(p);pan={x:e.clientX,y:e.clientY,ox:offset.x,oy:offset.y,moved:false,node:drag,pointerId:e.pointerId};if(drag){drag.dx=drag.x-p.x;drag.dy=drag.y-p.y;drag.target={x:drag.x,y:drag.y};for(const n of nodes)Sleeping.set(n.body,false);}});
   canvas.addEventListener('pointermove',e=>{const p=position(e);hover=hit(p);if(!pan||e.pointerId!==pan.pointerId)return;if(Math.hypot(e.clientX-pan.x,e.clientY-pan.y)>4)pan.moved=true;if(drag){drag.target={x:p.x+drag.dx,y:p.y+drag.dy};if(paused){Body.setPosition(drag.body,drag.target);Body.setVelocity(drag.body,{x:0,y:0});drag.x=drag.target.x;drag.y=drag.target.y;}}else{offset.x=pan.ox+e.clientX-pan.x;offset.y=pan.oy+e.clientY-pan.y;}});
   const up=e=>{if(!pan||(e&&e.pointerId!==pan.pointerId))return;const cancelled=e&&(e.type==='pointercancel'||e.type==='lostpointercapture');if(!cancelled&&!pan.moved)select(pan.node);if(drag&&(cancelled||paused))Body.setVelocity(drag.body,{x:0,y:0});drag=null;pan=null;};
@@ -191,7 +223,7 @@
   document.getElementById('graph-reset').onclick=()=>{reset();select(null);};
   document.getElementById('graph-search').addEventListener('input',e=>{query=e.target.value.toLowerCase();const matches=nodes.filter(n=>n.title.toLowerCase().includes(query));if(query&&matches.length===1)select(matches[0]);else select(null);if(query&&matches.length===1)fit();});
   new ResizeObserver(size).observe(canvas);
-  fetch(new URL('assets/graph-data.json',base)).then(r=>{if(!r.ok)throw Error('load');return r.json();}).then(data=>{nodes=data.nodes.map(n=>({...n,squeeze:0,squeezeVelocity:0,contactAngle:0,r:n.group==='course'?9:n.group==='note'?6:7}));const map=new Map(nodes.map(n=>[n.id,n]));edges=data.edges.map(e=>({a:map.get(e.source),b:map.get(e.target)})).filter(e=>e.a&&e.b);for(const n of nodes){n.body=Bodies.circle(0,0,n.r+13,{frictionAir:.045,restitution:0,friction:0,collisionFilter:{group:-1},sleepThreshold:90});Composite.add(engine.world,n.body);}for(const e of edges){Composite.add(engine.world,Constraint.create({bodyA:e.a.body,bodyB:e.b.body,length:175,stiffness:.0007,damping:.13}));if(!adjacency.has(e.a.id))adjacency.set(e.a.id,new Set());if(!adjacency.has(e.b.id))adjacency.set(e.b.id,new Set());adjacency.get(e.a.id).add(e.b.id);adjacency.get(e.b.id).add(e.a.id);}const list=document.getElementById('graph-links');for(const n of nodes){const li=document.createElement('li'),a=document.createElement('a');a.textContent=n.title;a.href=new URL(n.url,base).href;li.append(a);list.append(li);}size();reset();select(null);requestAnimationFrame(draw);}).catch(()=>{info.textContent='图谱加载失败，请刷新页面重试。文章仍可通过左侧目录阅读。';});
+  fetch(new URL('assets/graph-data.json',base)).then(r=>{if(!r.ok)throw Error('load');return r.json();}).then(data=>{nodes=data.nodes.map(n=>({...n,squeeze:0,squeezeVelocity:0,contactAngle:0,localFlow:.2,r:n.group==='course'?9:n.group==='note'?6:7}));const map=new Map(nodes.map(n=>[n.id,n]));edges=data.edges.map(e=>({a:map.get(e.source),b:map.get(e.target)})).filter(e=>e.a&&e.b);for(const n of nodes){n.body=Bodies.circle(0,0,n.r+13,{frictionAir:.045,restitution:0,friction:0,collisionFilter:{group:-1},sleepThreshold:90});Composite.add(engine.world,n.body);}for(const e of edges){Composite.add(engine.world,Constraint.create({bodyA:e.a.body,bodyB:e.b.body,length:175,stiffness:.0007,damping:.13}));if(!adjacency.has(e.a.id))adjacency.set(e.a.id,new Set());if(!adjacency.has(e.b.id))adjacency.set(e.b.id,new Set());adjacency.get(e.a.id).add(e.b.id);adjacency.get(e.b.id).add(e.a.id);}const list=document.getElementById('graph-links');for(const n of nodes){const li=document.createElement('li'),a=document.createElement('a');a.textContent=n.title;a.href=new URL(n.url,base).href;li.append(a);list.append(li);}refreshActivity();size();reset();select(null);requestAnimationFrame(draw);}).catch(()=>{info.textContent='图谱加载失败，请刷新页面重试。文章仍可通过左侧目录阅读。';});
   window.addEventListener('pagehide',()=>{running=false;});
   window.addEventListener('pageshow',e=>{if(e.persisted){last=null;accumulator=0;running=true;requestAnimationFrame(draw);}});
   document.addEventListener('visibilitychange',()=>{last=null;accumulator=0;if(document.hidden&&pan)up({pointerId:pan.pointerId,type:'pointercancel'});});
