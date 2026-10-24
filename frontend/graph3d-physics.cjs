@@ -13,12 +13,14 @@ function createModel(data){
     });
   }
   reset();
-  function step(dt=1/120,flow=.55,adaptive=true){
+  function step(dt=1/120,flow=.55,adaptive=true,gravity={x:0,y:0,z:0}){
     dt=Math.max(0,Math.min(dt,1/60));time+=dt;
     const forces=nodes.map(n=>({x:-n.x*.09*n.mass,y:-n.y*.09*n.mass,z:-n.z*.09*n.mass,load:0}));
-    const index=new Map(nodes.map((n,i)=>[n,i]));
+    const index=new Map(nodes.map((n,i)=>[n,i]));const g=Object.fromEntries(axes.map(axis=>[axis,Number.isFinite(gravity?.[axis])?gravity[axis]:0])),gLength=Math.hypot(g.x,g.y,g.z),gScale=1/Math.max(1,gLength);
     for(let i=0;i<nodes.length;i++){
       const n=nodes[i],f=forces[i];n.localFlow+=((adaptive?n.targetFlow:1)-n.localFlow)*(1-Math.exp(-2*dt));
+      for(const axis of axes)f[axis]+=g[axis]*gScale*4*n.mass;
+      if(gLength>.00001){const distance=Math.hypot(n.x,n.y,n.z),excess=Math.max(0,distance-6),outward=distance?Math.max(0,axes.reduce((sum,axis)=>sum+n['v'+axis]*n[axis]/distance,0)):0,wall=excess*16+outward*4*Math.min(1,excess);if(distance)for(const axis of axes)f[axis]-=n[axis]/distance*wall*n.mass;f.load+=Math.min(.6,excess);}
       const amp=.9*flow*n.localFlow*n.mass;
       f.x+=(Math.sin(n.y*.5+time*.35)+Math.cos(n.z*.35-time*.2))*amp;
       f.y+=(Math.sin(n.z*.45+time*.27)-Math.cos(n.x*.4+time*.3))*amp;

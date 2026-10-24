@@ -23,9 +23,12 @@
   function requestDraw(){if(drawFrame===null)drawFrame=requestAnimationFrame(draw);}
   const STEP=1000/120,DT=STEP/1000,MAX_SPEED=18;
   const pauseButton=document.getElementById('graph-pause');
+  const labelLayout=GraphLabelLayout.createLayout();
   const adjacency=new Map();
   let view='2d',scene3D=null;
-  function sync3D(){if(scene3D)scene3D.setState({selected:selected?.id||null,query,focusOnly,paused,flow,adaptive:activityEnabled,transparency,liquid,labels:labelMode,nodeColors:Object.fromEntries(nodes.map(n=>[n.id,colorOf(n)])),lineColor:appearance.line,bend,activities:Object.fromEntries(nodes.map(n=>[n.id,n.flowFactor||.2]))});}
+  let gravityOptions={mode:'off',strength:.5,vector:{x:0,y:1}};const gravityField=GraphGravity.createField();
+  window.addEventListener('graph-gravity-change',event=>{gravityOptions={...event.detail};gravityField.configure(gravityOptions);scene3D?.setState({gravity:gravityOptions});});
+  function sync3D(){if(scene3D)scene3D.setState({selected:selected?.id||null,query,focusOnly,paused,flow,adaptive:activityEnabled,transparency,liquid,labels:labelMode,nodeColors:Object.fromEntries(nodes.map(n=>[n.id,colorOf(n)])),lineColor:appearance.line,bend,gravity:gravityOptions,activities:Object.fromEntries(nodes.map(n=>[n.id,n.flowFactor||.2]))});}
   function setView(next){
     const c3=document.getElementById('knowledge-graph-3d'),status=document.getElementById('graph-render-status');
     if(next==='3d'){
@@ -176,8 +179,8 @@
     const shown=nodes.filter(visible),boxes=[];
     const priority=n=>(n===selected?10000:0)+(n===hover?9000:0)+(query&&n.title.toLowerCase().includes(query)?8000:0)+(selected&&isLinked(n)?100:0)+(adjacency.get(n.id)?.size||0);
     const ordered=shown.slice().sort((a,b)=>priority(b)-priority(a)||a.id.localeCompare(b.id));
-    const intersects=(a,b)=>a.x<b.x+b.w+4&&a.x+a.w+4>b.x&&a.y<b.y+b.h+3&&a.y+a.h+3>b.y;
     const circles=shown.map(n=>({node:n,x:width/2+offset.x+n.x*zoom,y:height/2+offset.y+n.y*zoom,r:(liquid?(n.r+13)*1.3:n.r)*zoom+4}));
+    const obstacles=circles.map(c=>({id:c.node.id,x:c.x-c.r,y:c.y-c.r,w:c.r*2,h:c.r*2}));
     for(const n of ordered){
       const important=n===selected||n===hover;
       if(labelMode==='off'&&!important)continue;
@@ -186,15 +189,7 @@
       let text=n.title,maxWidth=Math.min(260,width-24);
       while(text.length>1&&ctx.measureText(text).width>maxWidth)text=text.slice(0,-2)+'…';
       const w=ctx.measureText(text).width+10,h=19,x=width/2+offset.x+n.x*zoom,y=height/2+offset.y+n.y*zoom,r=(liquid?(n.r+13)*1.3:n.r)*zoom+7;
-      const choices=[{x:x-w/2,y:y+r},{x:x-w/2,y:y-r-h},{x:x+r,y:y-h/2},{x:x-r-w,y:y-h/2}];
-      let box;
-      for(const candidate of choices){
-        candidate.w=w;candidate.h=h;
-        if(candidate.x<4||candidate.x+w>width-4||candidate.y<4||candidate.y+h>height-4)continue;
-        if(labelMode==='smart'&&(boxes.some(b=>intersects(candidate,b))||circles.some(c=>c.node!==n&&candidate.x<c.x+c.r&&candidate.x+w>c.x-c.r&&candidate.y<c.y+c.r&&candidate.y+h>c.y-c.r)))continue;
-        box=candidate;break;
-      }
-      if(!box&&important){box={x:Math.max(4,Math.min(width-w-4,x-w/2)),y:Math.max(4,Math.min(height-h-4,y+r)),w,h};}
+      const box=labelLayout.place({id:n.id,x,y,w,h,r,width,height,smart:labelMode==='smart',important,obstacles},boxes);
       if(!box)continue;boxes.push(box);
       ctx.globalAlpha=important?1:.9;ctx.fillStyle=dark?'#171116ee':'#fffafbee';ctx.fillRect(box.x,box.y,box.w,box.h);
       ctx.fillStyle=important?(dark?'#ffe1e7':'#8e1c32'):(dark?'#d8cbd2':'#604850');ctx.fillText(text,box.x+box.w/2,box.y+box.h/2);
@@ -219,6 +214,7 @@
     // A fixed 120 Hz step keeps damping, pointer forces and contacts independent
     // of pointer-event frequency and monitor refresh rate. Velocities in Matter
     // are normalized to a 60 Hz frame; forces use milliseconds squared.
+    const gravity=gravityField.step(DT),pull=Math.hypot(gravity.x,gravity.y);
     for(const n of nodes){
       n.x=n.body.position.x;n.y=n.body.position.y;
       n.contactLoad=0;n.contactX=0;n.contactY=0;
@@ -231,6 +227,7 @@
       const targetFlow=activityEnabled?(n.flowFactor||.2):1;n.localFlow+=(targetFlow-n.localFlow)*(1-Math.exp(-2*DT));
       if(liquid&&flow>0){const fx=Math.sin(n.y*.007+phase*.35)+Math.cos(n.x*.004-phase*.25),fy=Math.cos(n.x*.007-phase*.3)-Math.sin(n.y*.005+phase*.2);Body.applyForce(n.body,n.body.position,{x:fx*.000025*n.body.mass*flow*n.localFlow,y:fy*.000025*n.body.mass*flow*n.localFlow});}
       Body.applyForce(n.body,n.body.position,{x:-n.x*.00000013*n.body.mass,y:-n.y*.00000013*n.body.mass});
+      if(pull>.00001){const distance=Math.hypot(n.x,n.y),limit=230,excess=Math.max(0,distance-limit),outward=distance?Math.max(0,(n.body.velocity.x*n.x+n.body.velocity.y*n.y)/distance):0,wall=excess*.000007+outward*.00012*Math.min(1,excess/25);Body.applyForce(n.body,n.body.position,{x:(gravity.x*.00025-(distance?n.x/distance*wall:0))*n.body.mass,y:(gravity.y*.00025-(distance?n.y/distance*wall:0))*n.body.mass});}
     }
     for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
       const a=nodes[i],b=nodes[j],dx=b.x-a.x,dy=b.y-a.y;

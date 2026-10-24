@@ -7,6 +7,8 @@ const root=path.join(__dirname,'..');
 const GraphAppearance=require('../docs/assets/graph-appearance.js');
 const ArticleActivity=require('../docs/assets/article-activity.js');
 const LiquidSurface=require('../docs/assets/liquid-surface.js');
+const GraphGravity=require('../docs/assets/graph-gravity.js');
+const GraphLabelLayout=require('../docs/assets/graph-label-layout.js');
 const source=fs.readFileSync(path.join(root,'docs/assets/graph.js'),'utf8');
 const data=JSON.parse(fs.readFileSync(path.join(root,'docs/assets/graph-data.json'),'utf8'));
 
@@ -16,14 +18,14 @@ async function simulation(graph=data,usage={},three){
   const gradient={addColorStop(){}};let labelBoxes=[];
   const classes=()=>({toggle(){},contains(){return false;}});
   const ctx=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient,measureText:text=>({width:Array.from(text).length*8}),clearRect:()=>{labelBoxes=[];},fillRect:(x,y,w,h)=>{if(h===19)labelBoxes.push({x,y,w,h});}},{get:(obj,key)=>key in obj?obj[key]:()=>{}});
-  const elements=new Map(),frames=[],documentEvents={};
+  const elements=new Map(),frames=[],documentEvents={},windowEvents={};
   function element(id){if(!elements.has(id))elements.set(id,{textContent:'',value:'',classList:classes(),closest:()=>element('graph-wrap'),focus(){},attributes:{},children:[],events:{},append(...items){this.children.push(...items);},replaceChildren(){this.children=[];},setAttribute(name,value){this.attributes[name]=value;},addEventListener(type,fn){this.events[type]=fn;},getContext:()=>ctx,getBoundingClientRect:()=>({width:800,height:510,left:0,top:0}),setPointerCapture(){}});return elements.get(id);}
   const document={body:{classList:classes(),dataset:{mdColorScheme:'slate'}},hidden:false,currentScript:{src:'https://example.com/study-garden/assets/graph.js'},getElementById:element,createElement:()=>element(`generated-${Math.random()}`),createTextNode:s=>s,addEventListener:(type,fn)=>{documentEvents[type]=fn;}};
-  const context=vm.createContext({console,URL,Math,LiquidSurface,ArticleActivity,GraphAppearance,Graph3D:three,localStorage:{getItem:()=>JSON.stringify({version:1,entries:usage})}, Matter:physics,devicePixelRatio:1,window:{Matter:physics,Graph3D:three,addEventListener(){}},document,matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>graph})});
+  const context=vm.createContext({console,URL,Math,LiquidSurface,ArticleActivity,GraphAppearance,GraphGravity,GraphLabelLayout,Graph3D:three,localStorage:{getItem:()=>JSON.stringify({version:1,entries:usage})}, Matter:physics,devicePixelRatio:1,window:{Matter:physics,Graph3D:three,addEventListener(type,fn){windowEvents[type]=fn;}},document,matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>graph})});
   vm.runInContext(source,context);await new Promise(resolve=>setImmediate(resolve));
   const frame=delta=>{now+=delta;assert(frames.length===1,'Only one animation loop should be scheduled');frames.shift()(now);};
   frame(0);
-  return {engine,element,document,documentEvents,frame,get boxes(){return labelBoxes;},get updates(){return updates;},steps:(n,delta=1000/120)=>{for(let i=0;i<n;i++)frame(delta);},flow:value=>element('graph-flow').oninput({target:{value}})};
+  return {engine,element,document,documentEvents,windowEvents,frame,get boxes(){return labelBoxes;},get updates(){return updates;},steps:(n,delta=1000/120)=>{for(let i=0;i<n;i++)frame(delta);},flow:value=>element('graph-flow').oninput({target:{value}})};
 }
 const minimal=count=>({nodes:Array.from({length:count},(_,i)=>({id:`node-${i}`,title:`Node ${i}`,group:'course',url:`notes/${i}/`})),edges:[]});
 const kinetic=bodies=>bodies.reduce((energy,b)=>energy+b.mass*(b.velocity.x**2+b.velocity.y**2)/2,0);
@@ -74,9 +76,11 @@ const kinetic=bodies=>bodies.reduce((energy,b)=>energy+b.mass*(b.velocity.x**2+b
   assert.equal(bridge.element('graph-view').value,'3d');assert(sceneVisible);bridge.steps(10);assert.equal(bridge.updates,0,'2D physics must stop while 3D is active');
   selected3d('node-0');assert.equal(sceneState.selected,'node-0');
   bridge.element('graph-pause').onclick();assert(sceneState.paused);
+  bridge.windowEvents['graph-gravity-change']({detail:{mode:'manual',strength:.8,vector:{x:1,y:0}}});assert.equal(sceneState.gravity.vector.x,1);assert.equal(sceneState.gravity.strength,.8);
   bridge.element('graph-view').onchange({target:{value:'2d'}});assert(!sceneVisible);assert.equal(bridge.element('knowledge-graph-3d').hidden,true);
 
   // Identical simulated time at common refresh rates must produce the same state.
+  const gravitySim=await simulation(minimal(1));gravitySim.flow(0);const falling=gravitySim.engine.world.bodies[0];Matter.Body.setPosition(falling,{x:0,y:0});Matter.Body.setVelocity(falling,{x:0,y:0});gravitySim.windowEvents['graph-gravity-change']({detail:{mode:'manual',strength:1,vector:{x:0,y:1}}});gravitySim.steps(240);assert(falling.position.y>50);gravitySim.steps(2400);assert(Math.hypot(falling.position.x,falling.position.y)<350);gravitySim.windowEvents['graph-gravity-change']({detail:{mode:'manual',strength:1,vector:{x:0,y:-1}}});gravitySim.steps(1200);assert(falling.position.y<-50);
   const states=[];
   for(const hz of [30,60,144]){const s=await simulation(minimal(3));s.steps(hz*3,1000/hz);assert.equal(s.updates,360);states.push(s.engine.world.bodies.map(b=>({...b.position})));}
   for(const state of states.slice(1))state.forEach((p,i)=>assert(Math.hypot(p.x-states[0][i].x,p.y-states[0][i].y)<1e-8));
