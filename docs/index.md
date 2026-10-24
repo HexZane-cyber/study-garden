@@ -6,7 +6,7 @@
 <h2>把零散的知识，<br>连成自己的世界。</h2>
 <p>选一门课，留下一篇笔记。让每一步学习都有迹可循。</p>
 <div class="hero-actions"><a href="dashboard/" class="md-button md-button--primary">进入学习工作台 →</a><a href="catalog/" class="md-button">探索课程</a></div>
-<div class="hero-tags"><span>课程与路线</span><span>本机私密资料</span><span>球球与电路走线</span></div>
+<div class="hero-tags"><span>课程与路线</span><span>本机私密资料</span><span>元件与知识电路</span></div>
 </div>
 
 ## 为什么建立这个网站
@@ -29,8 +29,7 @@
 | [必学工具](tools/git.md) | 记录写代码和管理知识需要的工具 |
 | [课程指南](courses/cs-intro.md) | 收藏课程资源，安排练习和项目 |
 | [我的笔记](notes/index.md) | 沉淀概念理解、解题过程和实验记录 |
-| [知识电路](graph.md) | 拖动液态球球，沿元件式电路走线探索文章关系 |
-| [阵列视图](chip.md) | 固定元件阵列，按课程进度筛选和继续学习 |
+| [知识电路](graph.md) | 以元件和电路走线探索笔记，按课程进度继续学习 |
 | [共建课程](contribute.md) | 推荐课程，审核后加入正式目录 |
 | [个人私密空间](private.md) | 在本机加密保存课本、Obsidian 笔记与附件 |
 | [我的书签](library.md) | 回到收藏的文章与最近阅读内容 |

@@ -2,7 +2,7 @@
 
 {% block config %}
   {% set default_config = super() %}
-  {% if page and page.file.src_uri == "chip.md" %}
+  {% if page and page.file.src_uri in ["graph.md", "chip.md"] %}
     {# Chip selections own the URL fragment; preserve the rest of Material's config. #}
     {{ default_config | replace(features | tojson, features | reject('equalto', 'navigation.tracking') | list | tojson) }}
   {% else %}
@@ -13,25 +13,13 @@
 {% block scripts %}
   {{ super() }}
   {# Keep feature scripts on their owning page. Deferred dependencies execute in order. #}
-  {% if page and page.file.src_uri == "chip.md" %}
+  {% if page and page.file.src_uri in ["graph.md", "chip.md"] %}
     <script type="application/json" id="chip-course-data">{{ chip_courses | safe }}</script>
     <script src="{{ 'assets/graph-interaction.js' | url }}" defer></script>
     <script src="{{ 'assets/learning-model.js' | url }}" defer></script>
     <script src="{{ 'assets/chip-learning.js' | url }}" defer></script>
     <script src="{{ 'assets/chip-model.js' | url }}" defer></script>
     <script src="{{ 'assets/chip.js' | url }}" defer></script>
-  {% elif page and page.file.src_uri == "graph.md" %}
-    <script src="{{ 'assets/vendor/matter.min.js' | url }}" defer></script>
-    <script src="{{ 'assets/liquid-surface.js' | url }}" defer></script>
-    <script src="{{ 'assets/graph-appearance.js' | url }}" defer></script>
-    <script src="{{ 'assets/graph-gravity.js' | url }}" defer></script>
-    <script src="{{ 'assets/graph-label-layout.js' | url }}" defer></script>
-    <script src="{{ 'assets/graph-interaction.js' | url }}" defer></script>
-    <script src="{{ 'assets/graph-transfer.js' | url }}" defer></script>
-    <script src="{{ 'assets/graph-circuit.js' | url }}" defer></script>
-    <script src="{{ 'assets/vendor/graph3d.bundle.js' | url }}" defer></script>
-    <script src="{{ 'assets/graph.js' | url }}" defer></script>
-    <script src="{{ 'assets/gravity-controls.js' | url }}" defer></script>
   {% elif page and page.file.src_uri == "contribute.md" %}
     <script src="{{ 'assets/contribution-model.js' | url }}" defer></script>
     <script src="{{ 'assets/community.js' | url }}" defer></script>

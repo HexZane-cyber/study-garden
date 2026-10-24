@@ -15,7 +15,7 @@ class CatalogTest(unittest.TestCase):
     def test_chip_catalog_escapes_script_closers_without_changing_titles(self):
         data = hooks.load_course_catalog(ROOT / 'docs')
         data['courses'][0]['title'] = '</script><script>alert(1)</script>'
-        page = SimpleNamespace(file=SimpleNamespace(src_uri='chip.md'))
+        page = SimpleNamespace(file=SimpleNamespace(src_uri='graph.md'))
         with patch.object(hooks, 'load_course_catalog', return_value=data):
             context = hooks.on_page_context({}, page, {'docs_dir': ROOT / 'docs'}, None)
         self.assertNotIn('<', context['chip_courses'])

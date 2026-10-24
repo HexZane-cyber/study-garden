@@ -1,0 +1,676 @@
+{
+  "nodes": [
+    {
+      "id": "backup.md",
+      "title": "数据与备份",
+      "group": "guide",
+      "url": "backup/"
+    },
+    {
+      "id": "catalog.md",
+      "title": "课程目录",
+      "group": "guide",
+      "url": "catalog/"
+    },
+    {
+      "id": "chip.md",
+      "title": "知识电路（原阵列入口）",
+      "group": "guide",
+      "url": "chip/"
+    },
+    {
+      "id": "contribute.md",
+      "title": "共建课程",
+      "group": "guide",
+      "url": "contribute/"
+    },
+    {
+      "id": "courses/algorithms.md",
+      "title": "MIT 6.006 · 数据结构与算法",
+      "group": "course",
+      "url": "courses/algorithms/"
+    },
+    {
+      "id": "courses/community/index.md",
+      "title": "社区收录课程",
+      "group": "course",
+      "url": "courses/community/"
+    },
+    {
+      "id": "courses/cs-intro.md",
+      "title": "CS50x · 计算机科学导论",
+      "group": "course",
+      "url": "courses/cs-intro/"
+    },
+    {
+      "id": "courses/databases.md",
+      "title": "CMU 15-445 · 数据库系统",
+      "group": "course",
+      "url": "courses/databases/"
+    },
+    {
+      "id": "courses/math.md",
+      "title": "MIT 18.06 · 线性代数",
+      "group": "course",
+      "url": "courses/math/"
+    },
+    {
+      "id": "courses/ml.md",
+      "title": "Google MLCC · 机器学习入门",
+      "group": "course",
+      "url": "courses/ml/"
+    },
+    {
+      "id": "courses/networks.md",
+      "title": "Stanford CS144 · 计算机网络",
+      "group": "course",
+      "url": "courses/networks/"
+    },
+    {
+      "id": "courses/os.md",
+      "title": "MIT 6.1810 · 操作系统",
+      "group": "course",
+      "url": "courses/os/"
+    },
+    {
+      "id": "courses/python.md",
+      "title": "CS50P · Python 与项目实践",
+      "group": "course",
+      "url": "courses/python/"
+    },
+    {
+      "id": "courses/systems.md",
+      "title": "CMU 15-213 · 计算机系统",
+      "group": "course",
+      "url": "courses/systems/"
+    },
+    {
+      "id": "dashboard.md",
+      "title": "学习工作台",
+      "group": "guide",
+      "url": "dashboard/"
+    },
+    {
+      "id": "discussion.md",
+      "title": "交流讨论",
+      "group": "guide",
+      "url": "discussion/"
+    },
+    {
+      "id": "graph.md",
+      "title": "知识电路",
+      "group": "guide",
+      "url": "graph/"
+    },
+    {
+      "id": "guide.md",
+      "title": "如何使用这本手册",
+      "group": "guide",
+      "url": "guide/"
+    },
+    {
+      "id": "index.md",
+      "title": "之芯",
+      "group": "guide",
+      "url": ""
+    },
+    {
+      "id": "library.md",
+      "title": "我的书签",
+      "group": "guide",
+      "url": "library/"
+    },
+    {
+      "id": "notes/experiment.md",
+      "title": "一次实验应该记录什么",
+      "group": "note",
+      "url": "notes/experiment/"
+    },
+    {
+      "id": "notes/index.md",
+      "title": "我的笔记",
+      "group": "note",
+      "url": "notes/"
+    },
+    {
+      "id": "notes/learning-loop.md",
+      "title": "建立自己的学习循环",
+      "group": "note",
+      "url": "notes/learning-loop/"
+    },
+    {
+      "id": "notes/vectors.md",
+      "title": "向量与矩阵：从变换理解",
+      "group": "note",
+      "url": "notes/vectors/"
+    },
+    {
+      "id": "private.md",
+      "title": "个人私密空间",
+      "group": "guide",
+      "url": "private/"
+    },
+    {
+      "id": "publish.md",
+      "title": "上传笔记与发布网站",
+      "group": "guide",
+      "url": "publish/"
+    },
+    {
+      "id": "review.md",
+      "title": "复习卡",
+      "group": "guide",
+      "url": "review/"
+    },
+    {
+      "id": "roadmap.md",
+      "title": "一个可以调整的学习路线",
+      "group": "guide",
+      "url": "roadmap/"
+    },
+    {
+      "id": "tools/git.md",
+      "title": "Git 与知识管理",
+      "group": "tool",
+      "url": "tools/git/"
+    },
+    {
+      "id": "tools/markdown.md",
+      "title": "Markdown 写作",
+      "group": "tool",
+      "url": "tools/markdown/"
+    },
+    {
+      "id": "tools/missing-semester.md",
+      "title": "Missing Semester · 开发工具",
+      "group": "tool",
+      "url": "tools/missing-semester/"
+    }
+  ],
+  "edges": [
+    {
+      "source": "backup.md",
+      "target": "guide.md"
+    },
+    {
+      "source": "backup.md",
+      "target": "index.md"
+    },
+    {
+      "source": "backup.md",
+      "target": "library.md"
+    },
+    {
+      "source": "backup.md",
+      "target": "private.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "contribute.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/algorithms.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/cs-intro.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/databases.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/math.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ml.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/networks.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/os.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/python.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/systems.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "dashboard.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "guide.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "index.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "library.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "review.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "tools/missing-semester.md"
+    },
+    {
+      "source": "chip.md",
+      "target": "graph.md"
+    },
+    {
+      "source": "chip.md",
+      "target": "private.md"
+    },
+    {
+      "source": "chip.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "contribute.md",
+      "target": "courses/community/index.md"
+    },
+    {
+      "source": "contribute.md",
+      "target": "guide.md"
+    },
+    {
+      "source": "contribute.md",
+      "target": "index.md"
+    },
+    {
+      "source": "contribute.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "courses/algorithms.md",
+      "target": "courses/cs-intro.md"
+    },
+    {
+      "source": "courses/algorithms.md",
+      "target": "courses/databases.md"
+    },
+    {
+      "source": "courses/algorithms.md",
+      "target": "courses/python.md"
+    },
+    {
+      "source": "courses/algorithms.md",
+      "target": "courses/systems.md"
+    },
+    {
+      "source": "courses/algorithms.md",
+      "target": "notes/learning-loop.md"
+    },
+    {
+      "source": "courses/algorithms.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/algorithms.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "courses/algorithms.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/cs-intro.md",
+      "target": "courses/python.md"
+    },
+    {
+      "source": "courses/cs-intro.md",
+      "target": "courses/systems.md"
+    },
+    {
+      "source": "courses/cs-intro.md",
+      "target": "index.md"
+    },
+    {
+      "source": "courses/cs-intro.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/cs-intro.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "courses/cs-intro.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/databases.md",
+      "target": "courses/systems.md"
+    },
+    {
+      "source": "courses/databases.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/databases.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "courses/databases.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/math.md",
+      "target": "courses/ml.md"
+    },
+    {
+      "source": "courses/math.md",
+      "target": "notes/vectors.md"
+    },
+    {
+      "source": "courses/math.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/math.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "courses/math.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ml.md",
+      "target": "courses/python.md"
+    },
+    {
+      "source": "courses/ml.md",
+      "target": "notes/experiment.md"
+    },
+    {
+      "source": "courses/ml.md",
+      "target": "notes/vectors.md"
+    },
+    {
+      "source": "courses/ml.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ml.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "courses/ml.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/networks.md",
+      "target": "courses/os.md"
+    },
+    {
+      "source": "courses/networks.md",
+      "target": "courses/systems.md"
+    },
+    {
+      "source": "courses/networks.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/networks.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "courses/networks.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/networks.md",
+      "target": "tools/missing-semester.md"
+    },
+    {
+      "source": "courses/os.md",
+      "target": "courses/systems.md"
+    },
+    {
+      "source": "courses/os.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/os.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "courses/os.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/os.md",
+      "target": "tools/missing-semester.md"
+    },
+    {
+      "source": "courses/python.md",
+      "target": "notes/experiment.md"
+    },
+    {
+      "source": "courses/python.md",
+      "target": "notes/learning-loop.md"
+    },
+    {
+      "source": "courses/python.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/python.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "courses/python.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/python.md",
+      "target": "tools/missing-semester.md"
+    },
+    {
+      "source": "courses/systems.md",
+      "target": "notes/experiment.md"
+    },
+    {
+      "source": "courses/systems.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/systems.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "courses/systems.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "dashboard.md",
+      "target": "guide.md"
+    },
+    {
+      "source": "dashboard.md",
+      "target": "index.md"
+    },
+    {
+      "source": "dashboard.md",
+      "target": "library.md"
+    },
+    {
+      "source": "dashboard.md",
+      "target": "private.md"
+    },
+    {
+      "source": "dashboard.md",
+      "target": "review.md"
+    },
+    {
+      "source": "dashboard.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "discussion.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "graph.md",
+      "target": "guide.md"
+    },
+    {
+      "source": "graph.md",
+      "target": "index.md"
+    },
+    {
+      "source": "graph.md",
+      "target": "library.md"
+    },
+    {
+      "source": "graph.md",
+      "target": "private.md"
+    },
+    {
+      "source": "graph.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "guide.md",
+      "target": "index.md"
+    },
+    {
+      "source": "guide.md",
+      "target": "private.md"
+    },
+    {
+      "source": "guide.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "guide.md",
+      "target": "review.md"
+    },
+    {
+      "source": "guide.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "index.md",
+      "target": "library.md"
+    },
+    {
+      "source": "index.md",
+      "target": "notes/index.md"
+    },
+    {
+      "source": "index.md",
+      "target": "private.md"
+    },
+    {
+      "source": "index.md",
+      "target": "review.md"
+    },
+    {
+      "source": "index.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "index.md",
+      "target": "tools/git.md"
+    },
+    {
+      "source": "library.md",
+      "target": "private.md"
+    },
+    {
+      "source": "library.md",
+      "target": "review.md"
+    },
+    {
+      "source": "notes/experiment.md",
+      "target": "notes/index.md"
+    },
+    {
+      "source": "notes/experiment.md",
+      "target": "notes/learning-loop.md"
+    },
+    {
+      "source": "notes/index.md",
+      "target": "notes/learning-loop.md"
+    },
+    {
+      "source": "notes/index.md",
+      "target": "notes/vectors.md"
+    },
+    {
+      "source": "notes/index.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "notes/learning-loop.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "notes/learning-loop.md",
+      "target": "tools/markdown.md"
+    },
+    {
+      "source": "private.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "private.md",
+      "target": "review.md"
+    },
+    {
+      "source": "private.md",
+      "target": "tools/missing-semester.md"
+    },
+    {
+      "source": "publish.md",
+      "target": "tools/git.md"
+    },
+    {
+      "source": "publish.md",
+      "target": "tools/missing-semester.md"
+    },
+    {
+      "source": "review.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "roadmap.md",
+      "target": "tools/git.md"
+    },
+    {
+      "source": "roadmap.md",
+      "target": "tools/markdown.md"
+    },
+    {
+      "source": "roadmap.md",
+      "target": "tools/missing-semester.md"
+    },
+    {
+      "source": "tools/git.md",
+      "target": "tools/markdown.md"
+    },
+    {
+      "source": "tools/git.md",
+      "target": "tools/missing-semester.md"
+    }
+  ]
+}
