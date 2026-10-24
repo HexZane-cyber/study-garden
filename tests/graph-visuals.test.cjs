@@ -41,11 +41,15 @@ console.log('Graph visuals passed: curved paths and endpoints, smooth surface un
 {
  const {contactGroups}=require('../frontend/graph-visuals.cjs');
  const a={id:'front',x:0,y:0,z:0,radius:.4},b={id:'back',x:0,y:0,z:1.3,radius:.4};
- let state=contactGroups([a,b]);assert.equal(state.groups.length,1);
- for(let i=0;i<120;i++){b.z=1.36+Math.sin(i)*.08;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,1);}
- b.z=1.7;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,2);
- b.z=1.4;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,2);
- b.z=1.3;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,1);
+ let state=contactGroups([a,b]);assert.equal(state.groups.length,2,'visibly separated drops must not enter a fusion group');
+ b.z=.79;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,1);
+ for(let i=0;i<120;i++){b.z=.82+Math.sin(i)*.015;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,1);}
+ b.z=.9;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,2);
+ b.z=.82;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,2);
+ b.z=.79;state=contactGroups([a,b],state.contacts);assert.equal(state.groups.length,1);
  b.z=3;assert.equal(contactGroups([a,b],state.contacts).groups.length,2,'screen overlap alone must not merge depth-separated nodes');
  assert.equal(contactGroups([a],state.contacts).contacts.size,0,'filtered nodes cannot retain stale contacts');
 }
+
+for(const squeeze of [0,.01,.08,.2,.28])for(const speed of [0,1,6]){const scale=V.contactScale(.44,speed,squeeze,1);assert(Math.abs(scale.x*scale.y*scale.z-.44**3)<1e-10,'contact squash must preserve volume');if(squeeze>.05){assert(scale.y<.44);assert(scale.x>.44);}}
+assert(Math.abs(V.supportRadius({sx:.3,sy:.7,sz:.4,round:true},0,1,0)-.7)<1e-10);assert(Math.abs(V.supportRadius({sx:.3,sy:.7,sz:.4,round:true},1,0,0)-.3)<1e-10);

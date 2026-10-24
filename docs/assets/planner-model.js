@@ -8,7 +8,7 @@
   seen.clear();for(const session of raw.sessions.slice(-2000)){if(!session||typeof session.id!=='string'||!session.id||session.id.length>80||seen.has(session.id)||!validDay(session.date)||!Number.isInteger(session.minutes)||session.minutes<1||session.minutes>240)continue;seen.add(session.id);state.sessions.push({id:session.id,date:session.date,minutes:session.minutes,course:known.has(session.course)?session.course:''});}
   const timer=raw.timer;if(timer&&Number.isFinite(timer.elapsed)&&timer.elapsed>=0&&timer.elapsed<=MAX&&(timer.started===null||Number.isFinite(timer.started)&&timer.started>0)){state.timer={id:typeof timer.id==='string'&&timer.id.length<80?timer.id:'session-'+timer.started,elapsed:timer.elapsed,started:timer.started,course:known.has(timer.course)?timer.course:''};}return state;
  }
- function load(storage,ids){try{return clean(JSON.parse(storage.getItem(KEY)||'null'),ids);}catch{return blank();}}
+ function load(storage,ids){const text=storage.getItem(KEY);if(text===null)return blank();const raw=JSON.parse(text),state=clean(raw,ids);if(raw.tasks.length!==state.tasks.length||raw.sessions.length!==state.sessions.length||raw.timer&&!state.timer)throw Error('工作台记录不完整，已保留原始数据');return state;}
  function save(storage,state){try{storage.setItem(KEY,JSON.stringify(state));return true;}catch{return false;}}
  function elapsed(timer,now=Date.now()){if(!timer)return 0;return Math.max(0,Math.min(MAX,timer.elapsed+(timer.started===null?0:Math.max(0,now-timer.started))));}
  function toggleTimer(state,course,now=Date.now()){const timer=state.timer||{id:'session-'+now,elapsed:0,started:null,course};return {...state,timer:{...timer,elapsed:elapsed(timer,now),started:timer.started===null?now:null}};}

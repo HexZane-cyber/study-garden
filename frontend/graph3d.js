@@ -25,7 +25,7 @@ export function createScene(canvas,data,onSelect,onError){
   for(let i=0;i<160;i++)model.step(1/120,0);
   for(const n of model.nodes){n.vx*=.15;n.vy*=.15;n.vz*=.15;}
   const palette={course:0xef5467,note:0xff9a81,tool:0xd69767,guide:0x9e919b};
-  const state={paused:false,flow:.55,adaptive:true,transparency:.74,liquid:true,selected:null,query:'',focusOnly:false,labels:'smart',activities:{},nodeColors:{},lineColor:'#a94f6b',bend:.28};
+  const state={paused:false,flow:.55,adaptive:true,transparency:.74,liquid:true,contactMode:'soft',selected:null,query:'',focusOnly:false,labels:'smart',activities:{},nodeColors:{},lineColor:'#a94f6b',bend:.28};
   const adjacency=new Map(model.nodes.map(n=>[n.id,new Set()]));for(const e of model.edges){adjacency.get(e.a.id).add(e.b.id);adjacency.get(e.b.id).add(e.a.id);}
   const glass=new THREE.MeshPhysicalMaterial({color:0xe9b1c3,roughness:.1,metalness:0,transmission:.93,thickness:.7,ior:1.33,clearcoat:.45,clearcoatRoughness:.08,attenuationColor:0xee6a8c,attenuationDistance:2,envMapIntensity:.48});
   const solidMaterials=new Map(Object.entries(palette).map(([group,color])=>[group,new THREE.MeshStandardMaterial({color,roughness:.36})]));
@@ -76,9 +76,9 @@ export function createScene(canvas,data,onSelect,onError){
     pos.needsUpdate=true;geometry.computeVertexNormals();geometry.computeBoundingSphere();
   }
   function fusion(now){
-    if(!state.liquid){for(const item of fused.values())item.effect.visible=false;return;}
+    if(!state.liquid||state.contactMode!=='merge'){for(const item of fused.values())item.effect.visible=false;contacts=new Set();return;}
     const available=shapes.filter(s=>shown(s.n));
-    const grouped=Visuals.contactGroups(available.map(s=>({id:s.n.id,...s.mesh.position,radius:Math.max(s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z)})),contacts);
+    const grouped=Visuals.contactGroups(available.map(s=>{const q=s.mesh.quaternion;return {id:s.n.id,...s.mesh.position,sx:s.mesh.scale.x,sy:s.mesh.scale.y,sz:s.mesh.scale.z,inverse:[-q.x,-q.y,-q.z,q.w],seed:s.n.seed,phase:s.phase,norm:s.norm};}),contacts);
     contacts=grouped.contacts;
     const groups=grouped.groups.map(indices=>indices.map(i=>available[i]));
     const live=new Set();
@@ -86,9 +86,10 @@ export function createScene(canvas,data,onSelect,onError){
       if(group.length<2)continue;
       const id=group.map(s=>s.n.id).sort().join('|');live.add(id);
       let item=fused.get(id);
-      if(!item){const res=group.length<=3?28:group.length<=8?32:36;const effect=new MarchingCubes(res,fusionMaterial,false,true,16000);effect.isolation=0;effect.frustumCulled=false;scene.add(effect);item={effect,res,signature:'',updated:-Infinity};fused.set(id,item);}
+      if(!item){const res=group.length<=3?32:group.length<=8?36:40;const effect=new MarchingCubes(res,fusionMaterial,false,true,16000);effect.isolation=0;effect.frustumCulled=false;scene.add(effect);item={effect,res,signature:'',updated:-Infinity,born:model.time};fused.set(id,item);}
 
-      const signature=group.map(s=>[s.mesh.position.x,s.mesh.position.y,s.mesh.position.z,s.mesh.quaternion.x,s.mesh.quaternion.y,s.mesh.quaternion.z,s.mesh.quaternion.w,s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z,s.phase].map(v=>v.toFixed(3)).join(',')).join(';')+JSON.stringify(state.nodeColors);
+      const blend=Math.round((1-Math.exp(-5*Math.max(0,model.time-item.born)))*1000)/1000;
+      const signature=group.map(s=>[s.mesh.position.x,s.mesh.position.y,s.mesh.position.z,s.mesh.quaternion.x,s.mesh.quaternion.y,s.mesh.quaternion.z,s.mesh.quaternion.w,s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z,s.phase].map(v=>v.toFixed(3)).join(',')).join(';')+JSON.stringify(state.nodeColors)+blend;
       const dragging=group.some(s=>s.n.id===gesture?.id);
       if(signature===item.signature||(item.signature&&!dragging&&now-item.updated<1000/30)){item.effect.visible=true;for(const shape of group)shape.mesh.visible=false;continue;}
       item.signature=signature;item.updated=now;
@@ -98,7 +99,7 @@ export function createScene(canvas,data,onSelect,onError){
       if(item.volume&&box.min.x>item.volume.center.x-item.volume.half&&box.max.x<item.volume.center.x+item.volume.half&&box.min.y>item.volume.center.y-item.volume.half&&box.max.y<item.volume.center.y+item.volume.half&&box.min.z>item.volume.center.z-item.volume.half&&box.max.z<item.volume.center.z+item.volume.half){center=item.volume.center;half=item.volume.half;}
       else {half*=1.12;item.volume={center:center.clone(),half};}
       const drops=group.map(s=>{const q=s.mesh.quaternion,color=s.glass.color;return {x:s.n.x,y:s.n.y,z:s.n.z,sx:s.mesh.scale.x,sy:s.mesh.scale.y,sz:s.mesh.scale.z,inverse:[-q.x,-q.y,-q.z,q.w],seed:s.n.seed,phase:s.phase,norm:s.norm,color:[color.r,color.g,color.b]};});
-      item.effect.reset();Visuals.fillUnion(item.effect.field,item.effect.palette,item.res,center,half,drops,.18);
+      item.effect.reset();Visuals.fillUnion(item.effect.field,item.effect.palette,item.res,center,half,drops,.004+.076*blend);
       item.effect.position.copy(center);item.effect.scale.setScalar(half);item.effect.update();
       item.effect.visible=item.effect.count>0;
       if(item.effect.visible)for(const shape of group)shape.mesh.visible=false;
@@ -134,9 +135,8 @@ export function createScene(canvas,data,onSelect,onError){
     for(const shape of shapes){const {n,mesh,marker}=shape;
       mesh.visible=marker.visible=shown(n);mesh.position.set(n.x,n.y,n.z);marker.position.copy(mesh.position);
       mesh.material=state.liquid?shape.glass:shape.solid;shape.glass.transmission=glass.transmission;shape.glass.attenuationDistance=glass.attenuationDistance;
-      const speed=Math.hypot(n.vx,n.vy,n.vz),stretch=1+.12*Math.sin(n.seed)+Math.min(.3,speed*.07);
-      mesh.scale.set(n.r*stretch,n.r*(1-n.squeeze)/Math.sqrt(stretch),n.r/((1-n.squeeze)*Math.sqrt(stretch)));
-      direction.set(n.vx,n.vy,n.vz);if(direction.lengthSq()>.01)shape.angle.setFromUnitVectors(up,direction.normalize());else shape.angle.setFromAxisAngle(up,n.seed);
+      const speed=Math.hypot(n.vx,n.vy,n.vz),scale=Visuals.contactScale(n.r,speed,n.squeeze,n.seed);mesh.scale.set(scale.x,scale.y,scale.z);
+      if(n.squeeze>.008)direction.set(n.contactX,n.contactY,n.contactZ);else direction.set(n.vx,n.vy,n.vz);if(direction.lengthSq()>.01)shape.angle.setFromUnitVectors(up,direction.normalize());else shape.angle.setFromAxisAngle(up,n.seed);
       mesh.quaternion.slerp(shape.angle,1-Math.exp(-4*dt));
       if(updateShape)deform(shape);
     }
@@ -180,6 +180,7 @@ export function createScene(canvas,data,onSelect,onError){
   const visibility=()=>{last=null;accumulator=0;if(document.hidden){gesture=null;model.setDrag(null);controls.enabled=true;}};document.addEventListener('visibilitychange',visibility);
   function setVisible(value){active=value;layer.hidden=!value;last=null;accumulator=0;if(frameId!==null)cancelAnimationFrame(frameId);frameId=null;if(value){resize();frameId=requestAnimationFrame(render);}else{gesture=null;model.setDrag(null);controls.enabled=true;}}
   function setState(patch){
+    if(patch.contactMode!==undefined&&patch.contactMode!==state.contactMode){for(const item of fused.values()){scene.remove(item.effect);item.effect.geometry.dispose();}fused.clear();contacts=new Set();}
     if(patch.gravity)gravityField.configure(patch.gravity);
     if(patch.gravity&&Object.keys(patch).length===1)return;
     Object.assign(state,patch);for(const n of model.nodes)n.targetFlow=state.activities[n.id]||.2;

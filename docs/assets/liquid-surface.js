@@ -3,7 +3,7 @@
   // A compact Gaussian density field gives adjacent drops one continuous surface.
   // Work in CSS pixels so zoom and large screens cannot create unbounded grids.
   const LEVEL=Math.exp(-1.5);
-  function contours(particles,width,height,step=4){
+  function contours(particles,width,height,step=4,options={}){
     if(!particles.length||width<=0||height<=0)return [];
     const cols=Math.ceil(width/step)+1,rows=Math.ceil(height/step)+1;
     const field=new Float32Array(cols*rows);
@@ -20,7 +20,7 @@
         const dx=x*step-p.x,dy=y*step-p.y,u=(dx*c+dy*s)/p.rx,v=(-dx*s+dy*c)/p.ry;
         const theta=Math.atan2(v,u),radial=(1+skew*Math.cos(theta)+wave2*Math.cos(2*theta)+wave3*Math.cos(3*theta+phase))/normal;
         const q=(u*u+v*v)/(radial*radial);
-        if(q<6.25)field[y*cols+x]+=Math.exp(-1.5*q);
+        if(q<6.25){const index=y*cols+x,value=Math.exp(-1.5*q);field[index]=options.merge===false?Math.max(field[index],value):field[index]+value;}
       }
     }
     // Close surfaces at the viewport border; offscreen nodes remain harmless.

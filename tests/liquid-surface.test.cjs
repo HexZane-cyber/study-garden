@@ -9,6 +9,7 @@ assert.equal(squashed.length,1);assert(Math.abs(area(squashed[0])-area(single[0]
 assert.equal(contours([drop(80),drop(160)],300,200).length,2,'separated drops have separate surfaces');
 const joined=contours([drop(80),drop(125)],300,200);
 assert.equal(joined.length,1,'near drops must share one continuous liquid neck');
+assert.equal(contours([drop(80),drop(127)],300,200,2,{merge:false}).length,2,'soft contact must not bridge two still-separated outlines');
 assert.equal(contours([drop(80),drop(160)],300,200).length,2,'pulling drops apart restores two surfaces');
 const together=contours([drop(100),drop(100)],300,200);
 assert.equal(together.length,1);assert(area(together[0])>area(single[0]));

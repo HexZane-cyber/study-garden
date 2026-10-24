@@ -11,6 +11,7 @@ comments: false
 [打开学习工作台](dashboard.md){ .md-button }
 [导入我的资料](private.md){ .md-button .md-button--primary }
 [我的课程进度](catalog.md){ .md-button }
+[数据与备份](backup.md){ .md-button }
 [浏览知识图谱](graph.md){ .md-button }
 
 <div id="reading-library"></div>

@@ -21,7 +21,7 @@
     <script src="{{ 'assets/vault-formats.js' | url }}" defer></script>
     <script src="{{ 'assets/vault.js' | url }}" defer></script>
   {% endif %}
-  {% if page and page.file.src_uri in ['review.md', 'dashboard.md'] %}
+  {% if page and page.file.src_uri in ['review.md', 'dashboard.md', 'backup.md'] %}
     <script src="{{ 'assets/review-model.js' | url }}" defer></script>
     {% if page.file.src_uri == 'review.md' %}
     <script src="{{ 'assets/review.js' | url }}" defer></script>
@@ -30,7 +30,11 @@
   {% if learning_catalog %}
     <script type="application/json" id="learning-data">{{ learning_catalog | safe }}</script>
     <script src="{{ 'assets/learning-model.js' | url }}" defer></script>
-    {% if page.file.src_uri == 'dashboard.md' %}
+    {% if page.file.src_uri == 'backup.md' %}
+    <script src="{{ 'assets/planner-model.js' | url }}" defer></script>
+    <script src="{{ 'assets/backup-model.js' | url }}" defer></script>
+    <script src="{{ 'assets/backup.js' | url }}" defer></script>
+    {% elif page.file.src_uri == 'dashboard.md' %}
     <script src="{{ 'assets/planner-model.js' | url }}" defer></script>
     <script src="{{ 'assets/planner.js' | url }}" defer></script>
     {% else %}

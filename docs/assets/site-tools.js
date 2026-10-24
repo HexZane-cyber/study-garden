@@ -33,7 +33,7 @@
  const prefs=read('study-garden-reader-prefs',{});let size=[.9,1,1.1,1.2].includes(prefs.size)?prefs.size:1;
  function apply(){document.documentElement.style.setProperty('--reader-scale',size);write('study-garden-reader-prefs',{size});}
  button('字 −',()=>{size=Math.max(.9,Math.round((size-.1)*10)/10);apply();status.textContent='字号 '+Math.round(size*100)+'%';});button('字 +',()=>{size=Math.min(1.2,Math.round((size+.1)*10)/10);apply();status.textContent='字号 '+Math.round(size*100)+'%';});apply();
- const special=/^(private|graph|library|contribute|workbench|dashboard|catalog|review)(\/|$)/.test(location.pathname.slice(base.pathname.length));
+ const special=/^(private|graph|library|contribute|workbench|dashboard|catalog|review|backup)(\/|$)/.test(location.pathname.slice(base.pathname.length));
  if(!special&&location.pathname!==base.pathname){button('制作复习卡',()=>{
   const selection=getSelection(),content=document.querySelector('.md-content');let excerpt='';
   if(selection?.rangeCount&&content?.contains(selection.anchorNode)&&content.contains(selection.focusNode))excerpt=selection.toString().trim().slice(0,4000);

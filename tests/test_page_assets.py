@@ -70,6 +70,16 @@ class PageAssetsTest(unittest.TestCase):
         self.assertIn('assets/review-model.js', scripts)
         self.assertNotIn('assets/review.js', scripts)
 
+    def test_backup_dependencies_and_scope(self):
+        scripts = [name for name, _ in self.scripts('backup/index.html')]
+        expected = ['assets/reading-model.js', 'assets/review-model.js', 'assets/learning-model.js', 'assets/planner-model.js', 'assets/backup-model.js', 'assets/backup.js']
+        positions = [scripts.index(name) for name in expected]
+        self.assertEqual(positions, sorted(positions))
+        self.assertNotIn('assets/learning.js', scripts)
+        self.assertNotIn('assets/planner.js', scripts)
+        self.assertNotIn('assets/vault.js', scripts)
+        self.assertNotIn('assets/backup.js', [name for name, _ in self.scripts('index.html')])
+
 
 if __name__ == '__main__':
     unittest.main()

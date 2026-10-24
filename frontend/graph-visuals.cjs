@@ -44,16 +44,19 @@ function fillUnion(field,palette,res,center,half,drops,k=.18){
     }
   }
 }
-// A separate release threshold prevents contact membership chattering at the boundary.
+function supportRadius(drop,nx,ny,nz){if(!drop.sx)return drop.radius;const q=drop.inverse||[0,0,0,1],tx=2*(q[1]*nz-q[2]*ny),ty=2*(q[2]*nx-q[0]*nz),tz=2*(q[0]*ny-q[1]*nx),x=(nx+q[3]*tx+q[1]*tz-q[2]*ty)/drop.sx,y=(ny+q[3]*ty+q[2]*tx-q[0]*tz)/drop.sy,z=(nz+q[3]*tz+q[0]*ty-q[1]*tx)/drop.sz,length=Math.hypot(x,y,z)||1;return (drop.round?1:radial(x/length,y/length,z/length,drop.seed||0,drop.phase||0)/(drop.norm||1))/length;}
+function contactScale(radius,speed,squeeze,seed=0){const blend=Math.min(1,Math.max(0,squeeze)/.04),free=1+.08*Math.sin(seed)+Math.min(.24,Math.max(0,speed)*.05),y=free*(1-blend)+(1-Math.max(0,Math.min(.28,squeeze)))*blend,side=1/Math.sqrt(y);return {x:radius*side,y:radius*y,z:radius*side};}
+// Surface distance, rather than an inflated bounding sphere, defines contact.
 function contactGroups(drops,previous=new Set()){
  const parents=drops.map((_,i)=>i),contacts=new Set();
  const root=i=>{while(parents[i]!==i){parents[i]=parents[parents[i]];i=parents[i];}return i;};
  for(let i=0;i<drops.length;i++)for(let j=i+1;j<drops.length;j++){
   const a=drops[i],b=drops[j],key=JSON.stringify([a.id,b.id].sort());
-  const threshold=(a.radius+b.radius)*1.5+.16+(previous.has(key)?.24:0);
-  if(Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z)<threshold){contacts.add(key);parents[root(j)]=root(i);}
+  const dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,d=Math.hypot(dx,dy,dz),nx=d?dx/d:1,ny=d?dy/d:0,nz=d?dz/d:0;
+  const threshold=supportRadius(a,nx,ny,nz)+supportRadius(b,-nx,-ny,-nz)+(previous.has(key)?.045:.008);
+  if(d<threshold){contacts.add(key);parents[root(j)]=root(i);}
  }
  const groups=new Map();drops.forEach((d,i)=>{const key=root(i);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(i);});
  return {groups:[...groups.values()],contacts};
 }
-module.exports={curvePoint,radial,distance,fillUnion,contactGroups};
+module.exports={curvePoint,radial,distance,fillUnion,contactGroups,supportRadius,contactScale};

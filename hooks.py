@@ -97,7 +97,7 @@ def load_course_catalog(docs):
 
 def on_page_context(context, page, config, nav):
     data = load_course_catalog(config['docs_dir'])
-    paths = {c['path'] for c in data['courses']} | {'catalog.md', 'roadmap.md', 'dashboard.md'}
+    paths = {c['path'] for c in data['courses']} | {'catalog.md', 'roadmap.md', 'dashboard.md', 'backup.md'}
     if page.file.src_uri in paths:
         context['learning_catalog'] = json.dumps(data, ensure_ascii=False).replace('<', '\u003c')
     return context

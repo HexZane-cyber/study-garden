@@ -9,13 +9,13 @@ function createModel(data){
   function reset(){
     time=0;drag=null;
     nodes.forEach((n,i)=>{const y=1-2*(i+.5)/Math.max(1,nodes.length),r=Math.sqrt(Math.max(0,1-y*y)),a=i*2.399963;
-      n.x=Math.cos(a)*r*3.7;n.y=y*3.7;n.z=Math.sin(a)*r*3.7;n.vx=n.vy=n.vz=0;n.squeeze=0;
+      n.x=Math.cos(a)*r*3.7;n.y=y*3.7;n.z=Math.sin(a)*r*3.7;n.vx=n.vy=n.vz=0;n.squeeze=0;n.squeezeVelocity=0;n.contactX=0;n.contactY=1;n.contactZ=0;
     });
   }
   reset();
   function step(dt=1/120,flow=.55,adaptive=true,gravity={x:0,y:0,z:0}){
     dt=Math.max(0,Math.min(dt,1/60));time+=dt;
-    const forces=nodes.map(n=>({x:-n.x*.09*n.mass,y:-n.y*.09*n.mass,z:-n.z*.09*n.mass,load:0}));
+    const forces=nodes.map(n=>({x:-n.x*.09*n.mass,y:-n.y*.09*n.mass,z:-n.z*.09*n.mass,load:0,nx:0,ny:0,nz:0}));
     const index=new Map(nodes.map((n,i)=>[n,i]));const g=Object.fromEntries(axes.map(axis=>[axis,Number.isFinite(gravity?.[axis])?gravity[axis]:0])),gLength=Math.hypot(g.x,g.y,g.z),gScale=1/Math.max(1,gLength);
     for(let i=0;i<nodes.length;i++){
       const n=nodes[i],f=forces[i];n.localFlow+=((adaptive?n.targetFlow:1)-n.localFlow)*(1-Math.exp(-2*dt));
@@ -41,7 +41,7 @@ function createModel(data){
       const a=nodes[i],b=nodes[j];let dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,d=Math.hypot(dx,dy,dz);
       if(d<1e-6){dx=Math.cos(a.seed+j);dy=Math.sin(a.seed+j);dz=.4;d=Math.hypot(dx,dy,dz);dx*=1e-5/d;dy*=1e-5/d;dz*=1e-5/d;d=1e-5;}
       if(d>6)continue;
-      const normal={x:dx/d,y:dy/d,z:dz/d},rest=(a.r+b.r)*1.32,overlap=Math.max(0,rest-d);
+      const normal={x:dx/d,y:dy/d,z:dz/d},rest=(a.r+b.r)*1.2,overlap=Math.max(0,rest-d);
       const mass=a.mass*b.mass/(a.mass+b.mass),vn=axes.reduce((s,axis)=>s+(b['v'+axis]-a['v'+axis])*normal[axis],0);
       const pressure=mass*(42*Math.pow(overlap,1.5)+Math.max(0,-vn)*Math.sqrt(overlap)*7)+.12/Math.max(.5,d*d);
       const viscosity=mass*(1-Math.exp(-2*Math.max(0,1-d/2.4)**2*dt));
@@ -51,12 +51,14 @@ function createModel(data){
         a['v'+axis]+=impulse/a.mass;b['v'+axis]-=impulse/b.mass;
       }
       forces[i].load+=overlap/rest;forces[j].load+=overlap/rest;
+      const sign=normal.x<-.0001||Math.abs(normal.x)<.0001&&normal.y<-.0001||Math.abs(normal.x)+Math.abs(normal.y)<.0001&&normal.z<0?-1:1;for(const index of [i,j])for(const axis of axes)forces[index]['n'+axis]+=normal[axis]*overlap*sign;
     }
     nodes.forEach((n,i)=>{
       for(const axis of axes)n['v'+axis]=(n['v'+axis]+forces[i][axis]/n.mass*dt)*Math.exp(-.9*dt);
       const speed=Math.hypot(n.vx,n.vy,n.vz);if(speed>12)for(const axis of axes)n['v'+axis]*=12/speed;
       for(const axis of axes)n[axis]+=n['v'+axis]*dt;
-      n.squeeze+=(Math.min(.25,forces[i].load*.35)-n.squeeze)*(1-Math.exp(-12*dt));
+      const target=Math.min(.24,forces[i].load*.6),omega=18;n.squeezeVelocity+=(omega*omega*(target-n.squeeze)-2*.9*omega*n.squeezeVelocity)*dt;n.squeeze=Math.max(0,Math.min(.28,n.squeeze+n.squeezeVelocity*dt));if(n.squeeze===0&&n.squeezeVelocity<0)n.squeezeVelocity=0;
+      const length=Math.hypot(forces[i].nx,forces[i].ny,forces[i].nz);if(length>.00001)for(const axis of axes){const key='contact'+axis.toUpperCase();n[key]+=(forces[i]['n'+axis]/length-n[key])*(1-Math.exp(-10*dt));}
     });
   }
   return {nodes,edges,byId,step,reset,get time(){return time;},setDrag(target){drag=target;},get drag(){return drag;}};

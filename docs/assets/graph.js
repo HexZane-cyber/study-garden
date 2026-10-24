@@ -17,7 +17,7 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let width=0,height=0,nodes=[],edges=[],selected=null,hover=null,drag=null,pan=null;
   let zoom=1,offset={x:0,y:0},paused=reduced,query='',running=true,last=null,accumulator=0;
-  let liquid=true,flow=.55,phase=0,focusOnly=false,labelMode='smart',expanded=false;
+  let liquid=true,flow=.55,phase=0,focusOnly=false,labelMode='smart',expanded=false,contactMode='soft';
   const wrap=canvas.closest('.graph-wrap');
   let drawFrame=null;
   function requestDraw(){if(drawFrame===null)drawFrame=requestAnimationFrame(draw);}
@@ -28,7 +28,7 @@
   let view='2d',scene3D=null;
   let gravityOptions={mode:'off',strength:.5,vector:{x:0,y:1}};const gravityField=GraphGravity.createField();
   window.addEventListener('graph-gravity-change',event=>{gravityOptions={...event.detail};gravityField.configure(gravityOptions);scene3D?.setState({gravity:gravityOptions});});
-  function sync3D(){if(scene3D)scene3D.setState({selected:selected?.id||null,query,focusOnly,paused,flow,adaptive:activityEnabled,transparency,liquid,labels:labelMode,nodeColors:Object.fromEntries(nodes.map(n=>[n.id,colorOf(n)])),lineColor:appearance.line,bend,gravity:gravityOptions,activities:Object.fromEntries(nodes.map(n=>[n.id,n.flowFactor||.2]))});}
+  function sync3D(){if(scene3D)scene3D.setState({selected:selected?.id||null,query,focusOnly,paused,flow,adaptive:activityEnabled,transparency,liquid,contactMode,labels:labelMode,nodeColors:Object.fromEntries(nodes.map(n=>[n.id,colorOf(n)])),lineColor:appearance.line,bend,gravity:gravityOptions,activities:Object.fromEntries(nodes.map(n=>[n.id,n.flowFactor||.2]))});}
   function setView(next){
     const c3=document.getElementById('knowledge-graph-3d'),status=document.getElementById('graph-render-status');
     if(next==='3d'){
@@ -39,7 +39,7 @@
     document.getElementById('graph-view').value=view;document.getElementById('graph-hint').textContent=view==='3d'?'拖动空白旋转 · 滚轮缩放 · 拖动液滴移动':'点击节点查看关联，拖动空白处平移';
     last=null;accumulator=0;sync3D();size();
   }
-  document.getElementById('graph-view').onchange=e=>setView(e.target.value);
+  document.getElementById('graph-view').onchange=e=>setView(e.target.value);document.getElementById('graph-contact').onchange=e=>{contactMode=e.target.value==='merge'?'merge':'soft';sync3D();};
   function shapeSeed(id){let hash=2166136261;for(const ch of id)hash=Math.imul(hash^ch.codePointAt(0),16777619);return (hash>>>0)/4294967296*Math.PI*2;}
   let activityEnabled=true,activity={},transparency=.74,bend=.28;
   document.getElementById('graph-bend').oninput=e=>{bend=Math.max(0,Math.min(.6,Number(e.target.value)/100||0));document.getElementById('graph-bend-value').textContent=`${Math.round(bend*100)}%`;sync3D();};
@@ -104,7 +104,7 @@
         wave2:.08+.05*Math.sin(seed*1.7+breathe),
         wave3:.02+.10*(.5+.5*Math.cos(seed*2.1+breathe*.8)),phase:seed*.7+breathe*.25};
     });
-    const loops=LiquidSurface.contours(drops,width,height,3.5);
+    const loops=LiquidSurface.contours(drops,width,height,3.5,{merge:contactMode==='merge'});
     if(!loops.length)return;
     const dpr=canvas.width/width;ctx.save();ctx.setTransform(dpr,0,0,dpr,0,0);
     function path(){
