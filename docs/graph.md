@@ -1,56 +1,34 @@
 ---
+title: 知识芯片
 comments: false
 ---
 
-# 液态知识关系图
+# 知识芯片
 
-在三维空间中探索知识，也可以切回二维液面。每个节点是一篇文章，连线来自文章里的真实链接。按住液滴会有轻微压缩反馈，松开后回弹并出现光环。单击选中，在球旁点击「打开笔记」即可阅读；也可双击小球直接打开。
+把知识慢慢做成一枚属于自己的芯片。每篇笔记是一块存储单元，每门课程是一个计算模块，文章之间的真实链接变成电路走线。笔记越多，阵列和芯片封装就越大。
 
-<div class="graph-wrap">
-<div class="graph-toolbar"><input id="graph-search" aria-label="搜索知识节点" placeholder="搜索节点，例如：Python、矩阵…"><button id="graph-mode" type="button" aria-pressed="true">液态模式</button><button id="graph-pause" type="button">暂停运动</button><button id="graph-reset" type="button">重置视图</button></div>
-<div class="flow-control"><span>FLOW / 流动强度</span><input id="graph-flow" aria-label="流动强度" type="range" min="0" max="100" value="55"><span id="graph-flow-value">55%</span><label class="graph-glass-control">通透度 <input id="graph-transparency" aria-label="液面通透度" type="range" min="35" max="90" value="74"><span id="graph-transparency-value">74%</span></label><label class="graph-glass-control">弯曲度 <input id="graph-bend" aria-label="连线弯曲度" type="range" min="0" max="60" value="28"><span id="graph-bend-value">28%</span></label><label class="graph-activity-toggle"><input id="graph-activity" type="checkbox" checked> 按阅读频率调节</label></div>
-<div class="graph-tools"><label>视图<select id="graph-view" aria-label="图谱维度"><option value="3d">三维空间</option><option value="2d">二维液面</option></select></label><label>接触<select id="graph-contact" aria-label="液滴接触方式"><option value="soft">柔软接触</option><option value="merge">缓慢相融</option></select></label><label>标题<select id="graph-labels"><option value="smart">智能避让</option><option value="all">显示全部</option><option value="off">仅选中与悬停</option></select></label><button id="graph-focus" type="button" aria-pressed="false" disabled>只看直接关联</button><button id="graph-fit" type="button">适应画布</button><button id="graph-expand" type="button" aria-pressed="false">大画布</button><span id="graph-hint">点击节点查看关联，拖动空白处平移</span></div>
-<div class="graph-tools"><label><input id="graph-transfer" type="checkbox" checked> 靠近时吐出小液滴</label><span>小液滴飞向邻近节点并融入，仅作视觉互动。</span></div>
-<details class="graph-gravity"><summary>重力与倾斜 · 让知识随方向流动</summary><div class="gravity-controls"><button id="graph-gravity-pad" type="button" aria-label="重力方向盘，拖动或用方向键调整，Home 归零"><span aria-hidden="true">＋<i></i></span></button><div class="gravity-settings"><label>重力模式<select id="graph-gravity-mode" aria-label="重力模式"><option value="off">关闭</option><option value="manual">手动方向</option><option value="orbit">缓慢旋转</option></select></label><label>重力强度<input id="graph-gravity-strength" aria-label="重力强度" type="range" min="0" max="100" value="50"><output id="graph-gravity-value">50%</output></label><div class="gravity-presets"><button type="button" data-gravity-direction="0,1">向下</button><button type="button" data-gravity-direction="-1,0">向左</button><button type="button" data-gravity-direction="1,0">向右</button><button type="button" data-gravity-direction="0,-1">反重力</button><button type="button" data-gravity-direction="0,0">方向归零</button><button id="graph-gravity-sensor" type="button" aria-pressed="false">跟随设备倾斜</button></div></div></div><p id="graph-gravity-status" role="status">重力默认关闭。拖动方向盘、使用方向键，或选择一种模式开始。</p></details>
-<details class="graph-palette"><summary>颜色设置</summary><div class="graph-palette-controls"><label>修改对象<select id="graph-color-target" aria-label="颜色修改对象"><option value="node">当前选中节点</option><option value="course">课程默认色</option><option value="note">笔记默认色</option><option value="tool">工具默认色</option><option value="guide">指南默认色</option><option value="line">关系连线</option></select></label><label>调色盘<input id="graph-color-wheel" type="color" aria-label="图谱颜色盘" value="#ef5467"></label><label>颜色值<input id="graph-color-hex" aria-label="十六进制颜色" type="text" maxlength="7" value="#ef5467" placeholder="#ef5467" spellcheck="false"></label><button id="graph-color-apply" type="button">应用颜色</button><button id="graph-color-inherit" type="button">当前节点跟随分类</button><button id="graph-color-reset" type="button">恢复默认配色</button><span id="graph-color-status" role="status" aria-live="polite">先选择节点，或选择要修改的分类与连线。</span></div><p>单独设置的节点颜色优先于分类默认色。配色仅保存在本浏览器，三维与二维共用。</p></details>
-<p id="graph-render-status" class="reading-meta" role="status" hidden></p>
-<div class="graph-stage"><canvas id="knowledge-graph" role="img" aria-label="可拖拽的课程与笔记关系图。键盘用户可使用下方的文章列表。" tabindex="0"></canvas><canvas id="knowledge-graph-3d" aria-label="三维知识图谱：拖动空白旋转，滚轮缩放，拖动液滴移动节点。" tabindex="0" hidden></canvas></div>
-<div class="graph-legend"><span><i data-graph-group="course" style="background:#ef5467"></i>课程</span><span><i data-graph-group="note" style="background:#ff9a81"></i>笔记</span><span><i data-graph-group="tool" style="background:#d69767"></i>工具</span><span><i data-graph-group="guide" style="background:#9e919b"></i>指南</span></div>
-<div id="graph-info" class="graph-info" aria-live="polite">正在加载知识图谱…</div>
+<div class="chip-shell">
+<div class="chip-heading"><div><small>ZHIXIN / YOUR KNOWLEDGE DIE</small><strong id="chip-summary">正在读取模块…</strong></div><a id="chip-publish" href="../publish/">发布新笔记 ↗</a></div>
+<div class="chip-toolbar"><input id="chip-search" type="search" aria-label="搜索芯片模块" placeholder="搜索笔记或课程…"><select id="chip-group" aria-label="模块分类"><option value="">全部模块</option><option value="note">笔记阵列</option><option value="course">课程模块</option><option value="tool">工具接口</option><option value="guide">学习指南</option></select><button id="chip-fit" type="button">查看整枚芯片</button><button id="chip-out" type="button" aria-label="缩小芯片">−</button><span id="chip-zoom">100%</span><button id="chip-in" type="button" aria-label="放大芯片">＋</button><button id="chip-expand" type="button" aria-pressed="false">大画布</button><label><input id="chip-signals" type="checkbox" checked> 信号流动</label></div>
+<div class="chip-stage"><canvas id="knowledge-chip" tabindex="0" aria-label="知识芯片，单击模块或走线，拖动平移，滚轮缩放。也可使用下方模块和连接列表。"></canvas><div id="chip-status" class="chip-status" role="status">正在布置芯片…</div><div class="chip-help">单击模块或走线 · 双击模块打开文章 · 拖动平移 · 滚轮缩放</div></div>
+<div id="chip-panel" class="chip-panel" aria-live="polite">选择模块查看文章，或点击走线探索关系。</div>
+<div id="chip-size" class="chip-size"></div>
 </div>
 
-<details class="graph-keyboard"><summary>按列表访问所有文章（支持键盘操作）</summary><ul id="graph-links"></ul></details>
+<details class="chip-list"><summary>按列表访问模块（支持键盘操作）</summary><ul id="chip-articles"></ul></details>
+<details class="chip-list"><summary>按列表选择走线（支持键盘操作）</summary><ul id="chip-nets"></ul></details>
 
-## 如何让图谱生长
+## 芯片怎样长大
 
-单击小球可以查看关联，并在球旁打开对应文章；双击或连续轻触两次同一小球可直接进入。拖拽后松手不会打开文章，取消手势也不会跳转。三维标题本身是文章链接，支持键盘和浏览器的新标签页操作；选中节点后，在画布上按 Enter 也能打开。系统偏好减少动画时，反馈使用简单高亮。
+把笔记发布到本站的 `docs/notes/` 目录后，部署时会自动生成新的笔记模块。笔记阵列会逐渐增加行列，芯片外框与引脚也随之扩展；课程、工具和指南各有自己的区域。这里的尺寸表示知识布局，不是学习成绩或真实芯片制程。
 
-在[笔记](notes/index.md)中添加到其他文章的 Markdown 链接，提交后构建会重新生成连接。节点位置只是探索时的临时布局，不影响文章结构。
+在笔记中添加指向其他站内文章的 Markdown 链接，就会出现对应走线。选中模块可以阅读文章、查看直接关系；选中走线可以打开两端文章。走线可点击，但不会改动笔记内容。发布步骤见[上传与发布](publish.md)。
 
-三维视图中，拖动空白处旋转，滚轮缩放，右键拖动平移；拖住液滴可以移动节点，松手后保留惯性。触屏可单指旋转、双指缩放和平移。标题始终朝向屏幕，点击即可打开对应文章。关系连线采用柔和曲线，流动光点沿曲线移动，弯曲度滑块可以调整弧度；“颜色设置”内可用调色盘修改节点、分类与连线。通过“视图”切换到二维；浏览器不支持 WebGL 时自动回到二维。键盘可以使用节点标题链接或下方文章列表。
+本页展示已发布到站点的文章。保存在[个人私密空间](private.md)的加密笔记继续保持独立，不会自动出现在公开芯片中。
 
-标题默认智能避让，优先显示选中、悬停和搜索匹配的文章。点击一个节点后，下方会列出可以直接打开的关联文章；开启“只看直接关联”可收起其他节点，连线仍代表真实文章链接。“适应画布”把当前可见节点放回视野，“大画布”提供更宽的探索空间，按 Escape 可退出。以上操作不会改变文章内容或知识关系。
+## 阅读与操作
 
-运动中的标题会保留在节点同一侧，不再因为一次避让检测突然跳到另一边。画布边缘会连续限制标题位置；智能模式下，拥挤的普通标题暂时收起，留出足够空间后再显示，选中或键盘聚焦的标题优先保留。
+搜索会定位唯一匹配的模块；分类可以淡化无关区域。芯片较大时，点击「查看整枚芯片」回到整体布局，或放大后拖动阅读细节。「信号流动」只为选中的关系播放少量光点，关闭后保持静止；系统偏好减少动画时默认关闭。
 
-## 重力与倾斜
+键盘可使用下方列表选择模块或走线。在画布上，方向键平移，`+` / `−` 缩放，`0` 查看整体，`Enter` 打开已选模块，`Escape` 取消选择或退出大画布。
 
-展开「重力与倾斜」，可以拖动方向盘设置方向和倾斜幅度，用滑块调节整体强度，或选择向下、左右、反重力等预设。「缓慢旋转」让重力每 24 秒转一圈。方向变化经过平滑处理，节点会在重力、连接弹性和黏性之间逐渐重新分布；活动范围有弹性边界，避免持续加速飞离。二维和三维均可使用，三维方向按当前屏幕方向解释，旋转视角后仍然向屏幕所指的方向受力。
-
-支持方向传感器的手机或平板，可主动点击「跟随设备倾斜」并按浏览器提示授权；平放时，沿屏幕方向的重力接近零，竖起或左右倾斜会改变方向。没有传感器、权限未获准或未收到有效数据时，仍可使用手动方向和缓慢旋转。倾斜数据只用于当前页面，进入后台后停止跟随，需要手动重新开启。
-
-重力默认关闭，本次调整不会保存到浏览器。暂停运动也会暂停重力旋转和物理更新；关闭重力会逐渐消除外力，已有惯性会继续衰减。选择「反重力」是向上的视觉外力，不改变真实设备的重力。
-
-## 液态模式
-
-开启「靠近时吐出小液滴」后，两个节点接近但尚未接触时，其中一个会吐出小液滴，沿短弧线飞向另一个节点，逐渐变色并缩入目标。较活跃的文章优先发送，活跃度相同时轮流发送。二维、三维均支持；开关可以随时关闭，暂停运动会冻结传递，系统偏好减少动画时不播放。这只是视觉互动，不会移动笔记、修改文章或新增知识关系。每对节点有发送间隔，同时最多显示 12 个小液滴；三维小液滴复用同一批几何体和材质。
-
-连线被拉长时会逐渐绷直，距离缩短后恢复柔和弧度。三维「缓慢相融」的液颈会随实际接触深度逐渐变粗，分开时收细；它是视觉近似。为减少拖动时的停顿，融合表面最多每秒重建 30 次，每帧最多重建一组，并轮流更新各组；其余帧复用表面并跟随整体移动。物理运动、点击反馈和相机仍逐帧响应。
-
-拖拽时，液滴以柔软的牵引跟随指针；松手保留当前速度，并在黏性阻力下逐渐减速。液滴相撞时先挤压、传递动量，再缓慢恢复形状。单个节点也会呈现椭圆、水滴或柔和的不规则轮廓，每篇文章拥有稳定的形态差异。轮廓会随运动、挤压和流场缓慢变化，不会突然切换形状。二维视图的“缓慢相融”使用连续密度场生成共同液面，靠近时形成液颈，拉开后分离；“柔软接触”减少未接触液滴之间的场叠加；速度与接触压力影响轮廓的拉伸、压缩，液面采用半透明浅红材质，细高光沿边缘变化，后方文章连线仍然可见；“通透度”滑块可调整液面填色浓度，向右更通透。三维视图使用有厚度的透光材质。默认“柔软接触”会保持液滴各自的轮廓，沿碰撞方向挤压、向侧面展开并逐渐恢复，变形尽量保持体积；二维也会减少接触前的长距离粘连。选择“缓慢相融”后，只有液面接近实际接触时才开始生成融合表面，液颈逐渐形成，拉开后分离。液面相融只是视觉效果，不会新增文章链接。
-
-默认按本浏览器的文章阅读频率分配流动强度：经常阅读、近期打开的文章更活跃，少读或很久未读的文章更安静。记录仅保存在本机，不统计私密空间内容；快速刷新不重复计数。关闭“按阅读频率调节”可统一使用整体流动强度。降低“流动强度”可以减少持续漂移，方便阅读连接和标题；调到 0% 后，手动拖拽和接触仍然有效。
-
-三维视图使用 Three.js 渲染通透、不规则的液滴，在三轴上计算连线弹性、软接触、黏性与拖拽惯性；二维视图使用 Matter.js。两种视图都以固定的 120 Hz 步长更新物理。连续接触压力、邻域黏性和阻尼共同控制碰撞，变形采用渐进恢复，液滴挤扁时向两侧展开。不同屏幕刷新率使用同一运动节奏，回到后台页面时不会突然加速补算。连线始终对应文章之间的链接。
-
-切换到“清晰模式”可收起液态装饰。暂停会同时停止节点和流动效果，系统偏好减少动画时默认暂停。这是交互视觉模拟，不用于工程流体计算。

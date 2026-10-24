@@ -8,7 +8,7 @@ from urllib.parse import urljoin, urlparse
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 FEATURE_SCRIPTS = {
-    'graph/index.html': ['assets/vendor/matter.min.js', 'assets/liquid-surface.js', 'assets/graph-appearance.js', 'assets/graph-gravity.js', 'assets/graph-label-layout.js', 'assets/graph-interaction.js', 'assets/graph-transfer.js', 'assets/vendor/graph3d.bundle.js', 'assets/graph.js', 'assets/gravity-controls.js'],
+    'graph/index.html': ['assets/graph-interaction.js', 'assets/chip-model.js', 'assets/chip.js'],
     'contribute/index.html': ['assets/contribution-model.js', 'assets/community.js'],
     'private/index.html': ['assets/vendor/fflate.min.js', 'assets/vault-core.js', 'assets/vault-formats.js', 'assets/vault.js'],
     'review/index.html': ['assets/review-model.js', 'assets/review.js'],
@@ -69,6 +69,11 @@ class PageAssetsTest(unittest.TestCase):
         scripts = [name for name, _ in self.scripts('dashboard/index.html')]
         self.assertIn('assets/review-model.js', scripts)
         self.assertNotIn('assets/review.js', scripts)
+
+    def test_chip_does_not_download_retired_graph_runtimes(self):
+        scripts = [name for name, _ in self.scripts('graph/index.html')]
+        for retired in ['assets/vendor/graph3d.bundle.js', 'assets/vendor/matter.min.js', 'assets/graph.js', 'assets/gravity-controls.js', 'assets/graph-transfer.js']:
+            self.assertNotIn(retired, scripts)
 
     def test_backup_dependencies_and_scope(self):
         scripts = [name for name, _ in self.scripts('backup/index.html')]

@@ -123,5 +123,19 @@ const kinetic=bodies=>bodies.reduce((energy,b)=>energy+b.mass*(b.velocity.x**2+b
   c.events.keydown({key:'Enter',preventDefault(){}});clicks.flushTimers();assert.equal(clicks.navigations.length,2);
   c.events.keydown({key:'Enter',preventDefault(){}});clicks.windowEvents.pagehide();clicks.flushTimers();assert.equal(clicks.navigations.length,2,'leaving the page cancels deferred navigation');
 
+
+  // Click the rendered relation between two nodes, then clear or drag without activating it.
+  const edgeGraph=minimal(2);edgeGraph.edges=[{source:'node-0',target:'node-1'}];
+  const edgeSim=await simulation(edgeGraph);edgeSim.flow(0);edgeSim.element('graph-bend').oninput({target:{value:'0'}});edgeSim.element('graph-labels').onchange({target:{value:'off'}});
+  edgeSim.engine.world.bodies.forEach((b,i)=>{Matter.Body.setPosition(b,{x:i?100:-100,y:0});Matter.Body.setVelocity(b,{x:0,y:0});});edgeSim.frame(1000/120);edgeSim.element('graph-pause').onclick();
+  const edgeCanvas=edgeSim.element('knowledge-graph'),edgePointer=(type,x=400,y=255)=>edgeCanvas.events[type]({type,pointerId:1,clientX:x,clientY:y});
+  edgePointer('pointerdown');edgePointer('pointerup');
+  const edgeCard=edgeSim.element('graph-wrap').children.find(e=>e.className==='graph-node-card graph-edge-card');
+  assert.equal(edgeCard.hidden,false);assert.equal(edgeCard.children[1].href,'https://example.com/study-garden/notes/0/');assert.equal(edgeCard.children[2].href,'https://example.com/study-garden/notes/1/');
+  edgeCanvas.events.keydown({key:'Escape'});assert.equal(edgeCard.hidden,true);
+  edgePointer('pointerdown');edgePointer('pointermove',430);edgePointer('pointerup',430);assert.equal(edgeCard.hidden,true,'panning from a line does not select it');
+  edgePointer('pointerdown');edgePointer('pointercancel');assert.equal(edgeCard.hidden,true);
+  edgeSim.element('graph-edge-links').children[0].children[0].onclick();assert.equal(edgeCard.hidden,false,'keyboard-accessible relation list selects the same card');
+
   console.log(`Fluid graph passed: ${data.nodes.length} bodies, 120 Hz physics, refresh-rate invariance, dissipative contacts (minimum separation ${closest.toFixed(1)} px), coincidence recovery, spring drag, release inertia, bounded catch-up, pause and selection.`);
 })().catch(error=>{console.error(error);process.exitCode=1;});

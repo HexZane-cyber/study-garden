@@ -22,6 +22,12 @@ for(const hz of [30,60,144]){
  assert(Object.values(value).every(Number.isFinite));
 }
 const reduced={pressure:1,velocity:4,pulse:1};Interaction.step(reduced,true,1/60,true);assert.deepEqual(reduced,Interaction.feedback());
+const paths=[{id:0,points:[{x:0,y:0},{x:50,y:20},{x:100,y:0}]},{id:1,points:[{x:0,y:50},{x:100,y:50}]}];
+assert.equal(Interaction.hitEdge(paths,50,24,8),0,'wide CSS-pixel hit target follows the curved path');
+assert.equal(Interaction.hitEdge(paths,50,49,8),1,'choose the nearest eligible line');
+assert.equal(Interaction.hitEdge(paths,50,35,8),null);assert.equal(Interaction.hitEdge(paths,50,35,16),0,'touch gets a wider hit target');
+assert.equal(Interaction.hitEdge([{id:9,points:[null,{x:5,y:5},null]}],5,5),null,'clipped 3D endpoints cannot create a false line across the viewport');
+assert.equal(Interaction.segmentDistanceSquared(7,9,{x:5,y:5},{x:5,y:5}),20);
 
 // Execute the real 3D release handler, including cancellation and a missing move event.
 const source=fs.readFileSync(path.join(__dirname,'../frontend/graph3d.js'),'utf8');
@@ -29,8 +35,8 @@ const body=source.split('function release(event){')[1].split('  // Capture befor
 const makeRelease=new Function('taps','onSelect','actions',`
  let gesture=null;const shapes=[{n:{id:'a'},feedback:{pulse:0}}],model={setDrag(){}},controls={enabled:false};
  const release=event=>{${body}};
- return {down(id='a',moved=false){gesture={id,pointerId:1,x:10,y:10,moved};},release,shapes,controls};`);
-const selections=[],opens=[],r=makeRelease(Interaction.createTapTracker(),id=>selections.push(id),{onOpen:id=>opens.push(id)});
+ return {down(id='a',moved=false){gesture={id,pointerId:1,x:10,y:10,moved};},edge(index,moved=false){gesture={id:null,edge:index,pointerId:1,x:10,y:10,moved};},release,shapes,controls};`);
+const selections=[],opens=[],edges=[],r=makeRelease(Interaction.createTapTracker(),id=>selections.push(id),{onOpen:id=>opens.push(id),onEdge:index=>edges.push(index)});
 const up={type:'pointerup',pointerId:1,clientX:10,clientY:10};
 r.down();r.release(up);assert.deepEqual(selections,['a']);assert.equal(r.shapes[0].feedback.pulse,1);
 r.down();r.release(up);assert.deepEqual(opens,['a']);assert(r.controls.enabled);
@@ -38,4 +44,6 @@ for(const type of ['pointercancel','lostpointercapture']){r.down();r.release({..
 r.down();r.release({...up,clientX:50});r.down('a',true);r.release(up);
 assert.equal(selections.length,2);assert.equal(opens.length,1,'dragging or cancelling must never activate a node');
 r.down();r.release({...up,pointerId:2});assert.equal(selections.length,2);r.release(up);assert.equal(selections.length,3);
+r.edge(0);r.release(up);assert.deepEqual(edges,[0]);assert.equal(selections.length,3,'edge index zero must select its relation without clearing it through a node callback');
+r.edge(1,true);r.release(up);r.edge(1);r.release({...up,type:'pointercancel'});r.edge(1);r.release({...up,clientX:50});assert.deepEqual(edges,[0],'drag, cancel, and final displacement cannot select edges');
 console.log('Graph interaction passed: double tap timing/target/distance, drag and cancellation, press settling, reduced motion and actual 3D release routing.');
