@@ -7,6 +7,7 @@ import Physics from './graph3d-physics.cjs';
 import Gravity from '../docs/assets/graph-gravity.js';
 import LabelLayout from '../docs/assets/graph-label-layout.js';
 import Interaction from '../docs/assets/graph-interaction.js';
+import Transfer from '../docs/assets/graph-transfer.js';
 
 export function createScene(canvas,data,onSelect,onError,actions={}){
   const taps=Interaction.createTapTracker(),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -27,7 +28,7 @@ export function createScene(canvas,data,onSelect,onError,actions={}){
   for(let i=0;i<160;i++)model.step(1/120,0);
   for(const n of model.nodes){n.vx*=.15;n.vy*=.15;n.vz*=.15;}
   const palette={course:0xef5467,note:0xff9a81,tool:0xd69767,guide:0x9e919b};
-  const state={paused:false,flow:.55,adaptive:true,transparency:.74,liquid:true,contactMode:'soft',selected:null,query:'',focusOnly:false,labels:'smart',activities:{},nodeColors:{},lineColor:'#a94f6b',bend:.28};
+  const state={paused:false,flow:.55,adaptive:true,transparency:.74,liquid:true,transfer:true,contactMode:'soft',selected:null,query:'',focusOnly:false,labels:'smart',activities:{},nodeColors:{},lineColor:'#a94f6b',bend:.28};
   const adjacency=new Map(model.nodes.map(n=>[n.id,new Set()]));for(const e of model.edges){adjacency.get(e.a.id).add(e.b.id);adjacency.get(e.b.id).add(e.a.id);}
   const glass=new THREE.MeshPhysicalMaterial({color:0xe9b1c3,roughness:.1,metalness:0,transmission:.93,thickness:.7,ior:1.33,clearcoat:.45,clearcoatRoughness:.08,attenuationColor:0xee6a8c,attenuationDistance:2,envMapIntensity:.48});
   const solidMaterials=new Map(Object.entries(palette).map(([group,color])=>[group,new THREE.MeshStandardMaterial({color,roughness:.36})]));
@@ -50,6 +51,8 @@ export function createScene(canvas,data,onSelect,onError,actions={}){
   const lines=new THREE.LineSegments(lineGeometry,lineMaterial);lines.frustumCulled=false;scene.add(lines);
   const beadGeometry=new THREE.SphereGeometry(.026,6,4),beadMaterial=new THREE.MeshBasicMaterial({color:0xf7adbf});
   const beads=model.edges.map(()=>{const bead=new THREE.Mesh(beadGeometry,beadMaterial);scene.add(bead);return bead;});
+  const emitter=Transfer.createEmitter(),transferGeometry=new THREE.SphereGeometry(1,10,8),transferMaterial=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.16,metalness:.05});
+  const transfers=new THREE.InstancedMesh(transferGeometry,transferMaterial,Transfer.LIMIT),transferPose=new THREE.Object3D(),transferColor=new THREE.Color(),transferTargetColor=new THREE.Color(),transferWhite=new THREE.Color(0xffffff);transfers.count=0;transfers.frustumCulled=false;transfers.instanceMatrix.setUsage(THREE.DynamicDrawUsage);scene.add(transfers);
   const fused=new Map(),fusionMaterial=glass.clone();fusionMaterial.vertexColors=true;fusionMaterial.color.set(0xffffff);fusionMaterial.attenuationColor.set(0xffffff);
   let lastLabels=-1,contacts=new Set();const labelLayout=LabelLayout.createLayout();
   const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2(),plane=new THREE.Plane(),point=new THREE.Vector3(),dragOffset=new THREE.Vector3(),direction=new THREE.Vector3(),up=new THREE.Vector3(0,1,0);
@@ -166,6 +169,10 @@ export function createScene(canvas,data,onSelect,onError,actions={}){
       beads[i].visible=visible&&state.liquid;beads[i].position.set(p.x,p.y,p.z);
     });lineGeometry.attributes.position.needsUpdate=true;
     fusion(now,document.hidden?0:dt);
+    const packets=emitter.step(model.nodes.filter(shown),document.hidden?0:dt,{enabled:state.liquid&&state.transfer,reduced,paused:state.paused});
+    transfers.count=packets.length;
+    packets.forEach((p,i)=>{transferPose.position.set(p.x,p.y,p.z);direction.set(p.nx,p.ny,p.nz);transferPose.quaternion.setFromUnitVectors(up,direction);transferPose.scale.set(p.size/Math.sqrt(p.stretch),p.size*p.stretch,p.size/Math.sqrt(p.stretch));transferPose.updateMatrix();transfers.setMatrixAt(i,transferPose.matrix);transferColor.set(state.nodeColors[p.source]||palette[model.byId.get(p.source)?.group]||palette.guide);transferTargetColor.set(state.nodeColors[p.target]||palette[model.byId.get(p.target)?.group]||palette.guide);transferColor.lerp(transferTargetColor,p.t).lerp(transferWhite,.2);transfers.setColorAt(i,transferColor);});
+    transfers.instanceMatrix.needsUpdate=true;if(transfers.instanceColor)transfers.instanceColor.needsUpdate=true;
     renderer.render(scene,camera);if(now-lastLabels>1000/30){labels();lastLabels=now;}frameId=requestAnimationFrame(render);
   }
   function ray(event){const rect=canvas.getBoundingClientRect();pointer.set((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1);raycaster.setFromCamera(pointer,camera);}
@@ -196,18 +203,18 @@ export function createScene(canvas,data,onSelect,onError,actions={}){
     if(event.key==='Enter'&&state.selected){event.preventDefault();actions.onOpen?.(state.selected);}if(event.key==='0')fit();
   };canvas.addEventListener('keydown',keydown);
   const visibility=()=>{last=null;accumulator=0;if(document.hidden){gesture=null;taps.reset();model.setDrag(null);controls.enabled=true;}};document.addEventListener('visibilitychange',visibility);
-  function setVisible(value){taps.reset();active=value;layer.hidden=!value;last=null;accumulator=0;if(frameId!==null)cancelAnimationFrame(frameId);frameId=null;if(value){resize();frameId=requestAnimationFrame(render);}else{gesture=null;model.setDrag(null);controls.enabled=true;}}
+  function setVisible(value){if(!value)emitter.reset();taps.reset();active=value;layer.hidden=!value;last=null;accumulator=0;if(frameId!==null)cancelAnimationFrame(frameId);frameId=null;if(value){resize();frameId=requestAnimationFrame(render);}else{gesture=null;model.setDrag(null);controls.enabled=true;}}
   function setState(patch){
     if(patch.contactMode!==undefined&&patch.contactMode!==state.contactMode){for(const item of fused.values()){scene.remove(item.effect);item.effect.geometry.dispose();}fused.clear();contacts=new Set();}
     if(patch.gravity)gravityField.configure(patch.gravity);
     if(patch.gravity&&Object.keys(patch).length===1)return;
-    Object.assign(state,patch);for(const n of model.nodes)n.targetFlow=state.activities[n.id]||.2;
+    Object.assign(state,patch);for(const n of model.nodes){n.targetFlow=state.activities[n.id]||.2;n.flowFactor=n.targetFlow;}
     const color=new THREE.Color();
     for(const shape of shapes){color.set(state.nodeColors[shape.n.id]||palette[shape.n.group]||palette.guide);shape.glass.attenuationColor.copy(color);shape.solid.color.copy(color);shape.marker.material.color.copy(color);shape.glass.color.copy(color).lerp(new THREE.Color(0xffffff),.67);}
     lineMaterial.color.set(state.lineColor).multiplyScalar(.6);beadMaterial.color.set(state.lineColor).lerp(new THREE.Color(0xffffff),.4);
   }
-  function reset(){taps.reset();model.reset();for(let i=0;i<160;i++)model.step(1/120,0);for(const n of model.nodes){n.vx*=.15;n.vy*=.15;n.vz*=.15;}controls.target.set(0,0,0);camera.position.set(9,6,12);fit();}
-  function dispose(){disposed=true;setVisible(false);observer.disconnect();canvas.removeEventListener('pointerdown',down,true);canvas.removeEventListener('pointermove',move,true);for(const type of ['pointerup','pointercancel','lostpointercapture'])canvas.removeEventListener(type,release,true);canvas.removeEventListener('keydown',keydown);canvas.removeEventListener('webglcontextlost',lost);document.removeEventListener('visibilitychange',visibility);controls.dispose();layer.remove();renderer.dispose();envMap.dispose();glass.dispose();ringGeometry.dispose();markerGeometry.dispose();lineGeometry.dispose();lineMaterial.dispose();beadGeometry.dispose();beadMaterial.dispose();fusionMaterial.dispose();for(const item of fused.values())item.effect.geometry.dispose();for(const shape of shapes){shape.geometry.dispose();shape.glass.dispose();shape.solid.dispose();shape.marker.material.dispose();shape.ring.material.dispose();}for(const m of [...solidMaterials.values(),...markerMaterials.values()])m.dispose();}
+  function reset(){emitter.reset();taps.reset();model.reset();for(let i=0;i<160;i++)model.step(1/120,0);for(const n of model.nodes){n.vx*=.15;n.vy*=.15;n.vz*=.15;}controls.target.set(0,0,0);camera.position.set(9,6,12);fit();}
+  function dispose(){disposed=true;setVisible(false);observer.disconnect();canvas.removeEventListener('pointerdown',down,true);canvas.removeEventListener('pointermove',move,true);for(const type of ['pointerup','pointercancel','lostpointercapture'])canvas.removeEventListener(type,release,true);canvas.removeEventListener('keydown',keydown);canvas.removeEventListener('webglcontextlost',lost);document.removeEventListener('visibilitychange',visibility);controls.dispose();layer.remove();renderer.dispose();transferGeometry.dispose();transferMaterial.dispose();envMap.dispose();glass.dispose();ringGeometry.dispose();markerGeometry.dispose();lineGeometry.dispose();lineMaterial.dispose();beadGeometry.dispose();beadMaterial.dispose();fusionMaterial.dispose();for(const item of fused.values())item.effect.geometry.dispose();for(const shape of shapes){shape.geometry.dispose();shape.glass.dispose();shape.solid.dispose();shape.marker.material.dispose();shape.ring.material.dispose();}for(const m of [...solidMaterials.values(),...markerMaterials.values()])m.dispose();}
   function screenPosition(id){const n=model.byId.get(id);if(!n||!shown(n))return null;const p=new THREE.Vector3(n.x,n.y,n.z).project(camera);if(p.z< -1||p.z>1)return null;return {x:(p.x*.5+.5)*width,y:(-.5*p.y+.5)*height,r:n.r*1.45*height/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.position.distanceTo(new THREE.Vector3(n.x,n.y,n.z)))};}
   resize();fit();return {setVisible,setState,fit,reset,dispose,model,screenPosition};
 }

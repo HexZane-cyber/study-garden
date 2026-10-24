@@ -34,6 +34,7 @@ jobs:
           node tests/review.test.cjs
           node tests/learning.test.cjs
           node tests/core.test.cjs
+          node tests/graph-transfer.test.cjs
           node tests/graph-interaction.test.cjs
           node tests/fluid.test.cjs
           node tests/gravity.test.cjs
