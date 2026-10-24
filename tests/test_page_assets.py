@@ -1,6 +1,8 @@
 """Exercise built HTML so feature scripts remain scoped and resolve on Pages subpaths."""
 from html.parser import HTMLParser
 from pathlib import Path
+import json
+import re
 import unittest
 from urllib.parse import urljoin, urlparse
 
@@ -74,6 +76,17 @@ class PageAssetsTest(unittest.TestCase):
         scripts = [name for name, _ in self.scripts('graph/index.html')]
         for retired in ['assets/vendor/graph3d.bundle.js', 'assets/vendor/matter.min.js', 'assets/graph.js', 'assets/gravity-controls.js', 'assets/graph-transfer.js']:
             self.assertNotIn(retired, scripts)
+
+    def test_chip_selection_fragments_are_not_replaced_by_theme_tracking(self):
+        def config(path):
+            html = (SITE / path).read_text(encoding='utf-8')
+            return json.loads(re.search(r'<script id="__config"[^>]*>(.*?)</script>', html, re.S).group(1))
+        chip = config('graph/index.html')
+        article = config('courses/python/index.html')
+        self.assertNotIn('navigation.tracking', chip['features'])
+        self.assertIn('navigation.tracking', article['features'])
+        self.assertEqual(chip['features'], [feature for feature in article['features'] if feature != 'navigation.tracking'])
+        self.assertEqual(chip['translations'], article['translations'])
 
     def test_backup_dependencies_and_scope(self):
         scripts = [name for name, _ in self.scripts('backup/index.html')]

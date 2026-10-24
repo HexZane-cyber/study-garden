@@ -14,5 +14,8 @@
   return {banks,nodes,byId,edges,neighbors,width,height,notes:banks[0].nodes.length,capacity:banks.reduce((sum,b)=>sum+b.cols*b.rows,0)};
  }
  function pointOn(edge,t){const distance=Math.max(0,Math.min(1,t))*edge.length;let i=1;while(i<edge.lengths.length-1&&edge.lengths[i]<distance)i++;const a=edge.points[i-1],b=edge.points[i],part=edge.lengths[i]-edge.lengths[i-1],u=part?(distance-edge.lengths[i-1])/part:0;return {x:a.x+(b.x-a.x)*u,y:a.y+(b.y-a.y)*u};}
- return {layout,pointOn,groups};
+ function selectionHash(node,edge){if(node)return '#module='+encodeURIComponent(node.id);if(edge)return '#wire='+encodeURIComponent(edge.a.id)+'&to='+encodeURIComponent(edge.b.id);return '';}
+ function resolveSelection(board,hash){if(typeof hash!=='string'||hash.length>4096)return null;const params=new URLSearchParams(hash.replace(/^#/,'')),keys=[...params.keys()];if(keys.length===1&&keys[0]==='module'){const node=board.byId.get(params.get('module'));return node?{kind:'node',node}:{kind:'missing'};}if(keys.length===2&&new Set(keys).size===2&&params.has('wire')&&params.has('to')){const a=params.get('wire'),b=params.get('to'),edge=board.edges.find(e=>e.a.id===a&&e.b.id===b||e.a.id===b&&e.b.id===a);return edge?{kind:'edge',edge}:{kind:'missing'};}return null;}
+ function validView(view){return !!view&&Number.isFinite(view.zoom)&&view.zoom>=.035&&view.zoom<=3.5&&Number.isFinite(view.cx)&&Number.isFinite(view.cy)&&Math.abs(view.cx)<1e7&&Math.abs(view.cy)<1e7&&typeof view.fit==='boolean';}
+ return {layout,pointOn,groups,selectionHash,resolveSelection,validView};
 });

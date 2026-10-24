@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 
+{% block config %}
+  {% set default_config = super() %}
+  {% if page and page.file.src_uri == "graph.md" %}
+    {# Chip selections own the URL fragment; preserve the rest of Material's config. #}
+    {{ default_config | replace(features | tojson, features | reject('equalto', 'navigation.tracking') | list | tojson) }}
+  {% else %}
+    {{ default_config }}
+  {% endif %}
+{% endblock %}
+
 {% block scripts %}
   {{ super() }}
   {# Keep feature scripts on their owning page. Deferred dependencies execute in order. #}
