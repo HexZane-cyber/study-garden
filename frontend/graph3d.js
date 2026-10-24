@@ -6,8 +6,10 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import Physics from './graph3d-physics.cjs';
 import Gravity from '../docs/assets/graph-gravity.js';
 import LabelLayout from '../docs/assets/graph-label-layout.js';
+import Interaction from '../docs/assets/graph-interaction.js';
 
-export function createScene(canvas,data,onSelect,onError){
+export function createScene(canvas,data,onSelect,onError,actions={}){
+  const taps=Interaction.createTapTracker(),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'default'});
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.25));
   renderer.transmissionResolutionScale=.5;
@@ -30,6 +32,7 @@ export function createScene(canvas,data,onSelect,onError){
   const glass=new THREE.MeshPhysicalMaterial({color:0xe9b1c3,roughness:.1,metalness:0,transmission:.93,thickness:.7,ior:1.33,clearcoat:.45,clearcoatRoughness:.08,attenuationColor:0xee6a8c,attenuationDistance:2,envMapIntensity:.48});
   const solidMaterials=new Map(Object.entries(palette).map(([group,color])=>[group,new THREE.MeshStandardMaterial({color,roughness:.36})]));
   const markerGeometry=new THREE.SphereGeometry(.045,8,6),markerMaterials=new Map(Object.entries(palette).map(([group,color])=>[group,new THREE.MeshBasicMaterial({color})]));
+  const ringGeometry=new THREE.RingGeometry(1,1.035,40);
   const layer=document.createElement('div');layer.className='graph3d-labels';canvas.parentElement.append(layer);
   const measure=document.createElement('canvas').getContext('2d');measure.font='11px system-ui,"Microsoft YaHei",sans-serif';
   const shapes=model.nodes.map(n=>{
@@ -37,8 +40,9 @@ export function createScene(canvas,data,onSelect,onError){
     const liquidMaterial=glass.clone(),solid=(solidMaterials.get(n.group)||solidMaterials.get('guide')).clone();
     const mesh=new THREE.Mesh(geometry,liquidMaterial);mesh.userData.id=n.id;scene.add(mesh);
     const marker=new THREE.Mesh(markerGeometry,(markerMaterials.get(n.group)||markerMaterials.get('guide')).clone());scene.add(marker);
-    const label=document.createElement('button');label.type='button';label.className='graph3d-label';label.textContent=n.title;label.setAttribute('aria-label','选择 '+n.title);label.onclick=()=>onSelect(n.id);layer.append(label);
-    return {n,mesh,marker,geometry,base,label,glass:liquidMaterial,solid,norm:1,phase:n.seed,radii:new Float32Array(base.length/3),weights:Float32Array.from(base.filter((_,i)=>i%3===1),y=>Math.max(.01,Math.sqrt(Math.max(0,1-y*y)))),labelWidth:Math.min(250,measure.measureText(n.title).width+14),angle:new THREE.Quaternion()};
+    const label=document.createElement('a');label.className='graph3d-label';label.textContent=n.title;label.href=n.url||'#';label.setAttribute('aria-label','打开 '+n.title);label.title='打开文章：'+n.title;label.onclick=()=>onSelect(n.id);layer.append(label);
+    const ring=new THREE.Mesh(ringGeometry,new THREE.MeshBasicMaterial({color:0xf29ab5,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide}));ring.visible=false;scene.add(ring);
+    return {n,mesh,marker,ring,feedback:Interaction.feedback(),geometry,base,label,glass:liquidMaterial,solid,norm:1,phase:n.seed,radii:new Float32Array(base.length/3),weights:Float32Array.from(base.filter((_,i)=>i%3===1),y=>Math.max(.01,Math.sqrt(Math.max(0,1-y*y)))),labelWidth:Math.min(250,measure.measureText(n.title).width+14),angle:new THREE.Quaternion()};
   });
   const segments=20,positionArray=new Float32Array(model.edges.length*segments*6),lineGeometry=new THREE.BufferGeometry();
   lineGeometry.setAttribute('position',new THREE.BufferAttribute(positionArray,3));
@@ -136,8 +140,10 @@ export function createScene(canvas,data,onSelect,onError){
       mesh.visible=marker.visible=shown(n);mesh.position.set(n.x,n.y,n.z);marker.position.copy(mesh.position);
       mesh.material=state.liquid?shape.glass:shape.solid;shape.glass.transmission=glass.transmission;shape.glass.attenuationDistance=glass.attenuationDistance;
       const speed=Math.hypot(n.vx,n.vy,n.vz),scale=Visuals.contactScale(n.r,speed,n.squeeze,n.seed);mesh.scale.set(scale.x,scale.y,scale.z);
+      const feedback=Interaction.step(shape.feedback,gesture?.id===n.id,document.hidden?0:dt,reduced),press=1-.065*feedback.pressure;mesh.scale.x/=Math.sqrt(press);mesh.scale.y*=press;mesh.scale.z/=Math.sqrt(press);
       if(n.squeeze>.008)direction.set(n.contactX,n.contactY,n.contactZ);else direction.set(n.vx,n.vy,n.vz);if(direction.lengthSq()>.01)shape.angle.setFromUnitVectors(up,direction.normalize());else shape.angle.setFromAxisAngle(up,n.seed);
       mesh.quaternion.slerp(shape.angle,1-Math.exp(-4*dt));
+      const pulse=feedback.pulse;shape.ring.visible=shown(n)&&(pulse>0||gesture?.id===n.id);shape.ring.position.copy(mesh.position);direction.subVectors(camera.position,mesh.position).normalize();shape.ring.position.addScaledVector(direction,n.r*1.75);shape.ring.quaternion.copy(camera.quaternion);shape.ring.scale.setScalar(n.r*(1.45+(gesture?.id===n.id?0:(1-pulse)*.8)));shape.ring.material.opacity=reduced?(gesture?.id===n.id?0.35:0):Math.max(pulse*.55,gesture?.id===n.id ? .35 : 0);shape.glass.emissive.set(0x9e3658).multiplyScalar(feedback.pressure*.1+pulse*.08);shape.solid.emissive.copy(shape.glass.emissive);
       if(updateShape)deform(shape);
     }
     if(updateShape){lastShape=now;lastShapeTime=model.time;}
@@ -167,7 +173,7 @@ export function createScene(canvas,data,onSelect,onError){
       if(state.paused){const n=model.byId.get(gesture.id);n.x=point.x;n.y=point.y;n.z=point.z;n.vx=n.vy=n.vz=0;}
     }}
   }
-  function release(event){if(!gesture||gesture.pointerId!==event.pointerId)return;const old=gesture;gesture=null;model.setDrag(null);controls.enabled=true;if(event.type==='pointerup'&&!old.moved)onSelect(old.id);}
+  function release(event){if(!gesture||gesture.pointerId!==event.pointerId)return;const old=gesture;gesture=null;model.setDrag(null);controls.enabled=true;const moved=old.moved||Number.isFinite(event.clientX)&&Math.hypot(event.clientX-old.x,event.clientY-old.y)>4,result=taps.finish({id:old.id,x:old.x,y:old.y,moved,cancelled:event.type!=='pointerup'});if(result!=='none'){const shape=shapes.find(s=>s.n.id===old.id);if(shape)shape.feedback.pulse=1;onSelect(old.id);if(result==='open')actions.onOpen?.(old.id);}}
   // Capture before OrbitControls so node dragging never rotates the camera too.
   canvas.addEventListener('pointerdown',down,true);canvas.addEventListener('pointermove',move,true);canvas.addEventListener('pointerup',release,true);canvas.addEventListener('pointercancel',release,true);canvas.addEventListener('lostpointercapture',release,true);
   const lost=event=>{event.preventDefault();setVisible(false);onError('三维渲染已中断，已切回二维视图。');};canvas.addEventListener('webglcontextlost',lost);
@@ -175,10 +181,10 @@ export function createScene(canvas,data,onSelect,onError){
     const delta=event.key==='ArrowLeft'?.12:event.key==='ArrowRight'?-.12:0;
     if(delta){event.preventDefault();const offset=camera.position.clone().sub(controls.target).applyAxisAngle(up,delta);camera.position.copy(controls.target).add(offset);controls.update();}
     if(event.key==='+'||event.key==='='||event.key==='-'){event.preventDefault();const offset=camera.position.clone().sub(controls.target),distance=THREE.MathUtils.clamp(offset.length()*(event.key==='-'?1.12:.88),controls.minDistance,controls.maxDistance);camera.position.copy(controls.target).add(offset.setLength(distance));controls.update();}
-    if(event.key==='0')fit();
+    if(event.key==='Enter'&&state.selected){event.preventDefault();actions.onOpen?.(state.selected);}if(event.key==='0')fit();
   };canvas.addEventListener('keydown',keydown);
-  const visibility=()=>{last=null;accumulator=0;if(document.hidden){gesture=null;model.setDrag(null);controls.enabled=true;}};document.addEventListener('visibilitychange',visibility);
-  function setVisible(value){active=value;layer.hidden=!value;last=null;accumulator=0;if(frameId!==null)cancelAnimationFrame(frameId);frameId=null;if(value){resize();frameId=requestAnimationFrame(render);}else{gesture=null;model.setDrag(null);controls.enabled=true;}}
+  const visibility=()=>{last=null;accumulator=0;if(document.hidden){gesture=null;taps.reset();model.setDrag(null);controls.enabled=true;}};document.addEventListener('visibilitychange',visibility);
+  function setVisible(value){taps.reset();active=value;layer.hidden=!value;last=null;accumulator=0;if(frameId!==null)cancelAnimationFrame(frameId);frameId=null;if(value){resize();frameId=requestAnimationFrame(render);}else{gesture=null;model.setDrag(null);controls.enabled=true;}}
   function setState(patch){
     if(patch.contactMode!==undefined&&patch.contactMode!==state.contactMode){for(const item of fused.values()){scene.remove(item.effect);item.effect.geometry.dispose();}fused.clear();contacts=new Set();}
     if(patch.gravity)gravityField.configure(patch.gravity);
@@ -188,7 +194,8 @@ export function createScene(canvas,data,onSelect,onError){
     for(const shape of shapes){color.set(state.nodeColors[shape.n.id]||palette[shape.n.group]||palette.guide);shape.glass.attenuationColor.copy(color);shape.solid.color.copy(color);shape.marker.material.color.copy(color);shape.glass.color.copy(color).lerp(new THREE.Color(0xffffff),.67);}
     lineMaterial.color.set(state.lineColor).multiplyScalar(.6);beadMaterial.color.set(state.lineColor).lerp(new THREE.Color(0xffffff),.4);
   }
-  function reset(){model.reset();for(let i=0;i<160;i++)model.step(1/120,0);for(const n of model.nodes){n.vx*=.15;n.vy*=.15;n.vz*=.15;}controls.target.set(0,0,0);camera.position.set(9,6,12);fit();}
-  function dispose(){disposed=true;setVisible(false);observer.disconnect();canvas.removeEventListener('pointerdown',down,true);canvas.removeEventListener('pointermove',move,true);for(const type of ['pointerup','pointercancel','lostpointercapture'])canvas.removeEventListener(type,release,true);canvas.removeEventListener('keydown',keydown);canvas.removeEventListener('webglcontextlost',lost);document.removeEventListener('visibilitychange',visibility);controls.dispose();layer.remove();renderer.dispose();envMap.dispose();glass.dispose();markerGeometry.dispose();lineGeometry.dispose();lineMaterial.dispose();beadGeometry.dispose();beadMaterial.dispose();fusionMaterial.dispose();for(const item of fused.values())item.effect.geometry.dispose();for(const shape of shapes){shape.geometry.dispose();shape.glass.dispose();shape.solid.dispose();shape.marker.material.dispose();}for(const m of [...solidMaterials.values(),...markerMaterials.values()])m.dispose();}
-  resize();fit();return {setVisible,setState,fit,reset,dispose,model};
+  function reset(){taps.reset();model.reset();for(let i=0;i<160;i++)model.step(1/120,0);for(const n of model.nodes){n.vx*=.15;n.vy*=.15;n.vz*=.15;}controls.target.set(0,0,0);camera.position.set(9,6,12);fit();}
+  function dispose(){disposed=true;setVisible(false);observer.disconnect();canvas.removeEventListener('pointerdown',down,true);canvas.removeEventListener('pointermove',move,true);for(const type of ['pointerup','pointercancel','lostpointercapture'])canvas.removeEventListener(type,release,true);canvas.removeEventListener('keydown',keydown);canvas.removeEventListener('webglcontextlost',lost);document.removeEventListener('visibilitychange',visibility);controls.dispose();layer.remove();renderer.dispose();envMap.dispose();glass.dispose();ringGeometry.dispose();markerGeometry.dispose();lineGeometry.dispose();lineMaterial.dispose();beadGeometry.dispose();beadMaterial.dispose();fusionMaterial.dispose();for(const item of fused.values())item.effect.geometry.dispose();for(const shape of shapes){shape.geometry.dispose();shape.glass.dispose();shape.solid.dispose();shape.marker.material.dispose();shape.ring.material.dispose();}for(const m of [...solidMaterials.values(),...markerMaterials.values()])m.dispose();}
+  function screenPosition(id){const n=model.byId.get(id);if(!n||!shown(n))return null;const p=new THREE.Vector3(n.x,n.y,n.z).project(camera);if(p.z< -1||p.z>1)return null;return {x:(p.x*.5+.5)*width,y:(-.5*p.y+.5)*height,r:n.r*1.45*height/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.position.distanceTo(new THREE.Vector3(n.x,n.y,n.z)))};}
+  resize();fit();return {setVisible,setState,fit,reset,dispose,model,screenPosition};
 }

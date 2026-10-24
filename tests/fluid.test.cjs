@@ -8,6 +8,7 @@ const GraphAppearance=require('../docs/assets/graph-appearance.js');
 const ArticleActivity=require('../docs/assets/article-activity.js');
 const LiquidSurface=require('../docs/assets/liquid-surface.js');
 const GraphGravity=require('../docs/assets/graph-gravity.js');
+const GraphInteraction=require('../docs/assets/graph-interaction.js');
 const GraphLabelLayout=require('../docs/assets/graph-label-layout.js');
 const source=fs.readFileSync(path.join(root,'docs/assets/graph.js'),'utf8');
 const data=JSON.parse(fs.readFileSync(path.join(root,'docs/assets/graph-data.json'),'utf8'));
@@ -18,14 +19,15 @@ async function simulation(graph=data,usage={},three){
   const gradient={addColorStop(){}};let labelBoxes=[];
   const classes=()=>({toggle(){},contains(){return false;}});
   const ctx=new Proxy({createLinearGradient:()=>gradient,createRadialGradient:()=>gradient,measureText:text=>({width:Array.from(text).length*8}),clearRect:()=>{labelBoxes=[];},fillRect:(x,y,w,h)=>{if(h===19)labelBoxes.push({x,y,w,h});}},{get:(obj,key)=>key in obj?obj[key]:()=>{}});
+  const timers=new Map(),navigations=[];let timerId=0;
   const elements=new Map(),frames=[],documentEvents={},windowEvents={};
-  function element(id){if(!elements.has(id))elements.set(id,{textContent:'',value:'',classList:classes(),closest:()=>element('graph-wrap'),focus(){},attributes:{},children:[],events:{},append(...items){this.children.push(...items);},replaceChildren(){this.children=[];},setAttribute(name,value){this.attributes[name]=value;},addEventListener(type,fn){this.events[type]=fn;},getContext:()=>ctx,getBoundingClientRect:()=>({width:800,height:510,left:0,top:0}),setPointerCapture(){}});return elements.get(id);}
+  function element(id){if(!elements.has(id))elements.set(id,{style:{},textContent:'',value:'',classList:classes(),closest:()=>element('graph-wrap'),focus(){},attributes:{},children:[],events:{},append(...items){this.children.push(...items);},replaceChildren(){this.children=[];},setAttribute(name,value){this.attributes[name]=value;},addEventListener(type,fn){this.events[type]=fn;},getContext:()=>ctx,getBoundingClientRect:()=>({width:800,height:510,left:0,top:0}),setPointerCapture(){}});return elements.get(id);}
   const document={body:{classList:classes(),dataset:{mdColorScheme:'slate'}},hidden:false,currentScript:{src:'https://example.com/study-garden/assets/graph.js'},getElementById:element,createElement:()=>element(`generated-${Math.random()}`),createTextNode:s=>s,addEventListener:(type,fn)=>{documentEvents[type]=fn;}};
-  const context=vm.createContext({console,URL,Math,LiquidSurface,ArticleActivity,GraphAppearance,GraphGravity,GraphLabelLayout,Graph3D:three,localStorage:{getItem:()=>JSON.stringify({version:1,entries:usage})}, Matter:physics,devicePixelRatio:1,window:{Matter:physics,Graph3D:three,addEventListener(type,fn){windowEvents[type]=fn;}},document,matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>graph})});
+  const context=vm.createContext({console,URL,Math,LiquidSurface,ArticleActivity,GraphAppearance,GraphGravity,GraphLabelLayout,GraphInteraction,clearTimeout:id=>timers.delete(id),cancelAnimationFrame:()=>frames.splice(0),Graph3D:three,localStorage:{getItem:()=>JSON.stringify({version:1,entries:usage})}, Matter:physics,devicePixelRatio:1,window:{setTimeout:fn=>{timers.set(++timerId,fn);return timerId;},location:{assign:url=>navigations.push(url)},Matter:physics,Graph3D:three,addEventListener(type,fn){windowEvents[type]=fn;}},document,matchMedia:()=>({matches:false}),ResizeObserver:class{constructor(fn){this.fn=fn;}observe(){this.fn();}},requestAnimationFrame:fn=>frames.push(fn),fetch:async()=>({ok:true,json:async()=>graph})});
   vm.runInContext(source,context);await new Promise(resolve=>setImmediate(resolve));
   const frame=delta=>{now+=delta;assert(frames.length===1,'Only one animation loop should be scheduled');frames.shift()(now);};
   frame(0);
-  return {engine,element,document,documentEvents,windowEvents,frame,get boxes(){return labelBoxes;},get updates(){return updates;},steps:(n,delta=1000/120)=>{for(let i=0;i<n;i++)frame(delta);},flow:value=>element('graph-flow').oninput({target:{value}})};
+  return {engine,element,document,documentEvents,windowEvents,frame,navigations,flushTimers(){for(const fn of timers.values())fn();timers.clear();},get card(){return element('graph-wrap').children.find(e=>e.className==='graph-node-card');},get boxes(){return labelBoxes;},get updates(){return updates;},steps:(n,delta=1000/120)=>{for(let i=0;i<n;i++)frame(delta);},flow:value=>element('graph-flow').oninput({target:{value}})};
 }
 const minimal=count=>({nodes:Array.from({length:count},(_,i)=>({id:`node-${i}`,title:`Node ${i}`,group:'course',url:`notes/${i}/`})),edges:[]});
 const kinetic=bodies=>bodies.reduce((energy,b)=>energy+b.mass*(b.velocity.x**2+b.velocity.y**2)/2,0);
@@ -106,5 +108,19 @@ const kinetic=bodies=>bodies.reduce((energy,b)=>energy+b.mass*(b.velocity.x**2+b
   const releasedAt=body.position.x;dragged.steps(6);assert(body.position.x>releasedAt);dragged.steps(240);assert(Math.abs(body.velocity.x)<releaseVelocity*.1);
   const beforeGap=dragged.updates;dragged.frame(5000);assert(dragged.updates-beforeGap<=6,'Long stalls must not trigger unbounded catch-up');
   dragged.document.hidden=true;const beforeHidden=dragged.updates;dragged.frame(1000);assert.equal(dragged.updates,beforeHidden);
+
+  // Actual canvas pointer events: native article card, direct double tap, no drag/cancel navigation.
+  const clicks=await simulation(minimal(1));clicks.flow(0);clicks.element('graph-pause').onclick();
+  const c=clicks.element('knowledge-graph'),center=clicks.engine.world.bodies[0].position;
+  const tap=(type,dx=0,dy=0,id=7)=>c.events[type]({type,pointerId:id,clientX:400+center.x+dx,clientY:255+center.y+dy,preventDefault(){}});
+  tap('pointerdown');tap('pointerup');clicks.frame(16);
+  assert.equal(clicks.card.hidden,false);assert.equal(clicks.card.children[1].href,'https://example.com/study-garden/notes/0/');
+  clicks.flushTimers();assert.equal(clicks.navigations.length,0,'single tap selects without an unexpected page change');
+  tap('pointerdown');tap('pointerup');clicks.flushTimers();assert.deepEqual(clicks.navigations,['https://example.com/study-garden/notes/0/']);
+  for(const end of ['pointercancel','lostpointercapture']){tap('pointerdown');tap(end);tap('pointerup');clicks.flushTimers();assert.equal(clicks.navigations.length,1);}
+  tap('pointerdown');tap('pointerup',35,0);clicks.flushTimers();assert.equal(clicks.navigations.length,1,'release displacement without a move event still counts as a drag');
+  c.events.keydown({key:'Enter',preventDefault(){}});clicks.flushTimers();assert.equal(clicks.navigations.length,2);
+  c.events.keydown({key:'Enter',preventDefault(){}});clicks.windowEvents.pagehide();clicks.flushTimers();assert.equal(clicks.navigations.length,2,'leaving the page cancels deferred navigation');
+
   console.log(`Fluid graph passed: ${data.nodes.length} bodies, 120 Hz physics, refresh-rate invariance, dissipative contacts (minimum separation ${closest.toFixed(1)} px), coincidence recovery, spring drag, release inertia, bounded catch-up, pause and selection.`);
 })().catch(error=>{console.error(error);process.exitCode=1;});
