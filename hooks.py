@@ -97,7 +97,7 @@ def load_course_catalog(docs):
 
 def on_page_context(context, page, config, nav):
     data = load_course_catalog(config['docs_dir'])
-    if page.file.src_uri == 'graph.md':
+    if page.file.src_uri == 'chip.md':
         context['chip_courses'] = json.dumps({'courses': [{key: course[key] for key in ('id', 'title', 'path', 'url', 'prerequisites')} for course in data['courses']]}, ensure_ascii=False).replace('<', r'\u003c')
     paths = {c['path'] for c in data['courses']} | {'catalog.md', 'roadmap.md', 'dashboard.md', 'backup.md'}
     if page.file.src_uri in paths:

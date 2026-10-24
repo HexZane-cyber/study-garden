@@ -6,7 +6,7 @@
   function reset(){clock=scan=nextLaunch=serial=0;particles=[];cooldown.clear();}
   function step(nodes,delta,{enabled=true,paused=false,reduced=false}={}){
    if(!enabled||reduced){reset();return particles;}
-   if(paused)return particles;
+   if(paused){const visible=new Set(nodes.map(n=>n.id));particles=particles.filter(p=>visible.has(p.source)&&visible.has(p.target));return particles;}
    const dt=Math.max(0,Math.min(.05,Number.isFinite(delta)?delta:0));if(!dt)return particles;
    clock+=dt;scan-=dt;const byId=new Map(nodes.map(n=>[n.id,n]));
    particles=particles.filter(p=>{

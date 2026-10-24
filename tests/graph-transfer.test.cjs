@@ -5,6 +5,7 @@ e.step(nodes,.05);assert(e.particles[0].size>0);const first={...e.particles[0]};
 const reference=T.createEmitter();reference.step(pair(),1/60);reference.step(pair(),.05);reference.step(pair(),.05);
 nodes[1].y=.4;e.step(nodes,.05);assert(e.particles[0].y>reference.particles[0].y,'packet homes towards the current receiver position');
 const frozen=JSON.stringify(e.particles);e.step(nodes,3,{paused:true});assert.equal(JSON.stringify(e.particles),frozen,'pause freezes progress and emission');
+const pausedFilter=T.createEmitter();pausedFilter.step(pair(),.02);pausedFilter.step(pair(),.05);assert(pausedFilter.particles.length);pausedFilter.step(pair().slice(0,1),.05,{paused:true});assert.equal(pausedFilter.particles.length,0,'paused focus changes cannot leave packets from hidden nodes');
 for(let i=0;i<30;i++)e.step(nodes,1/30);assert.equal(e.particles.length,0,'packet is absorbed and cooldown prevents immediate repeated spitting');
 for(let i=0;i<80;i++)e.step(nodes,1/30);assert(e.particles.length<=1);
 e.step(nodes,.02,{enabled:false});assert.equal(e.particles.length,0);e.step(nodes,.02,{reduced:true});assert.equal(e.particles.length,0);

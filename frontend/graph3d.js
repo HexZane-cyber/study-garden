@@ -8,6 +8,7 @@ import Gravity from '../docs/assets/graph-gravity.js';
 import LabelLayout from '../docs/assets/graph-label-layout.js';
 import Interaction from '../docs/assets/graph-interaction.js';
 import Transfer from '../docs/assets/graph-transfer.js';
+import Circuit from '../docs/assets/graph-circuit.js';
 
 export function createScene(canvas,data,onSelect,onError,actions={}){
   const taps=Interaction.createTapTracker(),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -49,6 +50,8 @@ export function createScene(canvas,data,onSelect,onError,actions={}){
   lineGeometry.setAttribute('position',new THREE.BufferAttribute(positionArray,3));
   const lineMaterial=new THREE.LineBasicMaterial({color:0x6c3b4d});
   const lines=new THREE.LineSegments(lineGeometry,lineMaterial);lines.frustumCulled=false;scene.add(lines);
+  const terminalPositions=new Float32Array(model.edges.length*6),terminalGeometry=new THREE.BufferGeometry();terminalGeometry.setAttribute('position',new THREE.BufferAttribute(terminalPositions,3));
+  const terminalMaterial=new THREE.PointsMaterial({color:0xf3a9c0,size:3,sizeAttenuation:false}),terminals=new THREE.Points(terminalGeometry,terminalMaterial);terminals.frustumCulled=false;scene.add(terminals);
   const edgeHighlightPositions=new Float32Array((segments+1)*3),edgeHighlightGeometry=new THREE.BufferGeometry();edgeHighlightGeometry.setAttribute('position',new THREE.BufferAttribute(edgeHighlightPositions,3));
   const edgeHighlightMaterial=new THREE.LineBasicMaterial({color:0xffd8e5,transparent:true,opacity:.95,depthWrite:false}),edgeHighlight=new THREE.Line(edgeHighlightGeometry,edgeHighlightMaterial);edgeHighlight.visible=false;edgeHighlight.frustumCulled=false;edgeHighlight.renderOrder=2;scene.add(edgeHighlight);
   const beadGeometry=new THREE.SphereGeometry(.026,6,4),beadMaterial=new THREE.MeshBasicMaterial({color:0xf7adbf});
@@ -60,7 +63,7 @@ export function createScene(canvas,data,onSelect,onError,actions={}){
   const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2(),plane=new THREE.Plane(),point=new THREE.Vector3(),dragOffset=new THREE.Vector3(),direction=new THREE.Vector3(),up=new THREE.Vector3(0,1,0);
   let active=false,disposed=false,frameId=null,last=null,accumulator=0,hover=null,hoverEdge=null,gesture=null,lastShape=-1,lastShapeTime=-1,width=1,height=1;
   const linked=n=>!state.selected||n.id===state.selected||adjacency.get(state.selected)?.has(n.id);
-  const shown=n=>!state.focusOnly||linked(n);
+  const shown=n=>!state.focusOnly||(state.edge>=0?n===model.edges[state.edge]?.a||n===model.edges[state.edge]?.b:linked(n));
   function resize(){const rect=canvas.getBoundingClientRect();if(rect.width<1||rect.height<1)return;width=rect.width;height=rect.height;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();}
   const observer=new ResizeObserver(resize);observer.observe(canvas);
   function fit(){
@@ -163,13 +166,13 @@ export function createScene(canvas,data,onSelect,onError,actions={}){
     }
     if(updateShape){lastShape=now;lastShapeTime=model.time;}
     fusionMaterial.transmission=glass.transmission;fusionMaterial.attenuationDistance=glass.attenuationDistance;
+    let terminalCount=0;
     model.edges.forEach((e,i)=>{const visible=shown(e.a)&&shown(e.b),a=visible?e.a:{x:0,y:0,z:0},b=visible?e.b:a;
-      const tension=Math.max(1,Math.hypot(b.x-a.x,b.y-a.y,b.z-a.z)/3.2),curve=Visuals.prepareCurve(a,b,i,model.time,state.bend/tension,e.curve||(e.curve=new Float64Array(9))),p=e.point||(e.point={}),q=e.next||(e.next={});
-      Visuals.sampleCurve(curve,0,p);
-      for(let j=0;j<segments;j++){Visuals.sampleCurve(curve,(j+1)/segments,q);const offset=(i*segments+j)*6;positionArray[offset]=p.x;positionArray[offset+1]=p.y;positionArray[offset+2]=p.z;positionArray[offset+3]=q.x;positionArray[offset+4]=q.y;positionArray[offset+5]=q.z;p.x=q.x;p.y=q.y;p.z=q.z;}
-      const t=(model.time*.13+i*.618)%1;Visuals.sampleCurve(curve,t,p);
-      beads[i].visible=visible&&state.liquid;beads[i].position.set(p.x,p.y,p.z);
-    });lineGeometry.attributes.position.needsUpdate=true;
+      const route=Circuit.update(e.circuit||(e.circuit=Circuit.create()),a,b,i,{radiusA:visible?a.r*1.03:0,radiusB:visible?b.r*1.03:0,corner:.03+state.bend*.3}),p=e.point||(e.point={});
+      for(let j=0;j<segments;j++){const from=route.count?route.points[Math.min(j,route.count-1)]:a,to=route.count?route.points[Math.min(j+1,route.count-1)]:a,offset=(i*segments+j)*6;positionArray[offset]=from.x;positionArray[offset+1]=from.y;positionArray[offset+2]=from.z;positionArray[offset+3]=to.x;positionArray[offset+4]=to.y;positionArray[offset+5]=to.z;}
+      Circuit.sample(route,(model.time*.13+i*.618)%1,p);beads[i].visible=visible&&state.liquid&&route.count>0;beads[i].position.set(p.x,p.y,p.z);
+      if(visible&&route.count)for(const v of [route.points[0],route.points[route.count-1]]){terminalPositions[terminalCount++]=v.x;terminalPositions[terminalCount++]=v.y;terminalPositions[terminalCount++]=v.z;}
+    });lineGeometry.attributes.position.needsUpdate=true;terminalGeometry.setDrawRange(0,terminalCount/3);terminalGeometry.attributes.position.needsUpdate=true;
     const highlight=state.edge>=0?state.edge:hoverEdge,highlightEdge=model.edges[highlight];edgeHighlight.visible=!!highlightEdge&&shown(highlightEdge.a)&&shown(highlightEdge.b);
     if(edgeHighlight.visible){const offset=highlight*segments*6;edgeHighlightPositions.set(positionArray.subarray(offset,offset+3),0);for(let j=0;j<segments;j++)edgeHighlightPositions.set(positionArray.subarray(offset+j*6+3,offset+j*6+6),(j+1)*3);edgeHighlightGeometry.attributes.position.needsUpdate=true;edgeHighlightMaterial.color.set(state.lineColor).lerp(transferWhite,.7);}
     fusion(now,document.hidden?0:dt);
@@ -216,11 +219,11 @@ export function createScene(canvas,data,onSelect,onError,actions={}){
     Object.assign(state,patch);for(const n of model.nodes){n.targetFlow=state.activities[n.id]||.2;n.flowFactor=n.targetFlow;}
     const color=new THREE.Color();
     for(const shape of shapes){color.set(state.nodeColors[shape.n.id]||palette[shape.n.group]||palette.guide);shape.glass.attenuationColor.copy(color);shape.solid.color.copy(color);shape.marker.material.color.copy(color);shape.glass.color.copy(color).lerp(new THREE.Color(0xffffff),.67);}
-    lineMaterial.color.set(state.lineColor).multiplyScalar(.6);beadMaterial.color.set(state.lineColor).lerp(new THREE.Color(0xffffff),.4);
+    terminalMaterial.color.set(state.lineColor).lerp(new THREE.Color(0xffffff),.5);lineMaterial.color.set(state.lineColor).multiplyScalar(.8);beadMaterial.color.set(state.lineColor).lerp(new THREE.Color(0xffffff),.4);
     lineMaterial.transparent=true;lineMaterial.opacity=state.edge>=0?.3:1;
   }
   function reset(){hoverEdge=null;emitter.reset();taps.reset();model.reset();for(let i=0;i<160;i++)model.step(1/120,0);for(const n of model.nodes){n.vx*=.15;n.vy*=.15;n.vz*=.15;}controls.target.set(0,0,0);camera.position.set(9,6,12);fit();}
-  function dispose(){disposed=true;setVisible(false);observer.disconnect();canvas.removeEventListener('pointerdown',down,true);canvas.removeEventListener('pointermove',move,true);for(const type of ['pointerup','pointercancel','lostpointercapture'])canvas.removeEventListener(type,release,true);canvas.removeEventListener('keydown',keydown);canvas.removeEventListener('webglcontextlost',lost);document.removeEventListener('visibilitychange',visibility);controls.dispose();layer.remove();renderer.dispose();edgeHighlightGeometry.dispose();edgeHighlightMaterial.dispose();transferGeometry.dispose();transferMaterial.dispose();envMap.dispose();glass.dispose();ringGeometry.dispose();markerGeometry.dispose();lineGeometry.dispose();lineMaterial.dispose();beadGeometry.dispose();beadMaterial.dispose();fusionMaterial.dispose();for(const item of fused.values())item.effect.geometry.dispose();for(const shape of shapes){shape.geometry.dispose();shape.glass.dispose();shape.solid.dispose();shape.marker.material.dispose();shape.ring.material.dispose();}for(const m of [...solidMaterials.values(),...markerMaterials.values()])m.dispose();}
+  function dispose(){disposed=true;setVisible(false);observer.disconnect();canvas.removeEventListener('pointerdown',down,true);canvas.removeEventListener('pointermove',move,true);for(const type of ['pointerup','pointercancel','lostpointercapture'])canvas.removeEventListener(type,release,true);canvas.removeEventListener('keydown',keydown);canvas.removeEventListener('webglcontextlost',lost);document.removeEventListener('visibilitychange',visibility);controls.dispose();layer.remove();renderer.dispose();edgeHighlightGeometry.dispose();edgeHighlightMaterial.dispose();transferGeometry.dispose();transferMaterial.dispose();envMap.dispose();glass.dispose();ringGeometry.dispose();markerGeometry.dispose();lineGeometry.dispose();lineMaterial.dispose();terminalGeometry.dispose();terminalMaterial.dispose();beadGeometry.dispose();beadMaterial.dispose();fusionMaterial.dispose();for(const item of fused.values())item.effect.geometry.dispose();for(const shape of shapes){shape.geometry.dispose();shape.glass.dispose();shape.solid.dispose();shape.marker.material.dispose();shape.ring.material.dispose();}for(const m of [...solidMaterials.values(),...markerMaterials.values()])m.dispose();}
   function screenPosition(id){const n=model.byId.get(id);if(!n||!shown(n))return null;const p=new THREE.Vector3(n.x,n.y,n.z).project(camera);if(p.z< -1||p.z>1)return null;return {x:(p.x*.5+.5)*width,y:(-.5*p.y+.5)*height,r:n.r*1.45*height/(2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.position.distanceTo(new THREE.Vector3(n.x,n.y,n.z)))};}
   resize();fit();return {setVisible,setState,fit,reset,dispose,model,screenPosition};
 }

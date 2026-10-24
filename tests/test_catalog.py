@@ -15,7 +15,7 @@ class CatalogTest(unittest.TestCase):
     def test_chip_catalog_escapes_script_closers_without_changing_titles(self):
         data = hooks.load_course_catalog(ROOT / 'docs')
         data['courses'][0]['title'] = '</script><script>alert(1)</script>'
-        page = SimpleNamespace(file=SimpleNamespace(src_uri='graph.md'))
+        page = SimpleNamespace(file=SimpleNamespace(src_uri='chip.md'))
         with patch.object(hooks, 'load_course_catalog', return_value=data):
             context = hooks.on_page_context({}, page, {'docs_dir': ROOT / 'docs'}, None)
         self.assertNotIn('<', context['chip_courses'])
@@ -34,7 +34,7 @@ class CatalogTest(unittest.TestCase):
             self.assertNotIn('待补充', text)
             self.assertIn('## 先修', text)
             self.assertIn('## 阶段验收', text)
-        for name in ['index.html', 'graph/index.html', 'private/index.html']:
+        for name in ['index.html', 'chip/index.html', 'private/index.html']:
             self.assertNotIn('assets/learning.js', (ROOT / 'site' / name).read_text(encoding='utf-8'))
         for name in ['catalog/index.html', 'roadmap/index.html', 'courses/python/index.html']:
             text = (ROOT / 'site' / name).read_text(encoding='utf-8')
