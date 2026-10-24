@@ -28,6 +28,8 @@ assert.equal(Interaction.hitEdge(paths,50,49,8),1,'choose the nearest eligible l
 assert.equal(Interaction.hitEdge(paths,50,35,8),null);assert.equal(Interaction.hitEdge(paths,50,35,16),0,'touch gets a wider hit target');
 assert.equal(Interaction.hitEdge([{id:9,points:[null,{x:5,y:5},null]}],5,5),null,'clipped 3D endpoints cannot create a false line across the viewport');
 assert.equal(Interaction.segmentDistanceSquared(7,9,{x:5,y:5},{x:5,y:5}),20);
+assert.deepEqual(Interaction.edgeCandidates(paths,50,35,20).map(p=>p.id),[0,1],'all eligible overlapping tracks remain reachable');
+assert.deepEqual(Interaction.edgeCandidates([{id:'clipped',points:[null,{x:1,y:1},null]},{id:'far',points:[{x:100,y:100},{x:150,y:100}],bounds:{left:100,right:150,top:100,bottom:100}}],0,0,10),[]);
 
 // Execute the real 3D release handler, including cancellation and a missing move event.
 const source=fs.readFileSync(path.join(__dirname,'../frontend/graph3d.js'),'utf8');

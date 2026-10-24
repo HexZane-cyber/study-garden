@@ -9,7 +9,8 @@ comments: false
 
 <div class="chip-shell">
 <div class="chip-heading"><div><small>ZHIXIN / YOUR KNOWLEDGE DIE</small><strong id="chip-summary">正在读取模块…</strong></div><a id="chip-publish" href="../publish/">发布新笔记 ↗</a></div>
-<div class="chip-toolbar"><input id="chip-search" type="search" aria-label="搜索芯片模块" placeholder="搜索笔记或课程…"><select id="chip-group" aria-label="模块分类"><option value="">全部模块</option><option value="note">笔记阵列</option><option value="course">课程模块</option><option value="tool">工具接口</option><option value="guide">学习指南</option></select><button id="chip-fit" type="button">查看整枚芯片</button><button id="chip-out" type="button" aria-label="缩小芯片">−</button><span id="chip-zoom">100%</span><button id="chip-in" type="button" aria-label="放大芯片">＋</button><button id="chip-expand" type="button" aria-pressed="false">大画布</button><label><input id="chip-signals" type="checkbox" checked> 信号流动</label></div>
+<div class="chip-toolbar"><input id="chip-search" type="search" aria-label="搜索芯片模块" placeholder="搜索笔记或课程…"><select id="chip-group" aria-label="模块分类"><option value="">全部模块</option><option value="note">笔记阵列</option><option value="course">课程模块</option><option value="tool">工具接口</option><option value="guide">学习指南</option></select><button id="chip-clear" type="button" hidden>清除筛选</button><button id="chip-fit" type="button">查看整枚芯片</button><button id="chip-out" type="button" aria-label="缩小芯片">−</button><span id="chip-zoom">100%</span><button id="chip-in" type="button" aria-label="放大芯片">＋</button><button id="chip-expand" type="button" aria-pressed="false">大画布</button><label><input id="chip-signals" type="checkbox" checked> 信号流动</label></div>
+<div id="chip-results" class="chip-results" aria-label="模块搜索结果" hidden></div>
 <div class="chip-stage"><canvas id="knowledge-chip" tabindex="0" aria-label="知识芯片，单击模块或走线，拖动平移，滚轮缩放。也可使用下方模块和连接列表。"></canvas><div id="chip-status" class="chip-status" role="status">正在布置芯片…</div><div class="chip-help">单击模块或走线 · 双击模块打开文章 · 拖动平移 · 滚轮缩放</div></div>
 <div id="chip-panel" class="chip-panel" aria-live="polite">选择模块查看文章，或点击走线探索关系。</div>
 <div id="chip-size" class="chip-size"></div>
@@ -28,7 +29,9 @@ comments: false
 
 ## 阅读与操作
 
-搜索会定位唯一匹配的模块；分类可以淡化无关区域。芯片较大时，点击「查看整枚芯片」回到整体布局，或放大后拖动阅读细节。手机和平板支持双指缩放，并随双指中心平移；双指手势不会误打开文章。「信号流动」只为选中的关系播放少量光点，关闭后保持静止；系统偏好减少动画时默认关闭。
+搜索会列出匹配模块的完整标题，可以定位，也能直接阅读；唯一匹配会自动定位，在搜索框按 Enter 即可打开。分类和搜索会同时筛选下方模块列表，「清除筛选」恢复整体。多条走线共用通道时，可在文章入口旁的「切换重叠走线」中选择具体关系。
+
+芯片较大时，点击「查看整枚芯片」回到整体布局，或放大后拖动阅读细节。手机和平板支持双指缩放，并随双指中心平移；双指手势不会误打开文章。「信号流动」只为选中的关系播放少量光点，关闭后保持静止；系统偏好减少动画时默认关闭。
 
 键盘可使用下方列表选择模块或走线。在画布上，方向键平移，`+` / `−` 缩放，`0` 查看整体，`Enter` 打开已选模块，`Escape` 取消选择或退出大画布。
 
