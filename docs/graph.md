@@ -9,7 +9,8 @@ comments: false
 
 <div class="chip-shell">
 <div class="chip-heading"><div><small>ZHIXIN / YOUR KNOWLEDGE DIE</small><strong id="chip-summary">正在读取模块…</strong></div><a id="chip-publish" href="../publish/">发布新笔记 ↗</a></div>
-<div class="chip-toolbar"><input id="chip-search" type="search" aria-label="搜索芯片模块" placeholder="搜索笔记或课程…"><select id="chip-group" aria-label="模块分类"><option value="">全部模块</option><option value="note">笔记阵列</option><option value="course">课程模块</option><option value="tool">工具接口</option><option value="guide">学习指南</option></select><button id="chip-clear" type="button" hidden>清除筛选</button><button id="chip-fit" type="button">查看整枚芯片</button><button id="chip-out" type="button" aria-label="缩小芯片">−</button><span id="chip-zoom">100%</span><button id="chip-in" type="button" aria-label="放大芯片">＋</button><button id="chip-expand" type="button" aria-pressed="false">大画布</button><label><input id="chip-signals" type="checkbox" checked> 信号流动</label></div>
+<div id="chip-learning-summary" class="chip-learning-summary" role="status"></div>
+<div class="chip-toolbar"><input id="chip-search" type="search" aria-label="搜索芯片模块" placeholder="搜索笔记或课程…"><select id="chip-group" aria-label="模块分类"><option value="">全部模块</option><option value="note">笔记阵列</option><option value="course">课程模块</option><option value="tool">工具接口</option><option value="guide">学习指南</option></select><select id="chip-progress" aria-label="学习进度筛选"><option value="">全部学习状态</option><option value="planned">已加入计划</option><option value="learning">正在学习</option><option value="done">已完成</option><option value="todo">未开始</option></select><button id="chip-clear" type="button" hidden>清除筛选</button><button id="chip-fit" type="button">查看整枚芯片</button><button id="chip-out" type="button" aria-label="缩小芯片">−</button><span id="chip-zoom">100%</span><button id="chip-in" type="button" aria-label="放大芯片">＋</button><button id="chip-expand" type="button" aria-pressed="false">大画布</button><label><input id="chip-signals" type="checkbox" checked> 信号流动</label></div>
 <div id="chip-results" class="chip-results" aria-label="模块搜索结果" hidden></div>
 <div class="chip-stage"><canvas id="knowledge-chip" tabindex="0" aria-label="知识芯片，单击模块或走线，拖动平移，滚轮缩放。也可使用下方模块和连接列表。"></canvas><div id="chip-status" class="chip-status" role="status">正在布置芯片…</div><div class="chip-help">单击模块或走线 · 双击模块打开文章 · 拖动平移 · 滚轮缩放</div></div>
 <div id="chip-panel" class="chip-panel" aria-live="polite">选择模块查看文章，或点击走线探索关系。</div>
@@ -30,6 +31,8 @@ comments: false
 本页展示已发布到站点的文章。保存在[个人私密空间](private.md)的加密笔记继续保持独立，不会自动出现在公开芯片中。
 
 ## 阅读与操作
+
+课程模块会显示本浏览器在课程目录、学习路线或课程页保存的进度。可以筛选已加入计划、正在学习、已完成或未开始的课程；选中模块后，进入课程页继续学习和修改进度。其他标签页更新记录后，芯片会同步显示。位置链接只定位公开模块，不包含自己的学习进度。
 
 搜索会列出匹配模块的完整标题，可以定位，也能直接阅读；唯一匹配会自动定位，在搜索框按 Enter 即可打开。分类和搜索会同时筛选下方模块列表，「清除筛选」恢复整体。多条走线共用通道时，可在文章入口旁的「切换重叠走线」中选择具体关系。
 

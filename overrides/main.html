@@ -14,7 +14,10 @@
   {{ super() }}
   {# Keep feature scripts on their owning page. Deferred dependencies execute in order. #}
   {% if page and page.file.src_uri == "graph.md" %}
+    <script type="application/json" id="chip-course-data">{{ chip_courses | safe }}</script>
     <script src="{{ 'assets/graph-interaction.js' | url }}" defer></script>
+    <script src="{{ 'assets/learning-model.js' | url }}" defer></script>
+    <script src="{{ 'assets/chip-learning.js' | url }}" defer></script>
     <script src="{{ 'assets/chip-model.js' | url }}" defer></script>
     <script src="{{ 'assets/chip.js' | url }}" defer></script>
   {% elif page and page.file.src_uri == "contribute.md" %}

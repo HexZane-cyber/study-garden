@@ -3,6 +3,8 @@ import importlib.util
 import json
 import tempfile
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('catalog_hooks', ROOT / 'hooks.py')
@@ -10,6 +12,16 @@ hooks = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(hooks)
 
 class CatalogTest(unittest.TestCase):
+    def test_chip_catalog_escapes_script_closers_without_changing_titles(self):
+        data = hooks.load_course_catalog(ROOT / 'docs')
+        data['courses'][0]['title'] = '</script><script>alert(1)</script>'
+        page = SimpleNamespace(file=SimpleNamespace(src_uri='graph.md'))
+        with patch.object(hooks, 'load_course_catalog', return_value=data):
+            context = hooks.on_page_context({}, page, {'docs_dir': ROOT / 'docs'}, None)
+        self.assertNotIn('<', context['chip_courses'])
+        self.assertEqual(json.loads(context['chip_courses'])['courses'][0]['title'], data['courses'][0]['title'])
+        self.assertNotIn('learning_catalog', context)
+
     def test_catalog_guides_and_built_fallback(self):
         data = hooks.load_course_catalog(ROOT / 'docs')
         self.assertEqual(len(data['courses']), 10)

@@ -1,0 +1,8 @@
+const assert=require('node:assert/strict'),M=require('../docs/assets/learning-model.js'),C=require('../docs/assets/chip-learning.js'),catalog=require('../docs/assets/course-catalog.json');
+let value=null,writes=0;const storage={getItem:key=>{assert.equal(key,M.KEY);return value;},setItem(){writes++;throw Error('read-only');}};
+let report=C.read(storage,catalog.courses);assert(report.available);assert.equal(report.counts.todo,catalog.courses.length);
+value=JSON.stringify({version:1,entries:{python:'learning',math:'done','cs-intro':'planned',deleted:'bad'}});report=C.read(storage,catalog.courses);assert(report.available);assert.equal(report.counts.learning,1);assert.equal(report.counts.done,1);assert.equal(report.counts.planned,1);
+const map=C.index(catalog.courses);assert.equal(C.state(report,map.get('courses/python.md')),'learning');assert.equal(C.state(report,map.get('courses/math.md')),'done');assert.equal(C.state(report,undefined),null);
+for(const bad of ['broken','',JSON.stringify({version:2,entries:{}}),JSON.stringify({version:1,entries:[]}),JSON.stringify({version:1,entries:{python:'oops'}}),'x'.repeat(128*1024+1)]){value=bad;report=C.read(storage,catalog.courses);assert.equal(report.available,false);assert.equal(report.counts,null);assert.equal(value,bad);assert.equal(C.state(report,map.get('courses/python.md')),null);}
+assert.equal(C.read({getItem(){throw Error('denied');}},catalog.courses).available,false);assert.equal(writes,0);
+console.log('Chip learning passed: existing course-state mapping, exact counts, unavailable/corrupt storage, unknown-course handling and zero writes.');

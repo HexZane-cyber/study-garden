@@ -10,7 +10,7 @@ from urllib.parse import urljoin, urlparse
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 FEATURE_SCRIPTS = {
-    'graph/index.html': ['assets/graph-interaction.js', 'assets/chip-model.js', 'assets/chip.js'],
+    'graph/index.html': ['assets/graph-interaction.js', 'assets/learning-model.js', 'assets/chip-learning.js', 'assets/chip-model.js', 'assets/chip.js'],
     'contribute/index.html': ['assets/contribution-model.js', 'assets/community.js'],
     'private/index.html': ['assets/vendor/fflate.min.js', 'assets/vault-core.js', 'assets/vault-formats.js', 'assets/vault.js'],
     'review/index.html': ['assets/review-model.js', 'assets/review.js'],
@@ -55,7 +55,7 @@ class PageAssetsTest(unittest.TestCase):
                 self.assertIn('assets/site-tools.js', scripts)
                 self.assertIn('assets/appearance.js', scripts)
                 self.assertNotIn('data-md-component="source"', (SITE / path).read_text(encoding='utf-8'))
-                self.assertFalse(ALL_FEATURE_SCRIPTS.intersection(scripts))
+                self.assertFalse((ALL_FEATURE_SCRIPTS - {'assets/learning-model.js'}).intersection(scripts))
 
     def test_feature_dependencies_are_ordered_deferred_and_exclusive(self):
         for path, expected in FEATURE_SCRIPTS.items():
@@ -74,8 +74,16 @@ class PageAssetsTest(unittest.TestCase):
 
     def test_chip_does_not_download_retired_graph_runtimes(self):
         scripts = [name for name, _ in self.scripts('graph/index.html')]
-        for retired in ['assets/vendor/graph3d.bundle.js', 'assets/vendor/matter.min.js', 'assets/graph.js', 'assets/gravity-controls.js', 'assets/graph-transfer.js']:
+        for retired in ['assets/vendor/graph3d.bundle.js', 'assets/vendor/matter.min.js', 'assets/graph.js', 'assets/gravity-controls.js', 'assets/graph-transfer.js', 'assets/learning.js']:
             self.assertNotIn(retired, scripts)
+
+    def test_chip_embeds_only_public_course_metadata(self):
+        html = (SITE / 'graph/index.html').read_text(encoding='utf-8')
+        data = json.loads(re.search(r'<script type="application/json" id="chip-course-data">(.*?)</script>', html, re.S).group(1))
+        catalog = json.loads((ROOT / 'docs/assets/course-catalog.json').read_text(encoding='utf-8'))
+        self.assertEqual(data, {'courses': [{key: c[key] for key in ('id', 'title', 'path', 'url', 'prerequisites')} for c in catalog['courses']]})
+        scripts = [name for name, _ in self.scripts('graph/index.html')]
+        self.assertEqual(scripts.count('assets/learning-model.js'), 1)
 
     def test_chip_selection_fragments_are_not_replaced_by_theme_tracking(self):
         def config(path):
