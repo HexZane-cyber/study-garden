@@ -79,32 +79,42 @@ export function createScene(canvas,data,onSelect,onError,actions={}){
     for(let i=0;i<base.length;i+=3){const r=radii[i/3]/norm;pos.setXYZ(i/3,base[i]*r,base[i+1]*r,base[i+2]*r);}
     pos.needsUpdate=true;geometry.computeVertexNormals();geometry.computeBoundingSphere();
   }
-  function fusion(now){
+  function fusion(now,dt=0){
     if(!state.liquid||state.contactMode!=='merge'){for(const item of fused.values())item.effect.visible=false;contacts=new Set();return;}
     const available=shapes.filter(s=>shown(s.n));
     const grouped=Visuals.contactGroups(available.map(s=>{const q=s.mesh.quaternion;return {id:s.n.id,...s.mesh.position,sx:s.mesh.scale.x,sy:s.mesh.scale.y,sz:s.mesh.scale.z,inverse:[-q.x,-q.y,-q.z,q.w],seed:s.n.seed,phase:s.phase,norm:s.norm};}),contacts);
     contacts=grouped.contacts;
     const groups=grouped.groups.map(indices=>indices.map(i=>available[i]));
-    const live=new Set();
+    const groupId=group=>group.map(s=>s.n.id).sort().join('|');
+    // Oldest surfaces go first so several contacts share the rebuild budget fairly.
+    groups.sort((a,b)=>(fused.get(groupId(a))?.updated??-Infinity)-(fused.get(groupId(b))?.updated??-Infinity));
+    const live=new Set();let rebuilt=0;
     for(const group of groups){
       if(group.length<2)continue;
-      const id=group.map(s=>s.n.id).sort().join('|');live.add(id);
+      const id=groupId(group);live.add(id);
       let item=fused.get(id);
-      if(!item){const res=group.length<=3?32:group.length<=8?36:40;const effect=new MarchingCubes(res,fusionMaterial,false,true,16000);effect.isolation=0;effect.frustumCulled=false;scene.add(effect);item={effect,res,signature:'',updated:-Infinity,born:model.time};fused.set(id,item);}
-
-      const blend=Math.round((1-Math.exp(-5*Math.max(0,model.time-item.born)))*1000)/1000;
-      const signature=group.map(s=>[s.mesh.position.x,s.mesh.position.y,s.mesh.position.z,s.mesh.quaternion.x,s.mesh.quaternion.y,s.mesh.quaternion.z,s.mesh.quaternion.w,s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z,s.phase].map(v=>v.toFixed(3)).join(',')).join(';')+JSON.stringify(state.nodeColors)+blend;
-      const dragging=group.some(s=>s.n.id===gesture?.id);
-      if(signature===item.signature||(item.signature&&!dragging&&now-item.updated<1000/30)){item.effect.visible=true;for(const shape of group)shape.mesh.visible=false;continue;}
+      if(!item){if(rebuilt)continue;const res=group.length<=3?28:32;const effect=new MarchingCubes(res,fusionMaterial,false,true,16000);effect.isolation=0;effect.frustumCulled=false;scene.add(effect);item={effect,res,signature:'',updated:-Infinity,neck:.004};fused.set(id,item);}
+      const drops=group.map(s=>{const q=s.mesh.quaternion,color=s.glass.color;return {x:s.n.x,y:s.n.y,z:s.n.z,sx:s.mesh.scale.x,sy:s.mesh.scale.y,sz:s.mesh.scale.z,inverse:[-q.x,-q.y,-q.z,q.w],seed:s.n.seed,phase:s.phase,norm:s.norm,color:[color.r,color.g,color.b]};});
+      item.neck=Visuals.relaxNeck(item.neck,Visuals.neckTarget(drops),dt);
+      const signature=group.map(s=>[s.mesh.position.x,s.mesh.position.y,s.mesh.position.z,s.mesh.quaternion.x,s.mesh.quaternion.y,s.mesh.quaternion.z,s.mesh.quaternion.w,s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z,s.phase].map(v=>v.toFixed(3)).join(',')).join(';')+JSON.stringify(state.nodeColors)+item.neck.toFixed(3);
+      const centroid=new THREE.Vector3();for(const s of group)centroid.add(s.mesh.position);centroid.divideScalar(group.length);
+      if(item.signature&&(signature===item.signature||!Visuals.canRebuildSurface(item.updated,now,rebuilt))){
+        // Cached geometry follows translation every frame, even between surface rebuilds.
+        const shift=centroid.clone().sub(item.centroid);
+        item.effect.visible=true;item.effect.position.copy(item.origin).add(shift);for(const shape of group)shape.mesh.visible=false;
+        continue;
+      }
+      if(!Visuals.canRebuildSurface(item.updated,now,rebuilt))continue;
+      rebuilt++;
       item.signature=signature;item.updated=now;
       const box=new THREE.Box3();
       for(const s of group){const reach=Math.max(s.mesh.scale.x,s.mesh.scale.y,s.mesh.scale.z)*1.7+.2;box.expandByPoint(s.mesh.position.clone().addScalar(reach));box.expandByPoint(s.mesh.position.clone().addScalar(-reach));}
       let center=box.getCenter(new THREE.Vector3());const extent=box.getSize(new THREE.Vector3());let half=Math.max(extent.x,extent.y,extent.z)/2;
       if(item.volume&&box.min.x>item.volume.center.x-item.volume.half&&box.max.x<item.volume.center.x+item.volume.half&&box.min.y>item.volume.center.y-item.volume.half&&box.max.y<item.volume.center.y+item.volume.half&&box.min.z>item.volume.center.z-item.volume.half&&box.max.z<item.volume.center.z+item.volume.half){center=item.volume.center;half=item.volume.half;}
       else {half*=1.12;item.volume={center:center.clone(),half};}
-      const drops=group.map(s=>{const q=s.mesh.quaternion,color=s.glass.color;return {x:s.n.x,y:s.n.y,z:s.n.z,sx:s.mesh.scale.x,sy:s.mesh.scale.y,sz:s.mesh.scale.z,inverse:[-q.x,-q.y,-q.z,q.w],seed:s.n.seed,phase:s.phase,norm:s.norm,color:[color.r,color.g,color.b]};});
-      item.effect.reset();Visuals.fillUnion(item.effect.field,item.effect.palette,item.res,center,half,drops,.004+.076*blend);
+      item.effect.reset();Visuals.fillUnion(item.effect.field,item.effect.palette,item.res,center,half,drops,item.neck);
       item.effect.position.copy(center);item.effect.scale.setScalar(half);item.effect.update();
+      item.origin=center.clone();item.centroid=centroid;
       item.effect.visible=item.effect.count>0;
       if(item.effect.visible)for(const shape of group)shape.mesh.visible=false;
     }
@@ -149,11 +159,13 @@ export function createScene(canvas,data,onSelect,onError,actions={}){
     if(updateShape){lastShape=now;lastShapeTime=model.time;}
     fusionMaterial.transmission=glass.transmission;fusionMaterial.attenuationDistance=glass.attenuationDistance;
     model.edges.forEach((e,i)=>{const visible=shown(e.a)&&shown(e.b),a=visible?e.a:{x:0,y:0,z:0},b=visible?e.b:a;
-      for(let j=0;j<segments;j++){const p=Visuals.curvePoint(a,b,j/segments,i,model.time,state.bend),q=Visuals.curvePoint(a,b,(j+1)/segments,i,model.time,state.bend);positionArray.set([p.x,p.y,p.z,q.x,q.y,q.z],(i*segments+j)*6);}
-      const t=(model.time*.13+i*.618)%1,p=Visuals.curvePoint(a,b,t,i,model.time,state.bend);
+      const tension=Math.max(1,Math.hypot(b.x-a.x,b.y-a.y,b.z-a.z)/3.2),curve=Visuals.prepareCurve(a,b,i,model.time,state.bend/tension,e.curve||(e.curve=new Float64Array(9))),p=e.point||(e.point={}),q=e.next||(e.next={});
+      Visuals.sampleCurve(curve,0,p);
+      for(let j=0;j<segments;j++){Visuals.sampleCurve(curve,(j+1)/segments,q);const offset=(i*segments+j)*6;positionArray[offset]=p.x;positionArray[offset+1]=p.y;positionArray[offset+2]=p.z;positionArray[offset+3]=q.x;positionArray[offset+4]=q.y;positionArray[offset+5]=q.z;p.x=q.x;p.y=q.y;p.z=q.z;}
+      const t=(model.time*.13+i*.618)%1;Visuals.sampleCurve(curve,t,p);
       beads[i].visible=visible&&state.liquid;beads[i].position.set(p.x,p.y,p.z);
     });lineGeometry.attributes.position.needsUpdate=true;
-    fusion(now);
+    fusion(now,document.hidden?0:dt);
     renderer.render(scene,camera);if(now-lastLabels>1000/30){labels();lastLabels=now;}frameId=requestAnimationFrame(render);
   }
   function ray(event){const rect=canvas.getBoundingClientRect();pointer.set((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1);raycaster.setFromCamera(pointer,camera);}

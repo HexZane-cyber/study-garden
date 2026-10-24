@@ -84,7 +84,7 @@
     ctx.lineCap='round';
     for(let i=0;i<edges.length;i++){
       const e=edges[i];if(!visible(e.a)||!visible(e.b))continue;const dx=e.b.x-e.a.x,dy=e.b.y-e.a.y,d=Math.max(1,Math.hypot(dx,dy));
-      const wave=Math.min(d*.35,90)*bend*(i%2?1:-1)*(.8+.2*Math.sin(phase*.4+i*.7)*flow);
+      const wave=Math.min(d*.35,90)*bend/Math.max(1,d/175)*(i%2?1:-1)*(.8+.2*Math.sin(phase*.4+i*.7)*flow);
       const mx=(e.a.x+e.b.x)/2-dy/d*wave,my=(e.a.y+e.b.y)/2+dx/d*wave;
       const active=!selected||e.a===selected||e.b===selected;
       const gradient=ctx.createLinearGradient(e.a.x,e.a.y,e.b.x,e.b.y);

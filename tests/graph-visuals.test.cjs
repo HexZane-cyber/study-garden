@@ -53,3 +53,35 @@ console.log('Graph visuals passed: curved paths and endpoints, smooth surface un
 
 for(const squeeze of [0,.01,.08,.2,.28])for(const speed of [0,1,6]){const scale=V.contactScale(.44,speed,squeeze,1);assert(Math.abs(scale.x*scale.y*scale.z-.44**3)<1e-10,'contact squash must preserve volume');if(squeeze>.05){assert(scale.y<.44);assert(scale.x>.44);}}
 assert(Math.abs(V.supportRadius({sx:.3,sy:.7,sz:.4,round:true},0,1,0)-.7)<1e-10);assert(Math.abs(V.supportRadius({sx:.3,sy:.7,sz:.4,round:true},1,0,0)-.3)<1e-10);
+
+// Prepared curves retain exact endpoints and shape while reusing output storage.
+for(let i=0;i<80;i++){
+ const t=i/79,curve=V.prepareCurve(a,b,3,.4,.28),out={};
+ assert.equal(V.sampleCurve(curve,t,out),out);assert.deepEqual(out,V.curvePoint(a,b,t,3,.4,.28));
+ const shortened=V.prepareCurve(a,b,3,.4,.14);
+ if(t>.1&&t<.9){const p=V.sampleCurve(shortened,t),line=V.curvePoint(a,b,t,3,.4,0);assert(Math.hypot(p.x-line.x,p.y-line.y,p.z-line.z)<Math.hypot(out.x-line.x,out.y-line.y,out.z-line.z));}
+}
+const round=x=>({x,y:0,z:0,sx:.4,sy:.4,sz:.4,round:true});
+const thin=V.neckTarget([round(0),round(.8)]),thick=V.neckTarget([round(0),round(.7)]);
+assert(thin<thick&&thin<.01&&thick<=.062);assert.equal(V.neckTarget([round(0),round(1)]),.004);
+let neck=.004;for(let i=0;i<30;i++){const next=V.relaxNeck(neck,thick,1/60);assert(next>=neck&&next<=thick);neck=next;}
+const atRelease=neck;for(let i=0;i<12;i++)neck=V.relaxNeck(neck,.004,1/60);assert(neck<atRelease*.12,'pulling apart must quickly thin the neck');
+assert(!V.canRebuildSurface(0,16,0));assert(V.canRebuildSurface(0,34,0));assert(!V.canRebuildSurface(0,34,1));
+
+// Execute the renderer's real scheduling path with two simultaneous contacts.
+{
+ class Vec{constructor(x=0,y=0,z=0){Object.assign(this,{x,y,z});}clone(){return new Vec(this.x,this.y,this.z);}copy(v){Object.assign(this,{x:v.x,y:v.y,z:v.z});return this;}add(v){this.x+=v.x;this.y+=v.y;this.z+=v.z;return this;}sub(v){this.x-=v.x;this.y-=v.y;this.z-=v.z;return this;}addScalar(v){this.x+=v;this.y+=v;this.z+=v;return this;}divideScalar(v){this.x/=v;this.y/=v;this.z/=v;return this;}setScalar(v){this.x=this.y=this.z=v;return this;}}
+ class Box{constructor(){this.min=new Vec(Infinity,Infinity,Infinity);this.max=new Vec(-Infinity,-Infinity,-Infinity);}expandByPoint(v){for(const k of ['x','y','z']){this.min[k]=Math.min(this.min[k],v[k]);this.max[k]=Math.max(this.max[k],v[k]);}}getCenter(v){return v.copy(this.min).add(this.max).divideScalar(2);}getSize(v){return v.copy(this.max).sub(this.min);}}
+ let rebuilt=0;class Cubes{constructor(res){this.field=[];this.palette=[];this.position=new Vec();this.scale=new Vec();this.geometry={dispose(){}};this.count=3;}reset(){}update(){rebuilt++;}}
+ const shapes=[0,.7,4,4.7].map((x,i)=>({n:{id:String(i),x,y:0,z:0,seed:0},phase:0,norm:1,glass:{color:{r:1,g:0,b:0}},mesh:{visible:true,position:new Vec(x),scale:new Vec(.4,.4,.4),quaternion:{x:0,y:0,z:0,w:1}}}));
+ const source=require('node:fs').readFileSync(require('node:path').join(__dirname,'../frontend/graph3d.js'),'utf8');
+ const body=source.split('function fusion(now,dt=0){')[1].split('  function labels()')[0].trim().replace(/}$/, '');
+ const run=new Function('THREE','Visuals','MarchingCubes','shapes',`const fused=new Map(),state={liquid:true,contactMode:'merge',nodeColors:{}},scene={add(){},remove(){}},fusionMaterial={},shown=()=>true;let contacts=new Set();return {fused,frame(now,dt){for(const s of shapes)s.mesh.visible=true;${body}}};`)({Vector3:Vec,Box3:Box},{...V,fillUnion(){}},Cubes,shapes);
+ run.frame(0,0);assert.equal(rebuilt,1);run.frame(8,1/120);assert.equal(rebuilt,2,'second contact is serviced on the next frame');
+ const first=run.fused.values().next().value,origin=first.effect.position.x;
+ for(const s of shapes){s.n.x+=.03;s.mesh.position.x+=.03;}
+ run.frame(16,1/120);assert.equal(rebuilt,2,'dragging cannot bypass the 30 Hz surface cap');assert(Math.abs(first.effect.position.x-origin-.03)<1e-9,'cached surface must follow translation between rebuilds');
+ run.frame(34,1/60);assert.equal(rebuilt,3,'one frame cannot rebuild both contacts');run.frame(42,1/120);assert.equal(rebuilt,4);
+ shapes[1].n.x=shapes[1].mesh.position.x=2;run.frame(50,1/120);assert(shapes[0].mesh.visible&&shapes[1].mesh.visible,'separation restores individual surfaces without a stale bridge');
+}
+console.log('Connection refinement passed: reusable curves, pressure-dependent necks, separation relaxation, rebuild frequency, fair scheduling and cached translation.');

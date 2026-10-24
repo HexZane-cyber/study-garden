@@ -1,17 +1,22 @@
 'use strict';
-function curvePoint(a,b,t,seed=0,time=0,bend=.18){
+function prepareCurve(a,b,seed=0,time=0,bend=.18,out=new Float64Array(9)){
   const dx=b.x-a.x,dy=b.y-a.y,dz=(b.z||0)-(a.z||0),length=Math.hypot(dx,dy,dz);
-  if(length<1e-9)return {x:a.x,y:a.y,z:a.z||0};
   let nx=-dy,ny=dx,nz=0;if(Math.hypot(nx,ny)<length*.01){nx=-dz;ny=0;nz=dx;}
   const n=Math.hypot(nx,ny,nz)||1;nx/=n;ny/=n;nz/=n;
-  const ux=dx/length,uy=dy/length,uz=dz/length;
+  const divisor=length||1,ux=dx/divisor,uy=dy/divisor,uz=dz/divisor;
   const bx=uy*nz-uz*ny,by=uz*nx-ux*nz,bz=ux*ny-uy*nx;
   const phase=seed*.71+Math.sin(time*.35+seed)*.18,amplitude=Math.min(length*.65,length*bend);
   const cx=(a.x+b.x)/2+amplitude*(nx*Math.cos(phase)+bx*Math.sin(phase));
   const cy=(a.y+b.y)/2+amplitude*(ny*Math.cos(phase)+by*Math.sin(phase));
   const cz=((a.z||0)+(b.z||0))/2+amplitude*(nz*Math.cos(phase)+bz*Math.sin(phase));
-  const u=1-t;return {x:u*u*a.x+2*u*t*cx+t*t*b.x,y:u*u*a.y+2*u*t*cy+t*t*b.y,z:u*u*(a.z||0)+2*u*t*cz+t*t*(b.z||0)};
+  out[0]=a.x;out[1]=a.y;out[2]=a.z||0;out[3]=cx;out[4]=cy;out[5]=cz;out[6]=b.x;out[7]=b.y;out[8]=b.z||0;return out;
 }
+function sampleCurve(curve,t,out={}){const u=1-t,p=u*u,q=2*u*t,r=t*t;out.x=p*curve[0]+q*curve[3]+r*curve[6];out.y=p*curve[1]+q*curve[4]+r*curve[7];out.z=p*curve[2]+q*curve[5]+r*curve[8];return out;}
+function curvePoint(a,b,t,seed=0,time=0,bend=.18){return sampleCurve(prepareCurve(a,b,seed,time,bend),t);}
+// A capillary neck is narrow at first contact and relaxes when surfaces separate.
+function neckTarget(drops){let target=.004;for(let i=0;i<drops.length;i++)for(let j=i+1;j<drops.length;j++){const a=drops[i],b=drops[j],dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,d=Math.hypot(dx,dy,dz)||1e-9,nx=dx/d,ny=dy/d,nz=dz/d,gap=d-supportRadius(a,nx,ny,nz)-supportRadius(b,-nx,-ny,-nz),t=Math.max(0,Math.min(1,(.012-gap)/.12));target=Math.max(target,.004+.058*t*t*(3-2*t));}return target;}
+function relaxNeck(current,target,dt){return current+(target-current)*(1-Math.exp(-(target>current?7:16)*Math.max(0,Math.min(.05,dt))));}
+function canRebuildSurface(updated,now,used){return used<1&&now-updated>=1000/30;}
 function radialFast(x,y,z,trig){
   const [cs,ss,cp,sp]=trig,sinPhi=Math.sqrt(Math.max(0,1-y*y));
   const triple=((x*x*x-3*x*z*z)*cp-(3*x*x*z-z*z*z)*sp)/Math.max(1e-7,sinPhi);
@@ -49,14 +54,17 @@ function contactScale(radius,speed,squeeze,seed=0){const blend=Math.min(1,Math.m
 // Surface distance, rather than an inflated bounding sphere, defines contact.
 function contactGroups(drops,previous=new Set()){
  const parents=drops.map((_,i)=>i),contacts=new Set();
+ const bounds=drops.map(drop=>drop.sx?Math.max(drop.sx,drop.sy,drop.sz)*1.65:drop.radius);
  const root=i=>{while(parents[i]!==i){parents[i]=parents[parents[i]];i=parents[i];}return i;};
  for(let i=0;i<drops.length;i++)for(let j=i+1;j<drops.length;j++){
   const a=drops[i],b=drops[j],key=JSON.stringify([a.id,b.id].sort());
-  const dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,d=Math.hypot(dx,dy,dz),nx=d?dx/d:1,ny=d?dy/d:0,nz=d?dz/d:0;
+  const dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z;
+  if(dx*dx+dy*dy+dz*dz>(bounds[i]+bounds[j]+.045)**2)continue;
+  const d=Math.hypot(dx,dy,dz),nx=d?dx/d:1,ny=d?dy/d:0,nz=d?dz/d:0;
   const threshold=supportRadius(a,nx,ny,nz)+supportRadius(b,-nx,-ny,-nz)+(previous.has(key)?.045:.008);
   if(d<threshold){contacts.add(key);parents[root(j)]=root(i);}
  }
  const groups=new Map();drops.forEach((d,i)=>{const key=root(i);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(i);});
  return {groups:[...groups.values()],contacts};
 }
-module.exports={curvePoint,radial,distance,fillUnion,contactGroups,supportRadius,contactScale};
+module.exports={curvePoint,prepareCurve,sampleCurve,neckTarget,relaxNeck,canRebuildSurface,radial,distance,fillUnion,contactGroups,supportRadius,contactScale};
