@@ -36,6 +36,7 @@ jobs:
           node tests/core.test.cjs
           node tests/chip-learning.test.cjs
           node tests/chip.test.cjs
+          node tests/chip-stack.test.cjs
           node tests/graph-circuit.test.cjs
           node tests/graph-transfer.test.cjs
           node tests/graph-interaction.test.cjs

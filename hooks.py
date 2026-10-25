@@ -4,8 +4,10 @@ from urllib.parse import unquote
 import json
 import posixpath
 import re
+from html.parser import HTMLParser
 
 ROOT = Path(__file__).resolve().parent
+ARTICLE_SECTIONS = {}
 
 def title(path):
     match = re.search(r'^#\s+(.+)$', path.read_text(encoding='utf-8'), re.MULTILINE)
@@ -44,6 +46,7 @@ def on_config(config):
     return config
 
 def on_pre_build(config):
+    ARTICLE_SECTIONS.clear()
     data = graph_data(config['docs_dir'])
     path = Path(config['docs_dir']) / 'assets/graph-data.json'
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -114,3 +117,52 @@ def on_page_markdown(markdown, page, config, files):
         lines.extend(['', '</details>'])
         return markdown.replace('<!-- course-catalog-fallback -->', '\n'.join(lines))
     return markdown
+
+
+class ArticleHeadings(HTMLParser):
+    """Read final Markdown-generated anchors, including duplicate and CJK headings."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.sections = []
+        self.current = None
+        self.skip_permalink = False
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag in ('h2', 'h3', 'h4', 'h5', 'h6') and attrs.get('id'):
+            self.current = {'id': attrs['id'], 'level': int(tag[1]), 'text': []}
+        if self.current and tag == 'a' and 'headerlink' in attrs.get('class', '').split():
+            self.skip_permalink = True
+
+    def handle_data(self, value):
+        if self.current is not None and not self.skip_permalink:
+            self.current['text'].append(value)
+
+    def handle_endtag(self, tag):
+        if tag == 'a':
+            self.skip_permalink = False
+        if self.current and tag == 'h' + str(self.current['level']):
+            text = ' '.join(''.join(self.current['text']).split())
+            if text:
+                self.sections.append({'id': self.current['id'], 'title': text, 'level': self.current['level']})
+            self.current = None
+            self.skip_permalink = False
+
+
+def on_page_content(html, page, config, files):
+    headings = ArticleHeadings()
+    headings.feed(html)
+    ARTICLE_SECTIONS[page.file.src_uri] = headings.sections
+    return html
+
+
+def on_post_build(config):
+    # Assets were copied before page rendering. Update both copies after every
+    # article has its final anchors; never guess anchors from Markdown text.
+    source = Path(config['docs_dir']) / 'assets/graph-data.json'
+    data = json.loads(source.read_text(encoding='utf-8'))
+    for node in data['nodes']:
+        node['sections'] = ARTICLE_SECTIONS.get(node['id'], [])
+    content = json.dumps(data, ensure_ascii=False, indent=2)
+    source.write_text(content, encoding='utf-8')
+    (Path(config['site_dir']) / 'assets/graph-data.json').write_text(content, encoding='utf-8')

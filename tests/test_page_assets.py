@@ -10,8 +10,8 @@ from urllib.parse import urljoin, urlparse
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 FEATURE_SCRIPTS = {
-    'graph/index.html': ['assets/graph-interaction.js', 'assets/learning-model.js', 'assets/chip-learning.js', 'assets/chip-model.js', 'assets/chip.js'],
-    'chip/index.html': ['assets/graph-interaction.js', 'assets/learning-model.js', 'assets/chip-learning.js', 'assets/chip-model.js', 'assets/chip.js'],
+    'graph/index.html': ['assets/graph-interaction.js', 'assets/learning-model.js', 'assets/chip-learning.js', 'assets/chip-model.js', 'assets/vendor/chip3d.bundle.js', 'assets/chip.js'],
+    'chip/index.html': ['assets/graph-interaction.js', 'assets/learning-model.js', 'assets/chip-learning.js', 'assets/chip-model.js', 'assets/vendor/chip3d.bundle.js', 'assets/chip.js'],
     'contribute/index.html': ['assets/contribution-model.js', 'assets/community.js'],
     'private/index.html': ['assets/vendor/fflate.min.js', 'assets/vault-core.js', 'assets/vault-formats.js', 'assets/vault.js'],
     'review/index.html': ['assets/review-model.js', 'assets/review.js'],

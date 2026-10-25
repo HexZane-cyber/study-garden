@@ -4,187 +4,939 @@
       "id": "backup.md",
       "title": "数据与备份",
       "group": "guide",
-      "url": "backup/"
+      "url": "backup/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "怎样换设备",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "私密空间单独备份",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "记录读取失败时",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "catalog.md",
       "title": "课程目录",
       "group": "guide",
-      "url": "catalog/"
+      "url": "catalog/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "如何使用",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "chip.md",
       "title": "知识电路（原阵列入口）",
       "group": "guide",
-      "url": "chip/"
+      "url": "chip/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "电路板怎样长大",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "阅读与操作",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "contribute.md",
       "title": "共建课程",
       "group": "guide",
-      "url": "contribute/"
+      "url": "contribute/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "推荐一门课程",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "课程提案池",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "审核与权限",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "courses/algorithms.md",
       "title": "MIT 6.006 · 数据结构与算法",
       "group": "course",
-      "url": "courses/algorithms/"
+      "url": "courses/algorithms/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与适合人群",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "怎么开始",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "相关学习",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "我的学习记录",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "courses/community/index.md",
       "title": "社区收录课程",
       "group": "course",
-      "url": "courses/community/"
+      "url": "courses/community/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "课程如何出现在这里",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "courses/cs-intro.md",
       "title": "CS50x · 计算机科学导论",
       "group": "course",
-      "url": "courses/cs-intro/"
+      "url": "courses/cs-intro/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与适合人群",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "怎么开始",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "相关学习",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "我的学习记录",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "courses/databases.md",
       "title": "CMU 15-445 · 数据库系统",
       "group": "course",
-      "url": "courses/databases/"
+      "url": "courses/databases/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与适合人群",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "怎么开始",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "相关学习",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "我的学习记录",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "courses/math.md",
       "title": "MIT 18.06 · 线性代数",
       "group": "course",
-      "url": "courses/math/"
+      "url": "courses/math/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与适合人群",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "怎么开始",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "相关学习",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "我的学习记录",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "courses/ml.md",
       "title": "Google MLCC · 机器学习入门",
       "group": "course",
-      "url": "courses/ml/"
+      "url": "courses/ml/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与适合人群",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "怎么开始",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "相关学习",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "我的学习记录",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "courses/networks.md",
       "title": "Stanford CS144 · 计算机网络",
       "group": "course",
-      "url": "courses/networks/"
+      "url": "courses/networks/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与适合人群",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "怎么开始",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "相关学习",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "我的学习记录",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "courses/os.md",
       "title": "MIT 6.1810 · 操作系统",
       "group": "course",
-      "url": "courses/os/"
+      "url": "courses/os/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与适合人群",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "怎么开始",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "相关学习",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "我的学习记录",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "courses/python.md",
       "title": "CS50P · Python 与项目实践",
       "group": "course",
-      "url": "courses/python/"
+      "url": "courses/python/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与适合人群",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "怎么开始",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "相关学习",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "我的学习记录",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "courses/systems.md",
       "title": "CMU 15-213 · 计算机系统",
       "group": "course",
-      "url": "courses/systems/"
+      "url": "courses/systems/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与适合人群",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "怎么开始",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "相关学习",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "我的学习记录",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "dashboard.md",
       "title": "学习工作台",
       "group": "guide",
-      "url": "dashboard/"
+      "url": "dashboard/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "数据与使用",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "discussion.md",
       "title": "交流讨论",
       "group": "guide",
-      "url": "discussion/"
+      "url": "discussion/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "适合讨论的问题",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "提问时提供上下文",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "页面评论",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "graph.md",
       "title": "知识电路",
       "group": "guide",
-      "url": "graph/"
+      "url": "graph/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "电路板怎样长大",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "阅读与操作",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "guide.md",
       "title": "如何使用这本手册",
       "group": "guide",
-      "url": "guide/"
+      "url": "guide/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "按目录阅读",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "搜索内容",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建立知识连接",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "编辑与上传",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "草稿工作区",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "私密课本与笔记",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "一起补充课程",
+          "level": 2
+        },
+        {
+          "id": "_9",
+          "title": "快捷操作与阅读设置",
+          "level": 2
+        },
+        {
+          "id": "_10",
+          "title": "选课与记录进度",
+          "level": 2
+        },
+        {
+          "id": "_11",
+          "title": "把计划放进工作台",
+          "level": 2
+        },
+        {
+          "id": "_12",
+          "title": "从阅读到复习",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "index.md",
       "title": "之芯",
       "group": "guide",
-      "url": ""
+      "url": "",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "为什么建立这个网站",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "这里有什么",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "如何开始",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "写给未来的自己",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "参与交流",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "library.md",
       "title": "我的书签",
       "group": "guide",
-      "url": "library/"
+      "url": "library/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "我的文件",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "notes/experiment.md",
       "title": "一次实验应该记录什么",
       "group": "note",
-      "url": "notes/experiment/"
+      "url": "notes/experiment/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "实验目标",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "输入和环境",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "观察与结论",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "notes/index.md",
       "title": "我的笔记",
       "group": "note",
-      "url": "notes/"
+      "url": "notes/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "开始阅读",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "写一篇新笔记",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "notes/learning-loop.md",
       "title": "建立自己的学习循环",
       "group": "note",
-      "url": "notes/learning-loop/"
+      "url": "notes/learning-loop/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "从问题开始",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "理解与验证",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "留下可继续的笔记",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "notes/vectors.md",
       "title": "向量与矩阵：从变换理解",
       "group": "note",
-      "url": "notes/vectors/"
+      "url": "notes/vectors/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "向量",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "矩阵",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "为什么这样理解",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "private.md",
       "title": "个人私密空间",
       "group": "guide",
-      "url": "private/"
+      "url": "private/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "整理与阅读",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "支持的文件格式",
+          "level": 2
+        },
+        {
+          "id": "obsidian",
+          "title": "导入 Obsidian 笔记",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "资料如何保护",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "publish.md",
       "title": "上传笔记与发布网站",
       "group": "guide",
-      "url": "publish/"
+      "url": "publish/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "网页上传",
+          "level": 2
+        },
+        {
+          "id": "pdf",
+          "title": "图片和 PDF",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "编辑现有文章",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建立关系图",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "讨论设置",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "review.md",
       "title": "复习卡",
       "group": "guide",
-      "url": "review/"
+      "url": "review/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "怎样使用",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "数据保存在这里",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "roadmap.md",
       "title": "一个可以调整的学习路线",
       "group": "guide",
-      "url": "roadmap/"
+      "url": "roadmap/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "选择方向与下一步",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "第一阶段：建立基础",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "第二阶段：能够实现",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "第三阶段：理解系统",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "第四阶段：探索方向",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "学习的循环",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "继续扩展系统方向",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "tools/git.md",
       "title": "Git 与知识管理",
       "group": "tool",
-      "url": "tools/git/"
+      "url": "tools/git/",
+      "sections": [
+        {
+          "id": "git_1",
+          "title": "为什么用 Git 保存笔记",
+          "level": 2
+        },
+        {
+          "id": "_1",
+          "title": "一次最小的更新",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "笔记和代码如何配合",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "tools/markdown.md",
       "title": "Markdown 写作",
       "group": "tool",
-      "url": "tools/markdown/"
+      "url": "tools/markdown/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "基础格式",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "关联其他笔记",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "表格与提示",
+          "level": 2
+        }
+      ]
     },
     {
       "id": "tools/missing-semester.md",
       "title": "Missing Semester · 开发工具",
       "group": "tool",
-      "url": "tools/missing-semester/"
+      "url": "tools/missing-semester/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与适合人群",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "怎么开始",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "相关学习",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "我的学习记录",
+          "level": 2
+        }
+      ]
     }
   ],
   "edges": [
