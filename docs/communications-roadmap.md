@@ -105,3 +105,5 @@
 ## 更多原始课程链接 { #course-links }
 
 需要中文主课时，查看[北邮信号与通信、浙大 DSP](course-links.md#chinese-communications)。希望补变换原理或无线多天线、多载波知识时，查看[Stanford EE261 与 NPTEL MIMO / OFDM](course-links.md#systems-extensions)。链接页注明了先修、材料形式和本站选学时长估算。
+
+[信息论、建模与通信实验](course-links.md#communication-practice)还提供西电信息论、Stanford EE263 和 MathWorks 无线通信入门。对接收前端与天线感兴趣时，继续查看[射频与天线链接](course-links.md#rf-antennas)。

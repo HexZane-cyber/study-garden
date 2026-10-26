@@ -242,6 +242,61 @@
           "level": 3
         },
         {
+          "id": "digital-practice",
+          "title": "数字系统与 FPGA 实践",
+          "level": 2
+        },
+        {
+          "id": "zju-digital-systems",
+          "title": "浙大 · 玩转数字系统设计",
+          "level": 3
+        },
+        {
+          "id": "uestc-asic",
+          "title": "成电 · 数字逻辑与集成电路设计（ASIC 设计）",
+          "level": 3
+        },
+        {
+          "id": "cornell-ece4750",
+          "title": "Cornell ECE 4750 · 计算机体系结构",
+          "level": 3
+        },
+        {
+          "id": "rf-antennas",
+          "title": "射频与天线",
+          "level": 2
+        },
+        {
+          "id": "microwave-antennas",
+          "title": "微波技术与天线",
+          "level": 3
+        },
+        {
+          "id": "berkeley-ee142",
+          "title": "Berkeley EE142 · 通信集成电路",
+          "level": 3
+        },
+        {
+          "id": "communication-practice",
+          "title": "信息论、建模与通信实验",
+          "level": 2
+        },
+        {
+          "id": "xdu-information",
+          "title": "西电 · 信息论与编码理论",
+          "level": 3
+        },
+        {
+          "id": "stanford-ee263",
+          "title": "Stanford EE263 · 线性动态系统",
+          "level": 3
+        },
+        {
+          "id": "mathworks-wireless",
+          "title": "MathWorks · Wireless Communications Onramp",
+          "level": 3
+        },
+        {
           "id": "choose",
           "title": "按当前目标选择",
           "level": 2
@@ -2994,7 +3049,19 @@
     },
     {
       "source": "course-links.md",
+      "target": "courses/comm-coding.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "courses/comm-information.md"
+    },
+    {
+      "source": "course-links.md",
       "target": "courses/comm-intro.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "courses/comm-sdr.md"
     },
     {
       "source": "course-links.md",
@@ -3010,7 +3077,15 @@
     },
     {
       "source": "course-links.md",
+      "target": "courses/ee-digital.md"
+    },
+    {
+      "source": "course-links.md",
       "target": "courses/ee-dsp.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "courses/ee-em.md"
     },
     {
       "source": "course-links.md",
@@ -3019,6 +3094,14 @@
     {
       "source": "course-links.md",
       "target": "courses/ic-eda.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "courses/ic-fpga.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "courses/ic-rf.md"
     },
     {
       "source": "course-links.md",
