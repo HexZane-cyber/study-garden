@@ -92,6 +92,16 @@ nav:
       - MIT 6.301 晶体管与模拟电路设计进阶: courses/ic-analog.md
       - MIT 6.111 HDL 与数字系统实验: courses/ic-fpga.md
       - OpenROAD RTL 到 GDS 设计实践: courses/ic-eda.md
+  - 信息与通信工程:
+      - 学习路线与课程导航: communications-roadmap.md
+      - MIT 6.02 数字通信系统入门: courses/comm-intro.md
+      - MIT 6.450 数字通信原理进阶: courses/comm-principles.md
+      - MIT 6.262 离散随机过程: courses/comm-random.md
+      - MIT 6.441 信息论: courses/comm-information.md
+      - MIT 6.432 检测与估计: courses/comm-detection.md
+      - MIT 6.451 信道编码与数字通信: courses/comm-coding.md
+      - Tse / Viswanath 无线通信基础: courses/comm-wireless.md
+      - PySDR 通信仿真与 SDR 实践: courses/comm-sdr.md
   - 必学工具:
       - Missing Semester: tools/missing-semester.md
       - Git 与知识管理: tools/git.md

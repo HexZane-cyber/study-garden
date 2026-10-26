@@ -60,6 +60,69 @@
       ]
     },
     {
+      "id": "communications-roadmap.md",
+      "title": "信息与通信工程：从信号到系统",
+      "group": "guide",
+      "url": "communications-roadmap/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "公共基础与推荐顺序",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "新增课程与实践资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "分支一：无线通信与信息理论",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "分支二：通信信号处理与实践",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "网络与电磁方向的衔接",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "三个可复现的小项目",
+          "level": 2
+        },
+        {
+          "id": "1-bpsk",
+          "title": "1. BPSK 基带链路与误码曲线",
+          "level": 3
+        },
+        {
+          "id": "2-roc",
+          "title": "2. 已知信号检测与 ROC",
+          "level": 3
+        },
+        {
+          "id": "3",
+          "title": "3. 多径或衰落条件下的链路对照",
+          "level": 3
+        },
+        {
+          "id": "_8",
+          "title": "与清华公开教学信息的参照",
+          "level": 2
+        },
+        {
+          "id": "_9",
+          "title": "现在就开始",
+          "level": 2
+        }
+      ]
+    },
+    {
       "id": "contribute.md",
       "title": "共建课程",
       "group": "guide",
@@ -121,6 +184,390 @@
         {
           "id": "_7",
           "title": "我的学习记录",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/comm-coding.md",
+      "title": "MIT 6.451 · 信道编码与数字通信",
+      "group": "course",
+      "url": "courses/comm-coding/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/comm-detection.md",
+      "title": "MIT 6.432 · 检测与估计",
+      "group": "course",
+      "url": "courses/comm-detection/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/comm-information.md",
+      "title": "MIT 6.441 · 信息论",
+      "group": "course",
+      "url": "courses/comm-information/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/comm-intro.md",
+      "title": "MIT 6.02 · 数字通信系统入门",
+      "group": "course",
+      "url": "courses/comm-intro/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/comm-principles.md",
+      "title": "MIT 6.450 · 数字通信原理进阶",
+      "group": "course",
+      "url": "courses/comm-principles/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/comm-random.md",
+      "title": "MIT 6.262 · 离散随机过程",
+      "group": "course",
+      "url": "courses/comm-random/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/comm-sdr.md",
+      "title": "PySDR · 通信仿真与 SDR 实践",
+      "group": "course",
+      "url": "courses/comm-sdr/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/comm-wireless.md",
+      "title": "Tse / Viswanath · 无线通信基础",
+      "group": "course",
+      "url": "courses/comm-wireless/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
           "level": 2
         }
       ]
@@ -1273,6 +1720,11 @@
           "id": "_7",
           "title": "现在就开始",
           "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "与信息通信方向交叉学习",
+          "level": 2
         }
       ]
     },
@@ -1533,6 +1985,11 @@
           "id": "_9",
           "title": "集成电路与微电子",
           "level": 2
+        },
+        {
+          "id": "_10",
+          "title": "信息与通信工程",
+          "level": 2
         }
       ]
     },
@@ -1645,11 +2102,47 @@
     },
     {
       "source": "catalog.md",
+      "target": "communications-roadmap.md"
+    },
+    {
+      "source": "catalog.md",
       "target": "contribute.md"
     },
     {
       "source": "catalog.md",
       "target": "courses/algorithms.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/comm-coding.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/comm-detection.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/comm-information.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/comm-intro.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/comm-principles.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/comm-random.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/comm-sdr.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/comm-wireless.md"
     },
     {
       "source": "catalog.md",
@@ -1780,6 +2273,98 @@
       "target": "publish.md"
     },
     {
+      "source": "communications-roadmap.md",
+      "target": "courses/comm-coding.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/comm-detection.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/comm-information.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/comm-intro.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/comm-principles.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/comm-random.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/comm-sdr.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/comm-wireless.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/ee-calculus.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/ee-circuits.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/ee-dsp.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/ee-em.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/ee-probability.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/ee-signals.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/ic-fpga.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/math.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/networks.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/python.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "index.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "private.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "roadmap.md"
+    },
+    {
       "source": "contribute.md",
       "target": "courses/community/index.md"
     },
@@ -1825,6 +2410,182 @@
     },
     {
       "source": "courses/algorithms.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/comm-coding.md",
+      "target": "courses/comm-information.md"
+    },
+    {
+      "source": "courses/comm-coding.md",
+      "target": "courses/comm-principles.md"
+    },
+    {
+      "source": "courses/comm-coding.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/comm-coding.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/comm-coding.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/comm-detection.md",
+      "target": "courses/comm-random.md"
+    },
+    {
+      "source": "courses/comm-detection.md",
+      "target": "courses/ee-signals.md"
+    },
+    {
+      "source": "courses/comm-detection.md",
+      "target": "courses/math.md"
+    },
+    {
+      "source": "courses/comm-detection.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/comm-detection.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/comm-detection.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/comm-information.md",
+      "target": "courses/comm-principles.md"
+    },
+    {
+      "source": "courses/comm-information.md",
+      "target": "courses/comm-wireless.md"
+    },
+    {
+      "source": "courses/comm-information.md",
+      "target": "courses/ee-probability.md"
+    },
+    {
+      "source": "courses/comm-information.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/comm-information.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/comm-information.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/comm-intro.md",
+      "target": "courses/comm-principles.md"
+    },
+    {
+      "source": "courses/comm-intro.md",
+      "target": "courses/comm-sdr.md"
+    },
+    {
+      "source": "courses/comm-intro.md",
+      "target": "courses/ee-probability.md"
+    },
+    {
+      "source": "courses/comm-intro.md",
+      "target": "courses/ee-signals.md"
+    },
+    {
+      "source": "courses/comm-intro.md",
+      "target": "courses/python.md"
+    },
+    {
+      "source": "courses/comm-intro.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/comm-intro.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/comm-intro.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/comm-principles.md",
+      "target": "courses/comm-wireless.md"
+    },
+    {
+      "source": "courses/comm-principles.md",
+      "target": "courses/ee-probability.md"
+    },
+    {
+      "source": "courses/comm-principles.md",
+      "target": "courses/math.md"
+    },
+    {
+      "source": "courses/comm-principles.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/comm-principles.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/comm-principles.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/comm-random.md",
+      "target": "courses/ee-probability.md"
+    },
+    {
+      "source": "courses/comm-random.md",
+      "target": "courses/math.md"
+    },
+    {
+      "source": "courses/comm-random.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/comm-random.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/comm-random.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/comm-sdr.md",
+      "target": "courses/ee-dsp.md"
+    },
+    {
+      "source": "courses/comm-sdr.md",
+      "target": "courses/python.md"
+    },
+    {
+      "source": "courses/comm-sdr.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/comm-sdr.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/comm-sdr.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/comm-wireless.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/comm-wireless.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/comm-wireless.md",
       "target": "roadmap.md"
     },
     {

@@ -35,7 +35,10 @@
         "系统方向",
         "机器学习",
         "集成电路基础",
-        "数字IC与EDA"
+        "数字IC与EDA",
+        "信息通信基础",
+        "无线通信与信息理论",
+        "通信信号处理与实践"
       ],
       "hours": 6,
       "summary": "围绕 Python 语言与测试练习组织学习，用一个可运行的小工具检验掌握程度。",
@@ -57,7 +60,10 @@
         "机器学习",
         "集成电路基础",
         "数字IC与EDA",
-        "模拟IC与器件"
+        "模拟IC与器件",
+        "信息通信基础",
+        "无线通信与信息理论",
+        "通信信号处理与实践"
       ],
       "hours": 6,
       "summary": "用矩阵、向量空间与线性变换建立数学直觉，为机器学习与数值计算打底。",
@@ -224,7 +230,10 @@
       "tracks": [
         "集成电路基础",
         "数字IC与EDA",
-        "模拟IC与器件"
+        "模拟IC与器件",
+        "信息通信基础",
+        "无线通信与信息理论",
+        "通信信号处理与实践"
       ],
       "hours": 6,
       "summary": "用导数、积分和近似建立电路与器件分析所需的数学基础。",
@@ -245,7 +254,10 @@
       ],
       "tracks": [
         "集成电路基础",
-        "模拟IC与器件"
+        "模拟IC与器件",
+        "信息通信基础",
+        "无线通信与信息理论",
+        "通信信号处理与实践"
       ],
       "hours": 6,
       "summary": "为噪声、失配和实验统计建立条件概率、随机变量与估计基础。",
@@ -354,7 +366,10 @@
       ],
       "tracks": [
         "集成电路基础",
-        "模拟IC与器件"
+        "模拟IC与器件",
+        "信息通信基础",
+        "无线通信与信息理论",
+        "通信信号处理与实践"
       ],
       "hours": 8,
       "summary": "用时域和频域描述系统，为模拟滤波、采样及混合信号设计打底。",
@@ -375,7 +390,9 @@
         "python"
       ],
       "tracks": [
-        "模拟IC与器件"
+        "模拟IC与器件",
+        "信息通信基础",
+        "通信信号处理与实践"
       ],
       "hours": 6,
       "summary": "把离散系统、FFT 和滤波器设计连接到芯片上的数字处理模块。",
@@ -486,6 +503,182 @@
       "summary": "沿着综合、布局布线与时序报告认识数字芯片实现流程。",
       "edition": "OpenROAD-flow-scripts 官方文档，使用时固定版本",
       "checked": "2026-10-26"
+    },
+    {
+      "id": "comm-intro",
+      "title": "MIT 6.02 · 数字通信系统入门",
+      "path": "courses/comm-intro.md",
+      "url": "courses/comm-intro/",
+      "category": "信息与通信工程",
+      "level": "基础",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-02-introduction-to-eecs-ii-digital-communication-systems-fall-2012/",
+      "edition": "Fall 2012 本科课程归档",
+      "checked": "2026-10-26",
+      "hours": 6,
+      "prerequisites": [
+        "ee-signals",
+        "ee-probability",
+        "python"
+      ],
+      "tracks": [
+        "信息通信基础",
+        "无线通信与信息理论",
+        "通信信号处理与实践"
+      ],
+      "summary": "从比特、波形与分组的联系建立端到端通信系统的整体图像。"
+    },
+    {
+      "id": "comm-principles",
+      "title": "MIT 6.450 · 数字通信原理进阶",
+      "path": "courses/comm-principles.md",
+      "url": "courses/comm-principles/",
+      "category": "信息与通信工程",
+      "level": "进阶",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-450-principles-of-digital-communications-i-fall-2006/",
+      "edition": "Fall 2006 研究生课程归档",
+      "checked": "2026-10-26",
+      "hours": 8,
+      "prerequisites": [
+        "comm-intro",
+        "math",
+        "ee-probability"
+      ],
+      "tracks": [
+        "信息通信基础",
+        "无线通信与信息理论"
+      ],
+      "summary": "用信号空间、调制与检测的数学模型分析数字通信链路。"
+    },
+    {
+      "id": "comm-random",
+      "title": "MIT 6.262 · 离散随机过程",
+      "path": "courses/comm-random.md",
+      "url": "courses/comm-random/",
+      "category": "信息与通信工程",
+      "level": "进阶",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-262-discrete-stochastic-processes-spring-2011/",
+      "edition": "Spring 2011 研究生课程归档",
+      "checked": "2026-10-26",
+      "hours": 6,
+      "prerequisites": [
+        "ee-probability",
+        "math"
+      ],
+      "tracks": [
+        "无线通信与信息理论",
+        "通信信号处理与实践"
+      ],
+      "summary": "用随时间演化的概率模型解释通信系统中的随机性。"
+    },
+    {
+      "id": "comm-information",
+      "title": "MIT 6.441 · 信息论",
+      "path": "courses/comm-information.md",
+      "url": "courses/comm-information/",
+      "category": "信息与通信工程",
+      "level": "进阶",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-441-information-theory-spring-2010/",
+      "edition": "Spring 2010 研究生课程归档",
+      "checked": "2026-10-26",
+      "hours": 6,
+      "prerequisites": [
+        "ee-probability",
+        "comm-principles"
+      ],
+      "tracks": [
+        "无线通信与信息理论"
+      ],
+      "summary": "用熵、互信息和容量理解压缩与可靠通信的边界。"
+    },
+    {
+      "id": "comm-detection",
+      "title": "MIT 6.432 · 检测与估计",
+      "path": "courses/comm-detection.md",
+      "url": "courses/comm-detection/",
+      "category": "信息与通信工程",
+      "level": "进阶",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-432-stochastic-processes-detection-and-estimation-spring-2004/",
+      "edition": "Spring 2004 研究生课程归档",
+      "checked": "2026-10-26",
+      "hours": 6,
+      "prerequisites": [
+        "comm-random",
+        "ee-signals",
+        "math"
+      ],
+      "tracks": [
+        "通信信号处理与实践"
+      ],
+      "summary": "为通信接收、统计信号处理与感知建立假设检验和参数估计基础。"
+    },
+    {
+      "id": "comm-coding",
+      "title": "MIT 6.451 · 信道编码与数字通信",
+      "path": "courses/comm-coding.md",
+      "url": "courses/comm-coding/",
+      "category": "信息与通信工程",
+      "level": "进阶",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-451-principles-of-digital-communication-ii-spring-2005/",
+      "edition": "Spring 2005 研究生课程归档",
+      "checked": "2026-10-26",
+      "hours": 6,
+      "prerequisites": [
+        "comm-principles",
+        "comm-information"
+      ],
+      "tracks": [
+        "无线通信与信息理论"
+      ],
+      "summary": "从译码与性能分析理解编码如何改善可靠性，以及需要付出的代价。"
+    },
+    {
+      "id": "comm-wireless",
+      "title": "Tse / Viswanath · 无线通信基础",
+      "path": "courses/comm-wireless.md",
+      "url": "courses/comm-wireless/",
+      "category": "信息与通信工程",
+      "level": "进阶",
+      "provider": "David Tse / Pramod Viswanath",
+      "official": "https://web.stanford.edu/~dntse/wireless_book.html",
+      "edition": "2005 年教材，作者公开章节与勘误入口",
+      "checked": "2026-10-26",
+      "hours": 6,
+      "prerequisites": [
+        "comm-principles",
+        "comm-information"
+      ],
+      "tracks": [
+        "无线通信与信息理论"
+      ],
+      "summary": "从无线信道、分集到 MIMO，学习衰落与资源共享下的通信取舍。"
+    },
+    {
+      "id": "comm-sdr",
+      "title": "PySDR · 通信仿真与 SDR 实践",
+      "path": "courses/comm-sdr.md",
+      "url": "courses/comm-sdr/",
+      "category": "信息与通信工程",
+      "level": "基础",
+      "provider": "PySDR / Marc Lichtman",
+      "official": "https://pysdr.org/",
+      "edition": "作者在线教材，使用时记录章节与访问日期",
+      "checked": "2026-10-26",
+      "hours": 6,
+      "prerequisites": [
+        "python",
+        "ee-dsp",
+        "comm-intro"
+      ],
+      "tracks": [
+        "通信信号处理与实践"
+      ],
+      "summary": "把 IQ 采样、滤波、调制与同步变成可观察、可复现的通信实验。"
     }
   ],
   "tracks": {
@@ -547,6 +740,41 @@
       "ic-analog",
       "ee-dsp",
       "ee-em"
+    ],
+    "信息通信基础": [
+      "ee-calculus",
+      "math",
+      "python",
+      "ee-probability",
+      "ee-signals",
+      "comm-intro",
+      "ee-dsp",
+      "comm-principles"
+    ],
+    "无线通信与信息理论": [
+      "ee-calculus",
+      "math",
+      "python",
+      "ee-probability",
+      "ee-signals",
+      "comm-intro",
+      "comm-random",
+      "comm-principles",
+      "comm-information",
+      "comm-coding",
+      "comm-wireless"
+    ],
+    "通信信号处理与实践": [
+      "ee-calculus",
+      "math",
+      "python",
+      "ee-probability",
+      "ee-signals",
+      "comm-intro",
+      "ee-dsp",
+      "comm-random",
+      "comm-detection",
+      "comm-sdr"
     ]
   }
 }

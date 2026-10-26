@@ -4,6 +4,8 @@
 
 集成电路与微电子方向可先阅读[专门路线](ic-roadmap.md)，再选择基础、数字 IC / EDA 或模拟 IC / 器件分支。
 
+信息与通信方向见[专门路线](communications-roadmap.md)，可复用已有信号、概率和电磁场基础，再进入通信与无线方向。
+
 <div id="course-catalog"></div>
 
 <!-- course-catalog-fallback -->
