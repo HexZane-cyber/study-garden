@@ -2,6 +2,7 @@
 
 想换一种讲法、补中文基础，或者沿着集成电路与通信方向继续深入，可以从这里直接进入课程原站。本页精选 **20 个课程与实践入口：10 个中文、10 个英文**，优先选择学校、教师与课程平台发布的资源，关注内容与现有路线的衔接。
 
+[找配套习题与邀请码说明](course-practice.md){ .md-button .md-button--primary }
 [中文电路与器件](#chinese-circuits){ .md-button }
 [中文信号与通信](#chinese-communications){ .md-button }
 [芯片设计进阶](#ic-extensions){ .md-button }
@@ -30,6 +31,8 @@
 
     [进入课程 →](https://www.icourse163.org/course/BUPT-1003377004)
 
+    [习题、测验与提交 →](course-practice.md#bupt-circuits)
+
 -   ### 西电 · 半导体物理 { #xdu-semiconductor }
 
     **中文 · 进阶 · 中国大学 MOOC**
@@ -42,6 +45,8 @@
 
     [进入课程 →](https://www.icourse163.org/course/XDU-1472391161)
 
+    [习题、测验与提交 →](course-practice.md#xdu-semiconductor)
+
 -   ### 华中科大 · 集成电路设计基础 { #hust-ic }
 
     **中文 · 基础至进阶 · 中国大学 MOOC**
@@ -53,6 +58,8 @@
     - 搭配本站：[集成电路路线](ic-roadmap.md)。
 
     [进入课程 →](https://www.icourse163.org/course/HUST-1003410006)
+
+    [习题、测验与提交 →](course-practice.md#hust-ic)
 
 </div>
 
@@ -72,6 +79,8 @@
 
     [进入课程 →](https://www.icourse163.org/course/BUPT-1003556005) · [往期课程介绍](https://www.icourse163.org/course/BUPT-1003556005?tid=1003806003)
 
+    [习题、测验与提交 →](course-practice.md#bupt-signals)
+
 -   ### 北邮 · 通信原理 { #bupt-communications }
 
     **中文 · 基础至进阶 · 中国大学 MOOC**
@@ -84,6 +93,8 @@
 
     [进入课程 →](https://www.icourse163.org/course/BUPT-1002543002)
 
+    [习题、测验与提交 →](course-practice.md#bupt-communications)
+
 -   ### 浙大 · 数字信号处理 { #zju-dsp }
 
     **中文 · 基础至进阶 · 中国大学 MOOC**
@@ -95,6 +106,8 @@
     - 搭配本站：[DSP 指南](courses/ee-dsp.md)。
 
     [进入课程 →](https://www.icourse163.org/course/ZJU-1206695830)
+
+    [习题、测验与提交 →](course-practice.md#zju-dsp)
 
 </div>
 
@@ -114,6 +127,8 @@
 
     [打开公开讲义 →](https://rfic.eecs.berkeley.edu/courses/ee105/lectures.html)
 
+    [习题、测验与提交 →](course-practice.md#berkeley-ee105)
+
 -   ### IIT Madras · Analog IC Design { #nptel-analog }
 
     **英文 · 进阶 · NPTEL**
@@ -126,6 +141,8 @@
 
     [进入课程 →](https://nptel.ac.in/courses/108106105) · [官方课程说明 PDF](https://archive.nptel.ac.in/content/syllabus_pdf/108106105.pdf)
 
+    [习题、测验与提交 →](course-practice.md#nptel-analog)
+
 -   ### IIIT Delhi · VLSI Design Flow: RTL to GDS { #nptel-rtl-gds }
 
     **英文 · 进阶 · NPTEL**
@@ -137,6 +154,8 @@
     - 搭配本站：[RTL 到 GDS 实践](courses/ic-eda.md)；环境安装和排错另留时间。
 
     [进入课程 →](https://nptel.ac.in/courses/108106191)
+
+    [习题、测验与提交 →](course-practice.md#nptel-rtl-gds)
 
 </div>
 
@@ -156,6 +175,8 @@
 
     [进入课程 →](https://nptel.ac.in/courses/117104115) · [官方课程说明 PDF](https://archive.nptel.ac.in/content/syllabus_pdf/117104115.pdf)
 
+    [习题、测验与提交 →](course-practice.md#nptel-wireless)
+
 -   ### Stanford EE261 · 傅里叶变换及其应用 { #stanford-ee261 }
 
     **英文 · 进阶 · 公开视频、讲义与习题**
@@ -168,6 +189,8 @@
 
     [打开课程与视频 →](https://see.stanford.edu/Course/EE261)
 
+    [习题、测验与提交 →](course-practice.md#stanford-ee261)
+
 -   ### Nand to Tetris · 从逻辑门搭建计算机 { #nand2tetris }
 
     **英文 · 入门至基础 · 原作者项目课程**
@@ -179,6 +202,8 @@
     - 材料说明：课程使用自己的教学 HDL，与 Verilog / FPGA 工程流程需要区分。
 
     [打开项目课程 →](https://www.nand2tetris.org/course) · [软件与在线 IDE 说明](https://www.nand2tetris.org/software)
+
+    [习题、测验与提交 →](course-practice.md#nand2tetris)
 
 </div>
 
@@ -198,6 +223,8 @@
 
     [进入课程 →](https://www.icourse163.org/course/detail.htm?cid=1207050802)
 
+    [习题、测验与提交 →](course-practice.md#zju-digital-systems)
+
 -   ### 成电 · 数字逻辑与集成电路设计（ASIC 设计） { #uestc-asic }
 
     **中文 · 基础至进阶 · 中国大学 MOOC**
@@ -210,6 +237,8 @@
 
     [进入课程 →](https://www.icourse163.org/course/UESTC-234015)
 
+    [习题、测验与提交 →](course-practice.md#uestc-asic)
+
 -   ### Cornell ECE 4750 · 计算机体系结构 { #cornell-ece4750 }
 
     **英文 · 进阶 · 公开讲义与实验说明**
@@ -221,6 +250,8 @@
     - 材料说明：公开资料可用于学习思路，课程服务器、提交系统和部分环境按原校要求使用。
 
     [进入课程 →](https://www.csl.cornell.edu/courses/ece4750/) · [公开讲义与实验说明](https://www.csl.cornell.edu/courses/ece4750/handouts.shtml)
+
+    [习题、测验与提交 →](course-practice.md#cornell-ece4750)
 
 </div>
 
@@ -240,6 +271,8 @@
 
     [进入课程 →](https://www.icourse163.org/course/detail.htm?cid=1206399806)
 
+    [习题、测验与提交 →](course-practice.md#microwave-antennas)
+
 -   ### Berkeley EE142 · 通信集成电路 { #berkeley-ee142 }
 
     **英文 · 进阶 · 教师公开讲义**
@@ -251,6 +284,8 @@
     - 搭配本站：[高速通信电路指南](courses/ic-rf.md)。资料为课程归档，实验工具和设备需求以原说明为准。
 
     [打开公开讲义 →](https://rfic.eecs.berkeley.edu/courses/ee142/lectures.html)
+
+    [习题、测验与提交 →](course-practice.md#berkeley-ee142)
 
 </div>
 
@@ -270,6 +305,8 @@
 
     [进入课程 →](https://www.icourse163.org/course/XIDIAN-1002199004)
 
+    [习题、测验与提交 →](course-practice.md#xdu-information)
+
 -   ### Stanford EE263 · 线性动态系统 { #stanford-ee263 }
 
     **英文 · 进阶 · 公开视频、讲义与习题**
@@ -282,6 +319,8 @@
 
     [打开课程与视频 →](https://see.stanford.edu/Course/EE263)
 
+    [习题、测验与提交 →](course-practice.md#stanford-ee263)
+
 -   ### MathWorks · Wireless Communications Onramp { #mathworks-wireless }
 
     **英文 · 入门至基础 · 官方交互练习**
@@ -293,6 +332,8 @@
     - 材料说明：交互学习使用 MathWorks 平台与账号；短课用于上手，后续结合[通信系统入门](courses/comm-intro.md)或[PySDR 实践](courses/comm-sdr.md)深入。
 
     [进入交互课程 →](https://matlabacademy.mathworks.com/details/wireless-communications-onramp/wireless)
+
+    [习题、测验与提交 →](course-practice.md#mathworks-wireless)
 
 </div>
 

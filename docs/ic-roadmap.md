@@ -128,3 +128,5 @@ project/
 [中文电路、半导体与 IC 基础](course-links.md#chinese-circuits)整理了北邮、西电和华中科大课程；[芯片设计进阶链接](course-links.md#ic-extensions)提供 Berkeley EE105 讲义、NPTEL 模拟 IC 和 RTL 到 GDS 课程。可以按当前薄弱环节选择一种讲法，选学范围和预计投入见链接页。
 
 继续做项目时，可选[浙大与成电的数字系统课程、Cornell 体系结构](course-links.md#digital-practice)。进入高频电路时，可参考[微波与天线、Berkeley EE142](course-links.md#rf-antennas)，先核对模电与电磁先修。
+
+配套练习见[习题、测验与提交](course-practice.md)，可查原课作业、同主题公开题目、在线判题和班级邀请码的官方说明。
