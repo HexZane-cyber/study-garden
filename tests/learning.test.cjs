@@ -17,4 +17,17 @@ for(const invalid of [0,-1,41,NaN,Infinity,'6'])assert.throws(()=>M.effort({tota
 const prefs={raw:null,getItem(){return this.raw;},setItem(key,value){this.raw=value;}};assert.equal(M.readWeekly(prefs),'');assert(M.saveWeekly(prefs,10));assert.equal(M.readWeekly(prefs),10);assert(M.saveWeekly(prefs,''));assert.equal(M.readWeekly(prefs),'');prefs.raw='broken';assert.equal(M.readWeekly(prefs),'');prefs.raw='999';assert.equal(M.readWeekly(prefs),'');assert.equal(M.saveWeekly(prefs,0),false);assert.equal(M.saveWeekly({setItem(){throw Error('quota');}},6),false);
 const sample=[{id:'advanced',prerequisites:['base','external'],totalHours:[30,50],hours:6},{id:'base',prerequisites:[],totalHours:[10,20],hours:4},{id:'external',prerequisites:[],totalHours:[20,30],hours:6},{id:'finished',prerequisites:[],totalHours:[50,100],hours:6}];
 const schedule=M.plan(sample,{advanced:'learning',base:'planned',finished:'done'},10);assert.deepEqual(schedule.courses.map(c=>c.id),['base','advanced']);assert.deepEqual(schedule.totalHours,[40,70]);assert.deepEqual(schedule.missingIds,['external']);assert.equal(schedule.weeks.weeksMin,4);assert.equal(schedule.weeks.weeksMax,7);assert.equal(M.plan(sample,{}).weeks,null);assert.deepEqual(M.plan(sample,{advanced:'planned',external:'done',base:'done'}).missingIds,[]);assert.deepEqual(M.plan(sample,{}).totalHours,[0,0]);
+const combined=M.filter(courses,{}, {query:' MIT   信号 '});assert(combined.some(c=>c.id==='ee-signals'));assert(combined.every(c=>[c.title,c.summary,c.provider,c.category,...c.tracks].join(' ').includes('信号')));
+assert(M.filter(courses,{}, {query:'ＨＤＬＢｉｔｓ'}).some(c=>c.id==='ic-hdlbits'),'full-width Latin input should match');
+assert.equal(M.filter(courses,{}, {query:'MIT nonexistent-topic-zzzz'}).length,0);
+const ic=M.filter(courses,{}, {track:'集成电路基础'});assert(ic.length>0);assert(ic.every(c=>c.tracks.includes('集成电路基础')));
+assert(M.filter(courses,{}, {query:'数字IC与EDA'}).length>0,'track names should be searchable');
+const filters={query:'MIT 信号',track:'信息通信基础',category:'',level:'基础',status:'',ready:true,maxHours:'160',sort:'hours'};
+const shared=M.catalogUrl('https://example.test/study-garden/catalog/?keep=1#courses',filters,courses,data.tracks),parsed=new URL(shared);
+assert.equal(parsed.searchParams.get('keep'),'1');assert.equal(parsed.hash,'#courses');assert.deepEqual(M.readFilters(parsed.search,courses,data.tracks),filters);
+const malformed=M.readFilters('?q='+encodeURIComponent('x'.repeat(250))+'&track=unknown&category=bad&level=expert&status=bad&ready=true&maxHours=-1&sort=bad',courses,data.tracks);
+assert.equal(malformed.query.length,200);assert.deepEqual({...malformed,query:''},M.filterDefaults);
+assert.deepEqual(M.normalizeFilters(null,courses,data.tracks),M.filterDefaults);
+const cleared=new URL(M.catalogUrl(shared,M.filterDefaults,courses,data.tracks));assert.equal(cleared.search,'?keep=1');assert.equal(cleared.hash,'#courses');
+assert.equal(M.readFilters('?track=__proto__',courses,data.tracks).track,'');assert.equal(M.readFilters('?ready=1',courses,data.tracks).ready,true);
 console.log('Learning model passed: filters, prerequisite readiness, route next steps, progress persistence and validated backup.');
