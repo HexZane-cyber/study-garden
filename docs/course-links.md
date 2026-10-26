@@ -2,6 +2,10 @@
 
 想换一种讲法、补中文基础，或者沿着集成电路与通信方向继续深入，可以从这里直接进入课程原站。本页精选 **20 个课程与实践入口：10 个中文、10 个英文**，优先选择学校、教师与课程平台发布的资源，关注内容与现有路线的衔接。
 
+新补充的[名校课程：重点与先修](university-courses.md)另收录 **7 所大学的 12 门课程**，逐门说明讲解重点、提前要会的知识、开课自查与材料权限。与本页合计提供 32 项课程和实践入口。
+
+[查看 12 门名校课程](university-courses.md){ .md-button .md-button--primary }
+
 [找配套习题与邀请码说明](course-practice.md){ .md-button .md-button--primary }
 [中文电路与器件](#chinese-circuits){ .md-button }
 [中文信号与通信](#chinese-communications){ .md-button }

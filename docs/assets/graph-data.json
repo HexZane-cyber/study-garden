@@ -425,6 +425,11 @@
           "level": 3
         },
         {
+          "id": "university-practice",
+          "title": "新增 12 门名校课程的练习",
+          "level": 2
+        },
+        {
           "id": "access",
           "title": "邀请码在哪找、怎样加入",
           "level": 2
@@ -2825,6 +2830,104 @@
           "level": 2
         }
       ]
+    },
+    {
+      "id": "university-courses.md",
+      "title": "名校课程：重点与先修",
+      "group": "guide",
+      "url": "university-courses/",
+      "sections": [
+        {
+          "id": "overview",
+          "title": "先选一门",
+          "level": 2
+        },
+        {
+          "id": "analog",
+          "title": "模拟与混合信号",
+          "level": 2
+        },
+        {
+          "id": "berkeley-ee140",
+          "title": "Berkeley EE140 / 240A · 模拟集成电路",
+          "level": 3
+        },
+        {
+          "id": "stanford-ee214b",
+          "title": "Stanford EE214B · 高级集成电路设计",
+          "level": 3
+        },
+        {
+          "id": "epfl-ee320",
+          "title": "EPFL EE-320 · Analog IC Design",
+          "level": 3
+        },
+        {
+          "id": "digital",
+          "title": "数字 IC 与体系结构",
+          "level": 2
+        },
+        {
+          "id": "berkeley-eecs151",
+          "title": "Berkeley EECS151 / 251A · 数字设计与集成电路",
+          "level": 3
+        },
+        {
+          "id": "eth-vlsi2",
+          "title": "ETH Zürich · VLSI 2：从网表到完整 SoC",
+          "level": 3
+        },
+        {
+          "id": "epfl-ee429",
+          "title": "EPFL EE-429 · Fundamentals of VLSI Design",
+          "level": 3
+        },
+        {
+          "id": "cmu-18447",
+          "title": "Carnegie Mellon 18-447 · 计算机体系结构",
+          "level": 3
+        },
+        {
+          "id": "mems",
+          "title": "MEMS 与微系统",
+          "level": 2
+        },
+        {
+          "id": "mit-6777",
+          "title": "MIT 6.777J · 微机电器件设计与制造",
+          "level": 3
+        },
+        {
+          "id": "communications",
+          "title": "通信、DSP 与优化",
+          "level": 2
+        },
+        {
+          "id": "stanford-ee359",
+          "title": "Stanford EE359 · 无线通信",
+          "level": 3
+        },
+        {
+          "id": "berkeley-ee123",
+          "title": "Berkeley EE123 · 数字信号处理",
+          "level": 3
+        },
+        {
+          "id": "uiuc-ece453",
+          "title": "UIUC ECE453 · 无线通信系统",
+          "level": 3
+        },
+        {
+          "id": "stanford-ee364a",
+          "title": "Stanford EE364A · 凸优化 I",
+          "level": 3
+        },
+        {
+          "id": "readiness",
+          "title": "先修自查与衔接顺序",
+          "level": 2
+        }
+      ]
     }
   ],
   "edges": [
@@ -3037,6 +3140,10 @@
       "target": "tools/missing-semester.md"
     },
     {
+      "source": "catalog.md",
+      "target": "university-courses.md"
+    },
+    {
       "source": "chip.md",
       "target": "graph.md"
     },
@@ -3173,6 +3280,10 @@
       "target": "roadmap.md"
     },
     {
+      "source": "communications-roadmap.md",
+      "target": "university-courses.md"
+    },
+    {
       "source": "contribute.md",
       "target": "courses/community/index.md"
     },
@@ -3261,6 +3372,10 @@
       "target": "index.md"
     },
     {
+      "source": "course-links.md",
+      "target": "university-courses.md"
+    },
+    {
       "source": "course-practice.md",
       "target": "courses/ic-eda.md"
     },
@@ -3279,6 +3394,10 @@
     {
       "source": "course-practice.md",
       "target": "private.md"
+    },
+    {
+      "source": "course-practice.md",
+      "target": "university-courses.md"
     },
     {
       "source": "courses/algorithms.md",
@@ -3469,6 +3588,10 @@
       "target": "roadmap.md"
     },
     {
+      "source": "courses/comm-principles.md",
+      "target": "university-courses.md"
+    },
+    {
       "source": "courses/comm-random.md",
       "target": "courses/ee-probability.md"
     },
@@ -3613,6 +3736,10 @@
       "target": "roadmap.md"
     },
     {
+      "source": "courses/ee-analog.md",
+      "target": "university-courses.md"
+    },
+    {
       "source": "courses/ee-calculus.md",
       "target": "courses/ee-circuits.md"
     },
@@ -3665,6 +3792,10 @@
       "target": "roadmap.md"
     },
     {
+      "source": "courses/ee-circuits.md",
+      "target": "university-courses.md"
+    },
+    {
       "source": "courses/ee-devices.md",
       "target": "courses/ic-digital.md"
     },
@@ -3683,6 +3814,10 @@
     {
       "source": "courses/ee-devices.md",
       "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ee-devices.md",
+      "target": "university-courses.md"
     },
     {
       "source": "courses/ee-digital.md",
@@ -3707,6 +3842,10 @@
     {
       "source": "courses/ee-digital.md",
       "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ee-digital.md",
+      "target": "university-courses.md"
     },
     {
       "source": "courses/ee-dsp.md",
@@ -3745,6 +3884,10 @@
       "target": "roadmap.md"
     },
     {
+      "source": "courses/ee-em.md",
+      "target": "university-courses.md"
+    },
+    {
       "source": "courses/ee-probability.md",
       "target": "ic-roadmap.md"
     },
@@ -3755,6 +3898,10 @@
     {
       "source": "courses/ee-probability.md",
       "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ee-probability.md",
+      "target": "university-courses.md"
     },
     {
       "source": "courses/ee-signals.md",
@@ -3779,6 +3926,10 @@
     {
       "source": "courses/ee-signals.md",
       "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ee-signals.md",
+      "target": "university-courses.md"
     },
     {
       "source": "courses/ic-analog.md",
@@ -3813,6 +3964,10 @@
       "target": "roadmap.md"
     },
     {
+      "source": "courses/ic-digital.md",
+      "target": "university-courses.md"
+    },
+    {
       "source": "courses/ic-eda.md",
       "target": "courses/ic-fpga.md"
     },
@@ -3831,6 +3986,10 @@
     {
       "source": "courses/ic-eda.md",
       "target": "tools/missing-semester.md"
+    },
+    {
+      "source": "courses/ic-eda.md",
+      "target": "university-courses.md"
     },
     {
       "source": "courses/ic-fpga.md",
@@ -3857,12 +4016,20 @@
       "target": "roadmap.md"
     },
     {
+      "source": "courses/ic-hdlbits.md",
+      "target": "university-courses.md"
+    },
+    {
       "source": "courses/ic-process.md",
       "target": "ic-roadmap.md"
     },
     {
       "source": "courses/ic-process.md",
       "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ic-process.md",
+      "target": "university-courses.md"
     },
     {
       "source": "courses/ic-rf.md",
@@ -4029,6 +4196,10 @@
       "target": "roadmap.md"
     },
     {
+      "source": "dashboard.md",
+      "target": "university-courses.md"
+    },
+    {
       "source": "discussion.md",
       "target": "publish.md"
     },
@@ -4089,6 +4260,10 @@
       "target": "roadmap.md"
     },
     {
+      "source": "ic-roadmap.md",
+      "target": "university-courses.md"
+    },
+    {
       "source": "index.md",
       "target": "library.md"
     },
@@ -4111,6 +4286,10 @@
     {
       "source": "index.md",
       "target": "tools/git.md"
+    },
+    {
+      "source": "index.md",
+      "target": "university-courses.md"
     },
     {
       "source": "library.md",

@@ -1,10 +1,11 @@
 # 习题、测验与提交
 
-选好课程后，从这里找到能动手练习的入口。本页对应[优质课程链接](course-links.md)的 **20 项资源**，另补充 HDLBits 在线判题。入口核对日期：**2026-10-26**。
+选好课程后，从这里找到能动手练习的入口。本页对应[优质课程链接](course-links.md)的 **20 项资源**，另补充 HDLBits 在线判题；新增的 **12 门名校课程**见[配套练习索引](#university-practice)。入口核对日期：**2026-10-26**。
 
 [马上开始练习](#start){ .md-button .md-button--primary }
 [中文课程配套](#chinese){ .md-button }
 [英文课程配套](#english){ .md-button }
+[新增名校课程](#university-practice){ .md-button }
 [邀请码与加入方式](#access){ .md-button }
 
 **先看入口类型：**“原课材料”来自该课程；“同主题练习”来自另一门课，可补充训练，但不是原课作业。“自测”可以检查自己的结果；“正式提交”是否开放，需要看所选学期和选课身份。公开讲义不代表开放校内成绩系统。
@@ -134,6 +135,25 @@
 - **交互练习：**[直接进入课程](https://matlabacademy.mathworks.com/details/wireless-communications-onramp/wireless)，按数字链路、调制、噪声及 OFDM 等模块学习。
 - **加入方式：**从原站 Sign In 使用自己的 MathWorks 账号；公开课程入口未显示班级邀请码。账号、环境与可用范围以原站提示为准。
 - **学习记录：**把仿真参数、误码率曲线与解释写入自己的笔记，课程交互任务不等同于高校正式实验成绩。
+
+## 新增 12 门名校课程的练习 { #university-practice }
+
+每门课的重点、先修与开课自查见[名校课程专题](university-courses.md)。下表继续区分公开材料和正式提交权限；同主题补充题不计入原课成绩。
+
+| 课程与重点 / 先修 | 作业或实验入口 | 提交与材料限制 |
+| --- | --- | --- |
+| [Berkeley EE140 / 240A](university-courses.md#berkeley-ee140) | [2025 春课程站的 HW / Lab / 历史试卷](https://people.eecs.berkeley.edu/~pister/140sp25/) | 公开材料可自测，讨论与成绩在课程系统 |
+| [Stanford EE214B](university-courses.md#stanford-ee214b) | [官方课程介绍](https://bulletin.stanford.edu/courses/1038621)；用 EE140 题目补相近主题 | 未确认完整公开题库；不提供通用邀请码 |
+| [EPFL EE-320](university-courses.md#epfl-ee320) | [官方教学平台](https://go.epfl.ch/EE-320) | 大纲说明有习题与 CAD 实践；完整题目公开性未确认，可能需要课程账号 |
+| [Berkeley EECS151 / 251A](university-courses.md#berkeley-eecs151) | [当期 HW 与实验目录](https://eecs151.org/) · [ASIC Lab 1](https://eecs151.org/asic/lab1/overview/) | 工具、服务器与验收需原课权限；公开实验指导不等于可运行全部环境 |
+| [ETH VLSI 2](university-courses.md#eth-vlsi2) | [2026 春官方课程与加入说明](https://www.vvz.ethz.ch/Vorlesungsverzeichnis/lerneinheit.view?ansicht=KATALOGDATEN&lang=en&lerneinheitId=199376&semkez=2026S) | 未确认完整公开实验包；该学期正式选课要求动机说明及课程方审核，无通用公开邀请码 |
+| [EPFL EE-429](university-courses.md#epfl-ee429) | [Moodle 课程](https://go.epfl.ch/EE-429)；补充可做 [MIT 数字 IC 作业](https://ocw.mit.edu/courses/6-374-analysis-and-design-of-digital-integrated-circuits-fall-2003/pages/assignments/) | Moodle 不允许访客进入；MIT 作业是同主题补充 |
+| [CMU 18-447](university-courses.md#cmu-18447) | [官方课程介绍](https://courses.ece.cmu.edu/18447)；补充可看[原有 Cornell 实验](#cornell-ece4750) | 未确认当前学期完整材料公开；补充实验不等于 CMU 原课提交 |
+| [MIT 6.777J](university-courses.md#mit-6777) | [公开作业及部分解答](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/pages/assignments/) | 2007 年归档用于自测，无原校在线评分 |
+| [Stanford EE359](university-courses.md#stanford-ee359) | [2020 冬课程站的 Homework / Projects / Exams 栏目](https://web.stanford.edu/class/ee359/courseinfo.html) | 归档入口，文件权限和可用性以原站为准；历史截止时间已过 |
+| [Berkeley EE123](university-courses.md#berkeley-ee123) | [2026 春课程站的 HW / 编程实验安排](https://sites.google.com/berkeley.edu/ee123-sp26/home) | 正式作业经 Gradescope；视频在 bCourses，均需课程权限，公开外链按原站设置 |
+| [UIUC ECE453](university-courses.md#uiuc-ece453) | [2025 秋 Homework / Labs / Notes](https://courses.grainger.illinois.edu/ece453/fa2025/index.htm) | 硬件实验需设备，正式提交与文件权限按原课要求 |
+| [Stanford EE364A](university-courses.md#stanford-ee364a) | [SEE 归档作业与解答、练习试卷](https://see.stanford.edu/Course/EE364A) | 归档可自测；当前班级 Ed / Gradescope 另需权限 |
 
 ## 邀请码在哪找、怎样加入 { #access }
 

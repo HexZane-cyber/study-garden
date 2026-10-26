@@ -109,3 +109,5 @@
 [信息论、建模与通信实验](course-links.md#communication-practice)还提供西电信息论、Stanford EE263 和 MathWorks 无线通信入门。对接收前端与天线感兴趣时，继续查看[射频与天线链接](course-links.md#rf-antennas)。
 
 配套练习见[习题、测验与提交](course-practice.md)，可查原课作业、同主题公开题目、在线判题和班级邀请码的官方说明。
+
+继续深化时，可看[名校课程重点与先修](university-courses.md#communications)：Berkeley EE123 补 DSP 实现，Stanford EE359 补衰落与无线链路，UIUC ECE453 连接射频硬件，Stanford EE364A 补凸优化。每门课都列出先修知识和开课自查。

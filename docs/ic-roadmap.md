@@ -130,3 +130,5 @@ project/
 继续做项目时，可选[浙大与成电的数字系统课程、Cornell 体系结构](course-links.md#digital-practice)。进入高频电路时，可参考[微波与天线、Berkeley EE142](course-links.md#rf-antennas)，先核对模电与电磁先修。
 
 配套练习见[习题、测验与提交](course-practice.md)，可查原课作业、同主题公开题目、在线判题和班级邀请码的官方说明。
+
+进阶选课见[名校课程重点与先修](university-courses.md)：模拟方向对照 EE140、EE214B 与 EPFL EE-320；数字方向对照 EECS151、ETH VLSI 2 与 EPFL EE-429；传感器方向可拓展 MIT MEMS。先按各课自查题判断准备度，再选择一门主课。
