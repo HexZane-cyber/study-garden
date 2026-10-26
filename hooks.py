@@ -5,10 +5,12 @@ import json
 import posixpath
 import re
 import math
+import hashlib
 from html.parser import HTMLParser
 
 ROOT = Path(__file__).resolve().parent
 ARTICLE_SECTIONS = {}
+ASSET_VERSIONS = {}
 
 def title(path):
     match = re.search(r'^#\s+(.+)$', path.read_text(encoding='utf-8'), re.MULTILINE)
@@ -48,6 +50,10 @@ def on_config(config):
 
 def on_pre_build(config):
     ARTICLE_SECTIONS.clear()
+    ASSET_VERSIONS.clear()
+    for name in ['learning-model.js', 'learning.js', 'planner-model.js', 'planner.js']:
+        path = Path(config['docs_dir']) / 'assets' / name
+        ASSET_VERSIONS[name] = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
     data = graph_data(config['docs_dir'])
     path = Path(config['docs_dir']) / 'assets/graph-data.json'
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -111,6 +117,7 @@ def load_course_catalog(docs):
 
 def on_page_context(context, page, config, nav):
     data = load_course_catalog(config['docs_dir'])
+    context['asset_versions'] = ASSET_VERSIONS
     if page.file.src_uri in {'graph.md', 'chip.md'}:
         context['chip_courses'] = json.dumps({'courses': [{key: course[key] for key in ('id', 'title', 'path', 'url', 'prerequisites')} for course in data['courses']]}, ensure_ascii=False).replace('<', r'\u003c')
     paths = {c['path'] for c in data['courses']} | {'catalog.md', 'roadmap.md', 'dashboard.md', 'backup.md'}

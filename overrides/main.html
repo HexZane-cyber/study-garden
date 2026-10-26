@@ -16,7 +16,7 @@
   {% if page and page.file.src_uri in ["graph.md", "chip.md"] %}
     <script type="application/json" id="chip-course-data">{{ chip_courses | safe }}</script>
     <script src="{{ 'assets/graph-interaction.js' | url }}" defer></script>
-    <script src="{{ 'assets/learning-model.js' | url }}" defer></script>
+    <script src="{{ 'assets/learning-model.js' | url }}?v={{ asset_versions.get('learning-model.js', '') }}" defer></script>
     <script src="{{ 'assets/chip-learning.js' | url }}" defer></script>
     <script src="{{ 'assets/chip-model.js' | url }}" defer></script>
     <script src="{{ 'assets/vendor/chip3d.bundle.js' | url }}" defer></script>
@@ -38,16 +38,16 @@
   {% endif %}
   {% if learning_catalog %}
     <script type="application/json" id="learning-data">{{ learning_catalog | safe }}</script>
-    <script src="{{ 'assets/learning-model.js' | url }}" defer></script>
+    <script src="{{ 'assets/learning-model.js' | url }}?v={{ asset_versions.get('learning-model.js', '') }}" defer></script>
     {% if page.file.src_uri == 'backup.md' %}
-    <script src="{{ 'assets/planner-model.js' | url }}" defer></script>
+    <script src="{{ 'assets/planner-model.js' | url }}?v={{ asset_versions.get('planner-model.js', '') }}" defer></script>
     <script src="{{ 'assets/backup-model.js' | url }}" defer></script>
     <script src="{{ 'assets/backup.js' | url }}" defer></script>
     {% elif page.file.src_uri == 'dashboard.md' %}
-    <script src="{{ 'assets/planner-model.js' | url }}" defer></script>
-    <script src="{{ 'assets/planner.js' | url }}" defer></script>
+    <script src="{{ 'assets/planner-model.js' | url }}?v={{ asset_versions.get('planner-model.js', '') }}" defer></script>
+    <script src="{{ 'assets/planner.js' | url }}?v={{ asset_versions.get('planner.js', '') }}" defer></script>
     {% else %}
-    <script src="{{ 'assets/learning.js' | url }}" defer></script>
+    <script src="{{ 'assets/learning.js' | url }}?v={{ asset_versions.get('learning.js', '') }}" defer></script>
     {% endif %}
   {% endif %}
 {% endblock %}

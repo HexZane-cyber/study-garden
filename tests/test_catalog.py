@@ -12,6 +12,17 @@ hooks = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(hooks)
 
 class CatalogTest(unittest.TestCase):
+    def test_feature_scripts_use_content_versions(self):
+        import hashlib
+        for page, names in {'dashboard': ['learning-model.js', 'planner-model.js', 'planner.js'],
+                            'catalog': ['learning-model.js', 'learning.js'],
+                            'graph': ['learning-model.js'],
+                            'backup': ['learning-model.js', 'planner-model.js']}.items():
+            html = (ROOT / 'site' / page / 'index.html').read_text(encoding='utf-8')
+            for name in names:
+                version = hashlib.sha256((ROOT / 'docs/assets' / name).read_bytes()).hexdigest()[:12]
+                self.assertIn(name + '?v=' + version, html)
+
     def test_chip_catalog_escapes_script_closers_without_changing_titles(self):
         data = hooks.load_course_catalog(ROOT / 'docs')
         data['courses'][0]['title'] = '</script><script>alert(1)</script>'
