@@ -6,6 +6,7 @@
 [中文课程配套](#chinese){ .md-button }
 [英文课程配套](#english){ .md-button }
 [新增名校课程](#university-practice){ .md-button }
+[讲义笔记与历年试卷](course-materials.md){ .md-button }
 [邀请码与加入方式](#access){ .md-button }
 
 **先看入口类型：**“原课材料”来自该课程；“同主题练习”来自另一门课，可补充训练，但不是原课作业。“自测”可以检查自己的结果；“正式提交”是否开放，需要看所选学期和选课身份。公开讲义不代表开放校内成绩系统。

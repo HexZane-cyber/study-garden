@@ -10,3 +10,4 @@ site/
 docs/assets/graph-data.json
 docs/assets/published-courses.json
 *-preview.png
+course-materials-*/

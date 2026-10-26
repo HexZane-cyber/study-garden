@@ -6,6 +6,8 @@
 
 [查看 12 门名校课程](university-courses.md){ .md-button .md-button--primary }
 
+想直接读资料或做题，查看[课程笔记与历年试卷](course-materials.md)，已按课程区分讲义、考试题卷和答案，并标出文件与权限状态。
+
 [找配套习题与邀请码说明](course-practice.md){ .md-button .md-button--primary }
 [中文电路与器件](#chinese-circuits){ .md-button }
 [中文信号与通信](#chinese-communications){ .md-button }

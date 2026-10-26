@@ -1,0 +1,54 @@
+# 开放许可资料署名
+
+本目录仅保存以下 5 份已核对开放许可的原始 PDF。文件未改动，不代表原学校对本站的认可。其余资料仅记录原站链接。
+
+许可：[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)。
+
+Stanford SEE 许可说明：https://see.stanford.edu/
+
+MIT OCW 许可说明：https://ocw.mit.edu/pages/privacy-and-terms-of-use/
+
+## mit-6777-ps1-2007.pdf
+
+- 作品：Problem set 1
+- 署名：MIT OpenCourseWare, Carol Livermore and Joel Voldman, 6.777J Spring 2007
+- 课程来源：https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/resources/ps1/
+- 原始文件：https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/aab0d30a1ee9b33eefd94ff1cc1e0057_ps1.pdf
+- 许可：https://creativecommons.org/licenses/by-nc-sa/4.0/
+- 修改：无；SHA-256：`e3aa0ed916c638e3460421ac73917f85279faed8d8bc2704e6552a8ca4abc95c`
+
+## ee364a-final-2008-solutions.pdf
+
+- 作品：2008 年期末参考答案
+- 署名：Stephen Boyd / Stanford Engineering Everywhere
+- 课程来源：https://see.stanford.edu/Course/EE364A
+- 原始文件：https://see.stanford.edu/materials/lsocoee364a/final-sols.pdf
+- 许可：https://creativecommons.org/licenses/by-nc-sa/4.0/
+- 修改：无；SHA-256：`d0e1e95b0890ca3f80ac10ec69344bc0c95762f3eac0fbe6330c6795b5e796ca`
+
+## ee364a-final-2008.pdf
+
+- 作品：2008 年期末试卷
+- 署名：Stephen Boyd / Stanford Engineering Everywhere
+- 课程来源：https://see.stanford.edu/Course/EE364A
+- 原始文件：https://see.stanford.edu/materials/lsocoee364a/final.pdf
+- 许可：https://creativecommons.org/licenses/by-nc-sa/4.0/
+- 修改：无；SHA-256：`1d242676f689b131276b7a6eaf6983e5bf354bd01b1e9065608a439e40f5cfbe`
+
+## ee364a-introduction.pdf
+
+- 作品：Introduction
+- 署名：Stephen Boyd / Stanford Engineering Everywhere
+- 课程来源：https://see.stanford.edu/Course/EE364A
+- 原始文件：https://see.stanford.edu/materials/lsocoee364a/01Introduction.pdf
+- 许可：https://creativecommons.org/licenses/by-nc-sa/4.0/
+- 修改：无；SHA-256：`54363e0d1b6aeee70ced37a41eac6a747d63813f09e25301c2e92fe517e70217`
+
+## ee364a-convex-sets.pdf
+
+- 作品：Convex Sets
+- 署名：Stephen Boyd / Stanford Engineering Everywhere
+- 课程来源：https://see.stanford.edu/Course/EE364A
+- 原始文件：https://see.stanford.edu/materials/lsocoee364a/02ConvexSets.pdf
+- 许可：https://creativecommons.org/licenses/by-nc-sa/4.0/
+- 修改：无；SHA-256：`f876c8c0a25396ec4c569ad7f1a377efd224cb56701d05ff04e36b00aeebeb12`

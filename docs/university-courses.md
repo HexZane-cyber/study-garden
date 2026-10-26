@@ -2,6 +2,7 @@
 
 在原有[优质课程链接](course-links.md)之外，继续补充 **7 所大学的 12 门课程**：MIT、Stanford、UC Berkeley、ETH Zürich、EPFL、Carnegie Mellon 和 UIUC。按你关注的集成电路、微电子与信息通信方向组织，先看内容与基础是否匹配，再决定学哪门。
 
+[打开讲义笔记与历年试卷](course-materials.md){ .md-button .md-button--primary }
 [模拟与混合信号](#analog){ .md-button }
 [数字 IC 与体系结构](#digital){ .md-button }
 [MEMS 与微系统](#mems){ .md-button }
@@ -20,7 +21,7 @@
 | [Berkeley EECS151 / 251A](#berkeley-eecs151) | RTL、验证、流水线及 ASIC / FPGA 流程 | 进阶 · 90–150 小时 | 2026 秋课程站及实验指导；工具有权限要求 |
 | [ETH VLSI 2](#eth-vlsi2) | 从网表到 SoC 版图与时序收敛 | 进阶 · 90–150 小时 | 2026 春官方大纲；未确认完整公开实验包 |
 | [EPFL EE-429](#epfl-ee429) | CMOS 延迟、功耗、SRAM 与半定制流程 | 进阶 · 70–120 小时 | 官方大纲公开，Moodle 课程拒绝访客访问 |
-| [CMU 18-447](#cmu-18447) | 处理器、流水线、存储层次和性能分析 | 进阶 · 80–140 小时 | 官方课程介绍；材料随学期与教师变化 |
+| [CMU 18-447](#cmu-18447) | 处理器、流水线、存储层次和性能分析 | 进阶 · 80–140 小时 | 已找到 2024 春公开讲义；试卷状态见资料页 |
 | [MIT 6.777J](#mit-6777) | MEMS 工艺、机电建模、传感与反馈 | 进阶 · 70–120 小时 | 2007 春 OCW 讲义、习题、部分解答及项目 |
 | [Stanford EE359](#stanford-ee359) | 衰落、容量、分集及多天线无线链路 | 进阶 · 80–130 小时 | 2020 冬课程站，列有讲义、作业及考试栏目 |
 | [Berkeley EE123](#berkeley-ee123) | FFT、滤波器、多速率与信号实现 | 基础至进阶 · 70–120 小时 | 2026 春课程站列有讲义、作业；视频在 bCourses |
@@ -40,6 +41,8 @@
 - **选学投入：**80–140 小时，覆盖主要放大器与反馈章节、代表性题目和一个缩小范围的仿真实验；不含整套课程项目。
 - **材料与练习：**[2025 春课程站](https://people.eecs.berkeley.edu/~pister/140sp25/)按周链接讲义、HW、Lab 和历史试卷。公开材料供自学，讨论与成绩系统仍需课程权限。
 
+[讲义笔记、试题与答案 →](course-materials.md#berkeley-ee140)
+
 ### Stanford EE214B · 高级集成电路设计 { #stanford-ee214b }
 
 **课程重点：**用紧凑模型抓住先进 CMOS 的性能限制；包含噪声分析、gm/ID 尺寸设计、反馈电路，以及数字门延迟和逻辑努力。它要求从器件参数解释设计取舍，不能只记拓扑。
@@ -49,6 +52,8 @@
 - **选学投入：**60–100 小时，限定噪声、gm/ID 与反馈专题阅读和小型仿真；完整学习所需资料需自行核对。
 - **入口与限制：**[Stanford 官方课程介绍](https://bulletin.stanford.edu/courses/1038621)。本次未确认完整公开讲义、题库或视频，适合先确定进阶目标；需要立即练习可用上方 EE140 的公开材料。
 
+[讲义笔记、试题与答案 →](course-materials.md#stanford-ee214b)
+
 ### EPFL EE-320 · Analog IC Design { #epfl-ee320 }
 
 **课程重点：**从 MOS 大、小信号模型与寄生效应入手，学习单级放大器、电流镜、差分对、cascode、OTA、频率响应及模拟版图。重点是把复杂电路拆成可分析的小模块。
@@ -57,6 +62,8 @@
 - **本站开课自查：**能用 KCL / KVL 分析电路，判断 MOS 饱和区，估算 gm 与输出电阻，并完成一次简单 SPICE 扫描。相关基础见[电路](courses/ee-circuits.md)与[器件指南](courses/ee-devices.md)。
 - **选学投入：**50–90 小时，核心模拟模块与一项 OTA 分析；不含全部 CAD 与版图实验。
 - **练习与权限：**大纲说明有习题、作业和 CAD 实践，[教学平台入口](https://go.epfl.ch/EE-320)可能要求课程账号；未确认完整题目公开。校外自学可用 EE140 作业补相近主题。
+
+[讲义笔记、试题与答案 →](course-materials.md#epfl-ee320)
 
 ## 数字 IC 与体系结构 { #digital }
 
@@ -69,6 +76,8 @@
 - **选学投入：**90–150 小时，核心讲义、入门实验和一个小模块的验证 / 综合；不含完整处理器或整芯片项目。
 - **材料与练习：**[2026 秋课程站](https://eecs151.org/)列出 HW 与实验；[ASIC Lab 1](https://eecs151.org/asic/lab1/overview/)可作为流程起点。实验服务器、工具许可与正式验收按原课权限安排，不能仅凭公开指导运行全部实验。
 
+[讲义笔记、试题与答案 →](course-materials.md#berkeley-eecs151)
+
 ### ETH Zürich · VLSI 2：从网表到完整 SoC { #eth-vlsi2 }
 
 **课程重点：**由前端设计复习进入标准单元、布局规划、I/O 与封装、时钟、寄生、布局布线、功耗和测试。官方说明自 2025 年起更侧重开源工具与实践，目标是围绕练习完成 SoC 设计。
@@ -77,6 +86,8 @@
 - **本站开课自查：**能从 RTL 得到综合网表，解释 setup / hold、关键路径与约束，读懂基本时序报告。可先学习[数字 IC](courses/ic-digital.md)和[OpenROAD 实践](courses/ic-eda.md)。
 - **选学投入：**90–150 小时，后端基础与缩小范围的模块流程；完整 SoC 项目另计。
 - **材料与加入：**官方大纲链接课程站，但本次未确认完整公开实验包；该学期正式选课要求提交动机说明并经课程方审核，不是公开邀请码选课。校外可先按本站 OpenROAD 指南做独立练习。
+
+[讲义笔记、试题与答案 →](course-materials.md#eth-vlsi2)
 
 ### EPFL EE-429 · Fundamentals of VLSI Design { #epfl-ee429 }
 
@@ -87,6 +98,8 @@
 - **选学投入：**70–120 小时，门级分析、存储基础与一个缩小流程练习，不含完整工业工具项目。
 - **练习与权限：**大纲含计算机实验和工业工具；[Moodle 课程入口](https://go.epfl.ch/EE-429)要求课程权限，核对时不允许访客进入。可搭配本站[CMOS 数字 IC 指南](courses/ic-digital.md)的 MIT 公开作业。
 
+[讲义笔记、试题与答案 →](course-materials.md#epfl-ee429)
+
 ### Carnegie Mellon 18-447 · 计算机体系结构 { #cmu-18447 }
 
 **课程重点：**处理器控制与数据通路、流水线、简单超标量执行、存储层次和性能分析；官方介绍包含用 Verilog 设计与仿真处理器的实验，强调用实现检验架构选择。
@@ -94,7 +107,9 @@
 - **官方先修：**[课程目录](https://courses.ece.cmu.edu/18447)列出 18-240、18-213，以及指定 18-3xx 课程之一；介绍明确要求 RTL 系统、缓存 / 虚拟内存与汇编知识。
 - **本站开课自查：**能读简单汇编、画数据通路、解释流水线冒险，写基础 Verilog；具备 C 编程和调试能力。可从[数字逻辑指南](courses/ee-digital.md)与[原有 Cornell 课程](course-links.md#cornell-ece4750)衔接。
 - **选学投入：**80–140 小时，核心结构分析和一个缩小的流水线 / 缓存实验；不含整套处理器项目。
-- **材料限制：**本次确认的是官方课程介绍，不承诺当前学期完整讲义与实验公开。没有课程系统权限时，可先使用[已有体系结构实验入口](course-practice.md#cornell-ece4750)。
+- **材料更新：**已进一步找到教师官网的 2024 春公开讲义，并抓取前六讲，见下方资料页；当前学期实验与试卷权限仍按原校要求。也可参考[已有体系结构实验入口](course-practice.md#cornell-ece4750)。
+
+[讲义笔记、试题与答案 →](course-materials.md#cmu-18447)
 
 ## MEMS 与微系统 { #mems }
 
@@ -107,6 +122,8 @@
 - **选学投入：**70–120 小时，工艺与建模重点、代表性习题及一个传感器模型；不包含洁净室加工与完整团队项目。
 - **公开材料：**[OCW 课程](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/) · [作业与部分解答](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/pages/assignments/)。归档材料用于自学，无原校在线评分。
 
+[讲义笔记、试题与答案 →](course-materials.md#mit-6777)
+
 ## 通信、DSP 与优化 { #communications }
 
 ### Stanford EE359 · 无线通信 { #stanford-ee359 }
@@ -118,6 +135,8 @@
 - **选学投入：**80–130 小时，核心链路理论、代表性推导和一个衰落信道仿真；不含完整项目。
 - **材料与练习：**[2020 课程站](https://web.stanford.edu/class/ee359/courseinfo.html)导航列有 Lectures、Homework、Projects、Exams。归档日期不代表当前提交窗口，部分文件可能受权限限制。
 
+[讲义笔记、试题与答案 →](course-materials.md#stanford-ee359)
+
 ### Berkeley EE123 · 数字信号处理 { #berkeley-ee123 }
 
 **课程重点：**DTFT / Z 变换、DFT / FFT、频谱分辨率、卷积实现、FIR 设计、多速率、滤波器组及量化；大纲还涉及小波、压缩感知与二维信号。重点在算法如何实现及其误差与取舍。
@@ -126,6 +145,8 @@
 - **本站开课自查：**能计算卷积与系统频率响应，理解采样、混叠和复指数；会用 Python / NumPy 绘图、FFT 与调试 Jupyter Notebook。信号基础可先看[本站指南](courses/ee-signals.md)。
 - **选学投入：**70–120 小时，FFT、滤波与采样重点和一个数值实验，不含全部扩展主题。
 - **练习与提交：**课程站列有讲义、HW 与编程实验安排，外链文件权限以原站为准；视频在 bCourses，作业正式提交通过 Gradescope，需要课程权限。公开自测也可搭配[MIT DSP 作业](course-practice.md#zju-dsp)。
+
+[讲义笔记、试题与答案 →](course-materials.md#berkeley-ee123)
 
 ### UIUC ECE453 · 无线通信系统 { #uiuc-ece453 }
 
@@ -136,6 +157,8 @@
 - **选学投入：**60–100 小时，接收、匹配与噪声分析，选做预习 / 仿真；不含整套仪器实验与硬件项目。
 - **材料与实验：**[2025 秋课程站](https://courses.grainger.illinois.edu/ece453/fa2025/index.htm)有 Notes、Homework、Labs 等入口；硬件实验需相应设备，完整文件与正式提交权限依课程要求。
 
+[讲义笔记、试题与答案 →](course-materials.md#uiuc-ece453)
+
 ### Stanford EE364A · 凸优化 I { #stanford-ee364a }
 
 **课程重点：**识别凸问题、构造模型，学习凸集 / 函数、线性与二次规划、最优性条件、对偶和内点法。对通信资源分配、滤波器设计与部分电路设计问题都有帮助，但不是所有无线或 IC 优化都能直接写成凸问题。
@@ -144,6 +167,8 @@
 - **本站开课自查：**能处理矩阵、二次型、特征值和向量求导，会最小二乘及基本概率，能用 Python 写一个数值求解脚本。矩阵基础可结合[EE263](course-links.md#stanford-ee263)补齐。
 - **选学投入：**70–120 小时，凸建模、对偶与代表性题目，另复现一个小型优化实例；不含全部算法细节和作业。
 - **公开材料与提交：**当前页面提供讲义与在线教材；[SEE 归档课程](https://see.stanford.edu/Course/EE364A)提供自学视频与作业栏目。当前班级的 Ed / Gradescope 使用课程权限，归档自学无需邀请码。
+
+[讲义笔记、试题与答案 →](course-materials.md#stanford-ee364a)
 
 ## 先修自查与衔接顺序 { #readiness }
 
