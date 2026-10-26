@@ -341,6 +341,10 @@ submission_issue: 123
 
 ## 12. 本地预览：真正修改前先能运行
 
+Windows 已安装 Python 时，可以双击仓库根目录的 `start-preview.cmd`。它会打开 `http://127.0.0.1:8080/`；已有构建时直接预览，缺少 `site/index.html` 时才尝试构建。保持启动窗口运行，按 `Ctrl+C` 停止。源码修改后仍需运行 `python build.py` 更新页面。
+
+`ERR_CONNECTION_REFUSED` 且地址为 `127.0.0.1:8080` 时，先启动预览服务。这个地址只表示当前电脑；正式网站是 [之芯](https://hexzane-cyber.github.io/study-garden/)，打开正式站点不需要本机启动预览。
+
 ### 12.1 进入正确项目目录
 
 在 PowerShell 中进入你保存源码的 `study-garden` 文件夹；先检查当前目录是否有 `build.py`、`mkdocs.yml` 和 `docs/`。以下命令均在这个目录运行。
