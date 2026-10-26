@@ -1,0 +1,442 @@
+{
+  "version": 1,
+  "authorship": "之芯原创自测，非学校真题或官方作业",
+  "questions": [
+    {
+      "id": "divider",
+      "title": "电阻分压与负载条件",
+      "topic": "电路与模拟IC",
+      "level": "入门",
+      "minutes": 4,
+      "course": "ee-circuits",
+      "kind": "number",
+      "prompt": "理想 12 V 电源串联 R1=3 kΩ、R2=6 kΩ，R2 下端接地。输出取 R2 上端，且不接负载。输出电压是多少 V？",
+      "hints": [
+        "输出是 R2 两端的电压。",
+        "先求串联电流，或使用无负载分压公式。"
+      ],
+      "solution": [
+        "两电阻串联总阻值为 9 kΩ，电流为 12/9000 A。",
+        "输出 Vout=12×6/(3+6)=8 V。",
+        "接入有限负载后要先把负载与 R2 并联，不能继续照搬这个结果。"
+      ],
+      "expected": 8,
+      "unit": "V",
+      "absTolerance": 0.01
+    },
+    {
+      "id": "thevenin",
+      "title": "分压网络的戴维南电阻",
+      "topic": "电路与模拟IC",
+      "level": "基础",
+      "minutes": 5,
+      "course": "ee-circuits",
+      "kind": "number",
+      "prompt": "仍为理想 12 V 电源、R1=3 kΩ、R2=6 kΩ 的分压网络。移除外部负载后，从输出节点对地看进去，戴维南等效电阻是多少 kΩ？",
+      "hints": [
+        "求等效电阻时，独立理想电压源置零。",
+        "电压源置零相当于短路，此时两个电阻是什么连接？"
+      ],
+      "solution": [
+        "将独立理想电压源短路。",
+        "从输出对地看，R1 与 R2 并联。",
+        "Rth=(3×6)/(3+6)=2 kΩ。开路电压为 8 V，但本题只要求等效电阻。"
+      ],
+      "expected": 2,
+      "unit": "kΩ",
+      "absTolerance": 0.01
+    },
+    {
+      "id": "rc-tau",
+      "title": "RC 电路时间常数",
+      "topic": "电路与模拟IC",
+      "level": "入门",
+      "minutes": 3,
+      "course": "ee-circuits",
+      "kind": "number",
+      "prompt": "理想一阶 RC 低通由 R=10 kΩ、C=100 nF 组成。时间常数 τ 是多少 ms？",
+      "hints": [
+        "τ=RC。",
+        "先统一为 Ω 和 F，最后把秒换成毫秒。"
+      ],
+      "solution": [
+        "10 kΩ=10⁴ Ω，100 nF=10⁻⁷ F。",
+        "τ=10⁴×10⁻⁷ s=10⁻³ s=1 ms。"
+      ],
+      "expected": 1,
+      "unit": "ms",
+      "absTolerance": 0.01
+    },
+    {
+      "id": "rc-step",
+      "title": "一个时间常数后的阶跃响应",
+      "topic": "电路与模拟IC",
+      "level": "基础",
+      "minutes": 5,
+      "course": "ee-circuits",
+      "kind": "number",
+      "prompt": "初始未充电的理想 RC 电路施加 0→5 V 的阶跃。电容电压在 t=τ 时是多少 V？保留三位小数即可。",
+      "hints": [
+        "一阶充电响应 vC(t)=5(1−exp(−t/τ))。"
+      ],
+      "solution": [
+        "代入 t=τ，得到 vC=5(1−e⁻¹)。",
+        "结果约为 3.161 V，是最终值的约 63.2%，不是 5 V。"
+      ],
+      "expected": 3.160602794,
+      "unit": "V",
+      "absTolerance": 0.01
+    },
+    {
+      "id": "opamp",
+      "title": "反相放大器的符号与增益",
+      "topic": "电路与模拟IC",
+      "level": "基础",
+      "minutes": 5,
+      "course": "ee-analog",
+      "kind": "number",
+      "prompt": "理想运放工作在线性负反馈区，反相结构 Rin=10 kΩ、Rf=47 kΩ，同相端接地，输入为 +0.20 V。输出电压是多少 V？假定电源范围足够。",
+      "hints": [
+        "理想反相闭环增益为 −Rf/Rin。"
+      ],
+      "solution": [
+        "Av=−47/10=−4.7。",
+        "Vout=−4.7×0.20=−0.94 V。",
+        "负号表示相对于输入反相；若实际电源范围不足，则会饱和，本题已排除此情况。"
+      ],
+      "expected": -0.94,
+      "unit": "V",
+      "absTolerance": 0.005
+    },
+    {
+      "id": "mos-square",
+      "title": "长沟道 MOS 饱和区电流",
+      "topic": "电路与模拟IC",
+      "level": "基础",
+      "minutes": 7,
+      "course": "ee-devices",
+      "kind": "number",
+      "prompt": "理想长沟道 NMOS：μnCox(W/L)=1 mA/V²，VTH=0.4 V，VGS=1.2 V，VDS=1.0 V。忽略沟道长度调制和体效应。漏电流是多少 mA？先检查工作区。",
+      "hints": [
+        "过驱动电压 Vov=VGS−VTH。",
+        "饱和条件为 VDS≥Vov；饱和区 ID=(1/2)μnCox(W/L)Vov²。"
+      ],
+      "solution": [
+        "Vov=1.2−0.4=0.8 V，且 VDS=1.0 V≥0.8 V，因此在模型的饱和区。",
+        "ID=(1/2)×1×0.8² mA=0.32 mA。",
+        "给定参数是 μnCox(W/L)，未包含前面的 1/2；不要把两种参数定义混用。"
+      ],
+      "expected": 0.32,
+      "unit": "mA",
+      "absTolerance": 0.005
+    },
+    {
+      "id": "cmos-power",
+      "title": "CMOS 动态功耗",
+      "topic": "数字IC",
+      "level": "基础",
+      "minutes": 6,
+      "course": "ic-digital",
+      "kind": "number",
+      "prompt": "用 Pdyn=αCLVDD²f 估算 CMOS 充放电动态功耗。给定 α=0.2（每周期发生 0→1 充电事件的平均次数）、CL=20 pF、VDD=1.2 V、f=100 MHz，结果是多少 mW？忽略短路与漏电功耗。",
+      "hints": [
+        "按题目已指定的 α 定义使用公式，不额外再乘 1/2。"
+      ],
+      "solution": [
+        "P=0.2×20×10⁻¹²×1.2²×100×10⁶ W。",
+        "结果为 0.000576 W，即 0.576 mW。",
+        "这只包含所给模型中的充放电动态功耗。"
+      ],
+      "expected": 0.576,
+      "unit": "mW",
+      "absTolerance": 0.005
+    },
+    {
+      "id": "setup-time",
+      "title": "建立时间约束",
+      "topic": "数字IC",
+      "level": "基础",
+      "minutes": 6,
+      "course": "ic-fpga",
+      "kind": "number",
+      "prompt": "两个同一时钟域寄存器之间，发射寄存器 tCQ,max=0.2 ns，组合逻辑最大延迟为 3.0 ns，接收寄存器建立时间为 0.3 ns。忽略时钟偏斜与不确定度。最小允许时钟周期是多少 ns？",
+      "hints": [
+        "建立约束包含 tCQ,max、组合最大延迟和 tsetup。"
+      ],
+      "solution": [
+        "Tmin≥tCQ,max+tcomb,max+tsetup。",
+        "Tmin=0.2+3.0+0.3=3.5 ns。",
+        "对应理想最高频率约 285.7 MHz。保持时间需另行检查，不能由建立约束代替。"
+      ],
+      "expected": 3.5,
+      "unit": "ns",
+      "absTolerance": 0.01
+    },
+    {
+      "id": "nonblocking",
+      "title": "非阻塞赋值交换寄存器",
+      "topic": "数字IC",
+      "level": "基础",
+      "minutes": 5,
+      "course": "ic-hdlbits",
+      "kind": "choice",
+      "prompt": "在同一 always @(posedge clk) 块中按顺序执行 a <= b; b <= a;。时钟沿前 a=0、b=1，且没有其他驱动。非阻塞赋值更新完成后，a、b 分别是什么？",
+      "hints": [
+        "右侧表达式读取本次时钟沿更新前的值。"
+      ],
+      "solution": [
+        "a 的待写入值是旧 b=1。",
+        "b 的待写入值是旧 a=0。",
+        "因此 a=1、b=0；不能按阻塞赋值的逐行立即更新方式推理。"
+      ],
+      "options": [
+        "a=0，b=1",
+        "a=1，b=0",
+        "a=1，b=1",
+        "a=0，b=0"
+      ],
+      "correct": 1
+    },
+    {
+      "id": "nand",
+      "title": "从真值表辨认逻辑门",
+      "topic": "数字IC",
+      "level": "入门",
+      "minutes": 3,
+      "course": "ee-digital",
+      "kind": "choice",
+      "prompt": "二输入逻辑门仅在 A=1 且 B=1 时输出 0，其余三种输入均输出 1。它是什么门？",
+      "hints": [
+        "先写出 Y=NOT(A AND B)。"
+      ],
+      "solution": [
+        "输出是与运算结果的取反。",
+        "因此为 NAND，与非门。"
+      ],
+      "options": [
+        "AND 与门",
+        "OR 或门",
+        "XOR 异或门",
+        "NAND 与非门"
+      ],
+      "correct": 3
+    },
+    {
+      "id": "convolution",
+      "title": "有限长离散卷积",
+      "topic": "信号与DSP",
+      "level": "基础",
+      "minutes": 6,
+      "course": "ee-signals",
+      "kind": "choice",
+      "prompt": "x[0]=1、x[1]=2，h[0]=1、h[1]=1，其余样本均为 0。求 y[n]=x[n]*h[n]，按 n=0、1、2 排列。",
+      "hints": [
+        "逐项用 y[n]=Σk x[k]h[n−k]。"
+      ],
+      "solution": [
+        "y[0]=1×1=1。",
+        "y[1]=1×1+2×1=3。",
+        "y[2]=2×1=2，因此结果为 [1,3,2]。"
+      ],
+      "options": [
+        "[1, 3, 2]",
+        "[1, 2, 1]",
+        "[1, 2, 2]",
+        "[2, 3, 1]"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "lti-step",
+      "title": "由冲激响应求稳态值",
+      "topic": "信号与DSP",
+      "level": "基础",
+      "minutes": 7,
+      "course": "ee-signals",
+      "kind": "number",
+      "prompt": "连续时间因果 LTI 系统 h(t)=exp(−2t)u(t)，输入为单位阶跃 u(t)，系统初始静止。输出 y(t) 在 t→∞ 时的极限是多少？",
+      "hints": [
+        "阶跃响应等于冲激响应从 0 到 t 的积分。"
+      ],
+      "solution": [
+        "y(t)=∫₀ᵗ exp(−2τ)dτ=(1−exp(−2t))/2，t≥0。",
+        "t→∞ 时指数项趋于 0，极限为 1/2=0.5。",
+        "也可用直流增益 ∫₀∞h(t)dt=1/2 检查。"
+      ],
+      "expected": 0.5,
+      "unit": "（无量纲）",
+      "absTolerance": 0.005
+    },
+    {
+      "id": "alias",
+      "title": "单音信号的混叠频率",
+      "topic": "信号与DSP",
+      "level": "基础",
+      "minutes": 5,
+      "course": "ee-dsp",
+      "kind": "number",
+      "prompt": "对 7 kHz 的实余弦单音以 fs=10 kHz 理想均匀采样。在 0 到 fs/2 的基带区间内，它对应的混叠频率是多少 kHz？",
+      "hints": [
+        "离散时间频率以采样频率为周期等效，实余弦还具有正负频率等效。"
+      ],
+      "solution": [
+        "7 kHz 与 7−10=−3 kHz 在采样后等效。",
+        "对实余弦，−3 kHz 对应同一基带频率 3 kHz。"
+      ],
+      "expected": 3,
+      "unit": "kHz",
+      "absTolerance": 0.01
+    },
+    {
+      "id": "dft-grid",
+      "title": "DFT 频率栅格间隔",
+      "topic": "信号与DSP",
+      "level": "基础",
+      "minutes": 4,
+      "course": "ee-dsp",
+      "kind": "number",
+      "prompt": "采样率 fs=8000 Hz，使用 N=256 点 DFT。相邻 DFT 频率栅格间隔 Δf 是多少 Hz？本题问栅格间隔，不把它等同于任意双音的实际可分辨能力。",
+      "hints": [
+        "Δf=fs/N。"
+      ],
+      "solution": [
+        "Δf=8000/256=31.25 Hz。",
+        "实际分辨近邻频率还受观测时长、窗函数等影响；零填充只是加密频率栅格。"
+      ],
+      "expected": 31.25,
+      "unit": "Hz",
+      "absTolerance": 0.01
+    },
+    {
+      "id": "sampling",
+      "title": "选择严格满足条件的采样率",
+      "topic": "信号与DSP",
+      "level": "入门",
+      "minutes": 4,
+      "course": "ee-signals",
+      "kind": "choice",
+      "prompt": "实低通信号的最高频率为 B=3 kHz。若本题要求选择严格大于 2B 的采样率，下面哪一个满足要求？",
+      "hints": [
+        "先算 2B，再按题目要求使用严格大于号。"
+      ],
+      "solution": [
+        "2B=6 kHz。",
+        "四个候选值中只有 8 kHz 严格大于 6 kHz。",
+        "本题特意使用严格条件，避免对临界采样和边界谱分量作额外假设。"
+      ],
+      "options": [
+        "4 kHz",
+        "5 kHz",
+        "8 kHz",
+        "3 kHz"
+      ],
+      "correct": 2
+    },
+    {
+      "id": "shannon",
+      "title": "理想 AWGN 信道容量",
+      "topic": "通信与信息论",
+      "level": "基础",
+      "minutes": 7,
+      "course": "comm-information",
+      "kind": "number",
+      "prompt": "理想带限 AWGN 信道带宽 B=1 MHz，接收信噪比 S/N=15（线性值，不是 dB）。按 C=B log₂(1+S/N) 求理论容量，单位 Mbit/s。",
+      "hints": [
+        "1+S/N=16。"
+      ],
+      "solution": [
+        "log₂(16)=4。",
+        "C=1×10⁶×4 bit/s=4 Mbit/s。",
+        "这是给定模型的理论上界，不是具体调制和编码系统一定能达到的净吞吐。"
+      ],
+      "expected": 4,
+      "unit": "Mbit/s",
+      "absTolerance": 0.01
+    },
+    {
+      "id": "binary-entropy",
+      "title": "二元信源熵",
+      "topic": "通信与信息论",
+      "level": "基础",
+      "minutes": 7,
+      "course": "comm-information",
+      "kind": "number",
+      "prompt": "无记忆二元信源 P(X=1)=1/4，P(X=0)=3/4。求每个符号的熵 H(X)，单位 bit/符号，保留三位小数即可。",
+      "hints": [
+        "H=−Σ p log₂p。"
+      ],
+      "solution": [
+        "H=−0.25 log₂0.25−0.75 log₂0.75。",
+        "结果约为 0.811278 bit/符号，写成 0.811 可接受。",
+        "最大值 1 bit/符号出现在两个符号等概率时。"
+      ],
+      "expected": 0.811278124,
+      "unit": "bit/符号",
+      "absTolerance": 0.001
+    },
+    {
+      "id": "bpsk",
+      "title": "相干 BPSK 误码率模型",
+      "topic": "通信与信息论",
+      "level": "基础",
+      "minutes": 6,
+      "course": "comm-principles",
+      "kind": "choice",
+      "prompt": "等概率二进制、理想相干检测、AWGN 条件下，BPSK 的比特误码率表达式是哪一个？Eb/N0 使用线性值，Q 为标准正态上尾函数。",
+      "hints": [
+        "判决距离按比特能量归一化；不要把 dB 数直接放进根号。"
+      ],
+      "solution": [
+        "在题设条件下 Pb=Q(sqrt(2Eb/N0))。",
+        "它依赖理想相干、AWGN 和等概率等前提，不能直接套到衰落信道或非相干接收。"
+      ],
+      "options": [
+        "Q(sqrt(2Eb/N0))",
+        "Q(2Eb/N0)",
+        "Q(sqrt(Eb/N0)/2)",
+        "log₂(1+Eb/N0)"
+      ],
+      "correct": 0
+    },
+    {
+      "id": "snr-db",
+      "title": "功率信噪比的 dB 换算",
+      "topic": "通信与信息论",
+      "level": "入门",
+      "minutes": 3,
+      "course": "comm-intro",
+      "kind": "number",
+      "prompt": "功率信噪比为 10 dB，其线性值 S/N 是多少？",
+      "hints": [
+        "功率比的 dB 定义是 10 log₁₀(S/N)，不是 20 log₁₀。"
+      ],
+      "solution": [
+        "S/N=10^(10/10)=10。",
+        "若给的是电压幅值比，还需考虑阻抗及对应定义；本题明确给出功率信噪比。"
+      ],
+      "expected": 10,
+      "unit": "（线性比值）",
+      "absTolerance": 0.01
+    },
+    {
+      "id": "sampling-vs-capacity",
+      "title": "解释抽样限制和容量限制",
+      "topic": "通信与信息论",
+      "level": "进阶",
+      "minutes": 10,
+      "course": "comm-intro",
+      "kind": "explain",
+      "prompt": "用自己的话比较：无失真重建条件中的采样率限制，与 AWGN 信道容量公式中的通信速率限制，各在回答什么问题？为什么不能只把 fs 直接当作可靠 bit/s？",
+      "hints": [
+        "采样率的单位是样本/秒；通信速率是 bit/秒。",
+        "考虑幅度量化、噪声、调制、编码和具体模型。"
+      ],
+      "solution": [
+        "抽样条件讨论带限连续信号能否由样本无失真重建，前提涉及带限和理想采样等。",
+        "AWGN 容量讨论给定带宽和信噪比条件下、允许足够长编码时可可靠通信的理论速率边界。",
+        "一个样本能承载多少可靠信息，不由采样率单独决定，还依赖噪声、量化和编码等条件。",
+        "因此样本/秒不能直接当作 bit/秒。此题为解释题，不自动判对错，可逐点对照或请本地 AI 检查。"
+      ]
+    }
+  ]
+}

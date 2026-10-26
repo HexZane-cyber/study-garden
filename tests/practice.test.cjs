@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict'),M=require('../docs/assets/practice-model.js'),questions=require('../docs/assets/exercises.json').questions;
+const numeric=questions.find(q=>q.id==='rc-step'),choice=questions.find(q=>q.id==='nand'),explain=questions.find(q=>q.kind==='explain');
+assert(M.evaluate(numeric,'３.１６０６').correct);assert(M.evaluate(numeric,'3.16e0').correct);assert(!M.evaluate(numeric,'3.2').correct);
+for(const value of ['','1/3','Infinity','NaN','0x3','3 V','1,5','1e999'])assert(!M.evaluate(numeric,value).valid,value);
+assert(M.evaluate(choice,'3').correct);assert(!M.evaluate(choice,'2').correct);assert(!M.evaluate(choice,'-1').valid);assert(!M.evaluate(choice,'4').valid);
+assert(M.evaluate(explain,'推理').manual);assert(!M.evaluate(explain,'推理').correct);
+const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v)};
+const records={nand:{...M.blank(),answer:'3',checked:true}};assert(M.save(storage,records,questions));assert.equal(M.progress(questions,M.read(storage,questions).records).correct,1);
+const backup=M.backup(records,questions);assert.deepEqual(M.restore(backup,questions),records);
+assert.throws(()=>M.restore('{"version":2}',questions));assert.throws(()=>M.clean({nand:{...M.blank(),hints:999}},questions));assert.throws(()=>M.restore('x'.repeat(M.LIMIT+1),questions));
+assert.deepEqual(M.merge(records,{nand:{...M.blank(),answer:'0'}}),records);
+map.set(M.KEY,'corrupt');assert(!M.read(storage,questions).writable);assert(!M.save(storage,{},questions));assert.equal(map.get(M.KEY),'corrupt');
+const blocked={getItem(){throw Error('blocked');},setItem(){throw Error('blocked');}};assert(!M.read(blocked,questions).writable);
+console.log('Practice validation, grading, backup and read-only recovery passed.');

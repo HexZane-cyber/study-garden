@@ -10,6 +10,8 @@ from urllib.parse import urljoin, urlparse
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 FEATURE_SCRIPTS = {
+    'exercises/index.html': ['assets/practice-model.js', 'assets/practice.js', 'assets/local-ai-model.js', 'assets/local-ai.js'],
+    'local-ai/index.html': ['assets/local-ai-model.js', 'assets/local-ai.js'],
     'graph/index.html': ['assets/graph-interaction.js', 'assets/learning-model.js', 'assets/chip-learning.js', 'assets/chip-model.js', 'assets/vendor/chip3d.bundle.js', 'assets/chip.js'],
     'chip/index.html': ['assets/graph-interaction.js', 'assets/learning-model.js', 'assets/chip-learning.js', 'assets/chip-model.js', 'assets/vendor/chip3d.bundle.js', 'assets/chip.js'],
     'contribute/index.html': ['assets/contribution-model.js', 'assets/community.js'],
@@ -67,6 +69,16 @@ class PageAssetsTest(unittest.TestCase):
                 for name, attrs in features:
                     self.assertIn('defer', attrs, name)
                     self.assertNotIn('async', attrs, name)
+
+    def test_ai_runtime_is_opt_in(self):
+        for path in ['index.html', 'exercises/index.html', 'local-ai/index.html']:
+            scripts = [name for name, _ in self.scripts(path)]
+            self.assertNotIn('assets/vendor/local-ai-runtime.bundle.js', scripts)
+            self.assertNotIn('assets/vendor/local-ai-worker.bundle.js', scripts)
+        html = (SITE / 'exercises/index.html').read_text(encoding='utf-8')
+        self.assertIn('id="practice-data"', html)
+        self.assertIn('data-runtime="../assets/vendor/local-ai-runtime.bundle.js?v=', html)
+        self.assertIn('data-worker="../assets/vendor/local-ai-worker.bundle.js?v=', html)
 
     def test_dashboard_only_downloads_review_model(self):
         scripts = [name for name, _ in self.scripts('dashboard/index.html')]

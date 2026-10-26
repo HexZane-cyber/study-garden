@@ -1,0 +1,41 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+function dependency(name){try{return require(name);}catch{return require('../.tooling/node_modules/'+name);}}
+const {JSDOM}=dependency('jsdom'),root=path.join(__dirname,'..'),data=require('../docs/assets/exercises.json'),P=require('../docs/assets/practice-model.js');
+const tick=()=>new Promise(resolve=>setImmediate(resolve)),button=(d,text)=>[...d.querySelectorAll('button')].find(b=>b.textContent===text);
+function page(blocked=false){
+ const dom=new JSDOM('<div id="practice-app"></div><div id="local-ai-app"></div><script id="practice-data" type="application/json"></script>',{url:'https://test.invalid/study-garden/exercises/',runScripts:'outside-only'}),w=dom.window,d=w.document;
+ d.getElementById('practice-data').textContent=JSON.stringify(data);w.HTMLElement.prototype.scrollIntoView=function(){};w.confirm=()=>true;
+ if(blocked)Object.defineProperty(w,'localStorage',{get(){throw Error('blocked');}});
+ let starts=0,requests=0,closed=0,resolveLoad,progress,fail=false;
+ Object.defineProperty(w,'isSecureContext',{value:true});Object.defineProperty(w.navigator,'gpu',{value:{requestAdapter:async()=>({features:new Set(['shader-f16'])})}});
+ w.fetch=async()=>{requests++;throw Error('unexpected network');};
+ w.ZhixinWebLLM={start(url,id,cb){starts++;progress=cb;return{ready:fail?Promise.reject(Error('mock failure')):new Promise(resolve=>{resolveLoad=resolve;}),close(){closed++;},async generate(messages,onToken){assert(messages.at(-1).content);onToken('<img src=x onerror=alert(1)>');return '<img src=x onerror=alert(1)>';}};},cached:async()=>false,remove:async()=>true};
+ for(const name of ['practice-model.js','practice.js','local-ai-model.js','local-ai.js']){Object.defineProperty(d,'currentScript',{value:{src:'https://test.invalid/study-garden/assets/'+name,dataset:{runtime:'../assets/vendor/local-ai-runtime.bundle.js',worker:'../assets/vendor/local-ai-worker.bundle.js'}},configurable:true});w.eval(fs.readFileSync(path.join(root,'docs/assets',name),'utf8'));}
+ return{dom,w,d,get starts(){return starts;},get requests(){return requests;},get closed(){return closed;},finish(){resolveLoad();},progress(p){progress(p);},fail(){fail=true;}};
+}
+(async()=>{
+ const p=page(),{w,d}=p;
+ assert.equal(p.starts,0);assert.equal(p.requests,0);assert(!d.querySelector('script[src*="runtime"]'));
+ const first=d.querySelector('.practice-card'),answer=first.querySelector('input[type=text]');answer.value='8';answer.dispatchEvent(new w.Event('input'));first.querySelector('button').click();
+ assert(first.querySelector('.practice-feedback').textContent.includes('允许误差'));assert.equal(JSON.parse(w.localStorage.getItem(P.KEY)).records.divider.answer,'8');
+ button(d,'本地 AI 检查').click();assert(!d.querySelector('.local-ai-context').hidden);assert(d.querySelector('[aria-label="向本地 AI 提问"]').value.includes('参考要点'));assert.equal(p.starts,0);
+ // Save only dirty question IDs so unrelated records written by another tab survive.
+ const stored=JSON.parse(w.localStorage.getItem(P.KEY));stored.records.nand={answer:'3',checked:true,revealed:false,hints:0};w.localStorage.setItem(P.KEY,JSON.stringify(stored));
+ answer.value='7';answer.dispatchEvent(new w.Event('input'));first.querySelector('button').click();assert.equal(JSON.parse(w.localStorage.getItem(P.KEY)).records.nand.answer,'3');
+ button(d,'下载并加载模型').click();await tick();assert.equal(p.starts,1);assert(button(d,'发送给本地 AI').disabled);p.progress({progress:.3,text:'mock loading'});assert(d.querySelector('.local-ai-status').textContent.includes('mock'));
+ button(d,'停止 / 卸载').click();p.progress({progress:1,text:'stale'});p.finish();await tick();assert(!d.querySelector('.local-ai-status').textContent.includes('stale'));assert(button(d,'发送给本地 AI').disabled);
+ button(d,'下载并加载模型').click();await tick();p.finish();await tick();assert(!button(d,'发送给本地 AI').disabled);
+ const before=w.localStorage.getItem(P.KEY);button(d,'发送给本地 AI').click();await tick();assert(d.querySelector('.local-ai-message.assistant p').textContent.includes('<img'));assert(!d.querySelector('.local-ai-chat img'));assert.equal(w.localStorage.getItem(P.KEY),before);assert.equal(p.requests,0);
+ button(d,'清空本次对话').click();assert.equal(d.querySelectorAll('.local-ai-message').length,0);
+ button(d,'停止 / 卸载').click();p.fail();button(d,'下载并加载模型').click();await tick();assert(d.querySelector('.local-ai-status').textContent.includes('mock failure'));assert(!button(d,'下载并加载模型').disabled);
+ const backend=d.querySelector('[aria-label="AI 运行方式"]');backend.value='ollama';backend.dispatchEvent(new w.Event('change'));const address=d.querySelector('[aria-label="本机 Ollama 地址"]');address.value='https://evil.example';button(d,'读取本机模型').click();await tick();assert.equal(p.requests,0);assert(d.querySelector('.local-ai-status').textContent.includes('回环'));
+ address.value='http://127.0.0.1:11434';let calls=[];w.fetch=async(url,init)=>{calls.push({url,init});return{ok:true,text:async()=>JSON.stringify(url.endsWith('/api/tags')?{models:[{name:'qwen2.5:1.5b'},{name:'x:cloud'}]}:{message:{content:'本地回复'}})};};
+ button(d,'读取本机模型').click();await tick();assert.equal(d.querySelector('[aria-label="本机已安装模型"]').options.length,1);const input=d.querySelector('[aria-label="向本地 AI 提问"]');input.value='解释信噪比';button(d,'发送给本地 AI').click();await tick();assert.equal(calls[1].url,'http://127.0.0.1:11434/api/chat');assert.equal(calls[1].init.credentials,'omit');assert.equal(JSON.parse(calls[1].init.body).stream,false);assert(d.querySelector('.local-ai-message.assistant p').textContent.includes('本地回复'));p.dom.window.close();
+ const b=page(true);const card=b.d.querySelector('.practice-card'),a=card.querySelector('input[type=text]');a.value='8';a.dispatchEvent(new b.w.Event('input'));card.querySelector('button').click();assert(card.querySelector('.practice-feedback').textContent.includes('允许误差'));assert(b.d.querySelector('.practice-status').textContent.includes('停止覆盖'));b.dom.window.close();
+ // The shipped main-thread bridge handles cancellation and late worker messages.
+ const workers=[];class Worker{constructor(url){this.url=url;this.messages=[];workers.push(this);}postMessage(m){this.messages.push(m);}terminate(){this.terminated=true;}reply(r){this.onmessage?.({data:r});}}
+ const sandbox={Worker,DOMException,setTimeout,clearTimeout};vm.createContext(sandbox);vm.runInContext(fs.readFileSync(path.join(root,'docs/assets/vendor/local-ai-runtime.bundle.js'),'utf8'),sandbox);const R=sandbox.ZhixinWebLLM;
+ const session=R.start('worker.js','Qwen2.5-0.5B-Instruct-q4f16_1-MLC',()=>{});const pending=assert.rejects(session.ready,{name:'AbortError'});session.close();await pending;assert(workers[0].terminated);
+ const s=R.start('worker.js','Qwen2.5-0.5B-Instruct-q4f16_1-MLC',()=>{}),worker=workers[1];worker.reply({id:1,type:'done',value:true});await s.ready;let token='';const result=s.generate([{role:'user',content:'hello'}],v=>token=v);await tick();worker.reply({id:2,type:'text',value:'hello'});worker.reply({id:2,type:'done',value:'hello'});assert.equal(await result,'hello');assert.equal(token,'hello');s.close();
+ console.log('Practice + local AI UI: opt-in downloads, cancellation, retry, safe text, loopback requests, storage recovery and worker RPC passed.');
+})().catch(error=>{console.error(error);process.exitCode=1;});

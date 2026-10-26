@@ -51,7 +51,7 @@ def on_config(config):
 def on_pre_build(config):
     ARTICLE_SECTIONS.clear()
     ASSET_VERSIONS.clear()
-    for name in ['learning-model.js', 'learning.js', 'planner-model.js', 'planner.js']:
+    for name in ['learning-model.js', 'learning.js', 'planner-model.js', 'planner.js', 'practice-model.js', 'practice.js', 'local-ai-model.js', 'local-ai.js', 'vendor/local-ai-runtime.bundle.js', 'vendor/local-ai-worker.bundle.js']:
         path = Path(config['docs_dir']) / 'assets' / name
         ASSET_VERSIONS[name] = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
     data = graph_data(config['docs_dir'])
@@ -115,9 +115,39 @@ def load_course_catalog(docs):
     return data
 
 
+def load_exercises(docs):
+    data = json.loads((Path(docs) / 'assets/exercises.json').read_text(encoding='utf-8'))
+    courses = {c['id'] for c in load_course_catalog(docs)['courses']}
+    ids = set()
+    if data.get('version') != 1 or not isinstance(data.get('questions'), list):
+        raise ValueError('Invalid exercises')
+    for q in data['questions']:
+        if not re.fullmatch('[a-z0-9-]+', q['id']) or q['id'] in ids or q['course'] not in courses:
+            raise ValueError('Invalid exercise ID or course')
+        ids.add(q['id'])
+        if any(not isinstance(q.get(k), str) or not q[k] for k in ('title', 'topic', 'prompt')):
+            raise ValueError('Missing exercise text')
+        if q.get('level') not in {'入门', '基础', '进阶'} or type(q.get('minutes')) is not int or q['minutes'] <= 0:
+            raise ValueError('Invalid exercise metadata')
+        for field in ('hints', 'solution'):
+            if not isinstance(q.get(field), list) or not q[field] or any(not isinstance(x, str) or not x for x in q[field]):
+                raise ValueError('Missing exercise hints or solution')
+        if q['kind'] == 'number':
+            if type(q.get('expected')) not in (int, float) or not math.isfinite(q['expected']) or not q.get('unit') or type(q.get('absTolerance')) not in (int, float) or not 0 < q['absTolerance'] < 1:
+                raise ValueError('Invalid numeric answer')
+        elif q['kind'] == 'choice':
+            if not isinstance(q.get('options'), list) or len(q['options']) < 2 or any(not isinstance(o, str) or not o for o in q['options']) or type(q.get('correct')) is not int or not 0 <= q['correct'] < len(q['options']):
+                raise ValueError('Invalid choice answer')
+        elif q['kind'] != 'explain':
+            raise ValueError('Unknown exercise kind')
+    return data
+
+
 def on_page_context(context, page, config, nav):
     data = load_course_catalog(config['docs_dir'])
     context['asset_versions'] = ASSET_VERSIONS
+    if page.file.src_uri in {'exercises.md', 'local-ai.md'}:
+        context['practice_data'] = json.dumps(load_exercises(config['docs_dir']), ensure_ascii=False).replace('<', r'\u003c')
     if page.file.src_uri in {'graph.md', 'chip.md'}:
         context['chip_courses'] = json.dumps({'courses': [{key: course[key] for key in ('id', 'title', 'path', 'url', 'prerequisites')} for course in data['courses']]}, ensure_ascii=False).replace('<', r'\u003c')
     paths = {c['path'] for c in data['courses']} | {'catalog.md', 'roadmap.md', 'dashboard.md', 'backup.md'}
@@ -128,6 +158,18 @@ def on_page_context(context, page, config, nav):
 
 def on_page_markdown(markdown, page, config, files):
     data = load_course_catalog(config['docs_dir'])
+    if page.file.src_uri == 'exercises.md':
+        import html
+        lines = ['<details markdown="1"><summary>无脚本题目与解析列表</summary>', '']
+        for q in load_exercises(config['docs_dir'])['questions']:
+            lines.extend(['**' + q['title'] + '**', '', html.escape(q['prompt']), ''])
+            if q['kind'] == 'choice':
+                lines.extend(f"- {chr(65+i)}. {html.escape(o)}" for i, o in enumerate(q['options']))
+            lines.extend(['', '<details markdown="1"><summary>参考解析</summary>', ''])
+            lines.extend('- ' + html.escape(x) for x in q['solution'])
+            lines.extend(['', '</details>', ''])
+        lines.append('</details>')
+        return markdown.replace('<!-- exercise-fallback -->', '\n'.join(lines))
     if page.file.src_uri == 'catalog.md':
         lines = ['<details id="course-catalog-fallback" markdown="1"><summary>按列表浏览全部课程（无需脚本）</summary>', '', '| 课程 | 方向 | 难度 | 预计总时长 | 建议周投入 |', '| --- | --- | --- | --- | --- |']
         for c in data['courses']:
@@ -152,6 +194,9 @@ def on_page_markdown(markdown, page, config, files):
 时长是本站为安排自学所作的估算，包含阅读 / 听课、独立练习和复盘，不是视频总长度、官方课时或完成保证。默认已具备先修；英文阅读、补基础与反复调试可能增加投入。先记录两周的实际用时，再调整计划。难度按当前所选学习范围判断，不等同于学校年级或官方分级。
 
 '''
+        related = next((q for q in load_exercises(config['docs_dir'])['questions'] if q['course'] == course['id']), None)
+        if related:
+            block += f"本站原创自测：[从相关习题开始](../exercises.md?exercise={related['id']})，支持逐条提示、参考解析与本地 AI 讨论。\n\n"
         marker = '<div id="course-progress"></div>'
         return markdown.replace(marker, marker + '\n\n' + block, 1)
     return markdown

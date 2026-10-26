@@ -1,0 +1,40 @@
+(()=>{
+ 'use strict';const source=document.currentScript,base=new URL('../',source.src),payload=document.getElementById('practice-data'),host=document.getElementById('practice-app'),M=window.PracticeModel;if(!host||!payload||!M)return;
+ const questions=JSON.parse(payload.textContent).questions,el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
+ let storage;try{storage=localStorage;}catch{storage={getItem(){throw Error('blocked');},setItem(){throw Error('blocked');}};}
+ let report=M.read(storage,questions),records=report.records,limit=6,pending=null;const dirty=new Set();
+ const status=el('p',report.error||'作答保存在本浏览器；这里只做学习自测，不计入任何学校成绩。','practice-status');status.setAttribute('role','status');
+ const controls=el('div',undefined,'practice-controls'),search=el('input');search.type='search';search.placeholder='搜索题目或知识点';search.setAttribute('aria-label','搜索原创习题');
+ const select=(label,values)=>{const l=el('label',label),s=el('select');s.setAttribute('aria-label',label);for(const [value,text]of values){const o=el('option',text);o.value=value;s.append(o);}l.append(s);controls.append(l);return s;};
+ controls.append(search);const topic=select('习题方向',[['','全部方向'],...[...new Set(questions.map(q=>q.topic))].map(x=>[x,x])]),level=select('习题难度',[['','全部难度'],['入门','入门'],['基础','基础'],['进阶','进阶']]);
+ const summary=el('p',undefined,'practice-summary'),list=el('div',undefined,'practice-list'),more=el('button','再显示 6 题');more.type='button';more.className='practice-more';more.onclick=()=>{limit+=6;render();};
+ function save(){if(pending!==null){clearTimeout(pending);pending=null;}const latest=M.read(storage,questions);if(report.writable&&latest.writable){const merged={...latest.records};for(const id of dirty)merged[id]=records[id];records=merged;}const ok=report.writable&&latest.writable&&M.save(storage,records,questions);if(ok)dirty.clear();status.textContent=ok?'作答已保存在本浏览器，可导出备份。':report.error||'浏览器未能保存，本次作答仍在页面中，请先导出备份。';return ok;}
+ function updateSummary(){const p=M.progress(questions,records);summary.textContent='已作答 '+p.attempted+' / '+p.total+' 题 · 数值与选择题检查通过 '+p.correct+' 题（解释题不自动判分）';}
+ function change(q,value){const r=records[q.id]||M.blank();records[q.id]={...r,answer:value,checked:false};dirty.add(q.id);updateSummary();if(pending!==null)clearTimeout(pending);pending=setTimeout(save,350);}
+ function ai(q,mode){save();const data={id:q.id,mode,answer:records[q.id]?.answer||''};if(document.getElementById('local-ai-app')){dispatchEvent(new CustomEvent('zhixin:exercise',{detail:data}));return;}try{sessionStorage.setItem(M.HANDOFF_KEY,JSON.stringify(data));}catch{status.textContent='未能暂存答案，将只打开题目；可在助手里手动补充解答。';}location.href=new URL('local-ai/?exercise='+encodeURIComponent(q.id)+'&mode='+mode,base).href;}
+ function render(){
+  list.replaceChildren();const terms=search.value.trim().toLowerCase().split(/\s+/).filter(Boolean),shown=questions.filter(q=>(!topic.value||q.topic===topic.value)&&(!level.value||q.level===level.value)&&terms.every(t=>[q.title,q.prompt,q.topic].join(' ').toLowerCase().includes(t)));
+  more.hidden=shown.length<=limit;updateSummary();if(!shown.length){const empty=el('p','没有匹配的题目，试着清空搜索或放宽方向。');list.append(empty);}
+  for(const q of shown.slice(0,limit)){
+   const r=records[q.id]||M.blank(),card=el('article',undefined,'practice-card');card.id='exercise-'+q.id;
+   card.append(el('p',q.topic+' · '+q.level+' · 建议 '+q.minutes+' 分钟','practice-meta'),el('h3',q.title),el('p',q.prompt,'practice-prompt'));
+   let answer;if(q.kind==='choice'){answer=el('fieldset',undefined,'practice-options');answer.append(el('legend','选择答案'));q.options.forEach((option,i)=>{const label=el('label'),input=el('input');input.type='radio';input.name='answer-'+q.id;input.value=String(i);input.checked=r.answer===String(i);input.onchange=()=>{change(q,input.value);feedback.textContent='答案已修改，请重新检查。';};label.append(input,option);answer.append(label);});}
+   else{const label=el('label',q.kind==='number'?'填写数值 · 单位：'+q.unit:'写出你的解释');answer=el(q.kind==='number'?'input':'textarea');answer.setAttribute('aria-label',q.title+'的答案');answer.maxLength=2000;if(q.kind==='number'){answer.type='text';answer.inputMode='decimal';answer.placeholder='只填数值，不填单位';}else{answer.rows=5;answer.placeholder='先自己说明条件与推理，再请 AI 检查。';}answer.value=r.answer;answer.oninput=()=>{change(q,answer.value);feedback.textContent='答案已修改，请重新检查。';};label.append(answer);card.append(label);}
+   if(q.kind==='choice')card.append(answer);
+   const feedback=el('p',r.checked?M.evaluate(q,r.answer).message:'','practice-feedback');feedback.setAttribute('role','status');
+   const actions=el('div',undefined,'practice-actions'),check=el('button',q.kind==='explain'?'自查说明':'检查答案'),hint=el('button','给我一个提示'),tip=el('div',undefined,'practice-hints');check.type=hint.type='button';
+   function showHints(){tip.replaceChildren();for(const text of q.hints.slice(0,(records[q.id]||r).hints))tip.append(el('p','提示：'+text));hint.disabled=(records[q.id]||r).hints>=q.hints.length;}
+   check.onclick=()=>{const current=records[q.id]||M.blank(),result=M.evaluate(q,current.answer);feedback.textContent=result.message;if(result.valid){records[q.id]={...current,checked:true};dirty.add(q.id);save();updateSummary();}};
+   hint.onclick=()=>{const current=records[q.id]||M.blank();records[q.id]={...current,hints:Math.min(q.hints.length,current.hints+1)};dirty.add(q.id);showHints();save();};
+   const ask=el('button','本地 AI 提示'),review=el('button','本地 AI 检查');ask.type=review.type='button';ask.onclick=()=>ai(q,'hint');review.onclick=()=>ai(q,'check');actions.append(check,hint,ask,review);card.append(actions,feedback,tip);
+   const details=el('details',undefined,'practice-solution'),title=el('summary','查看参考解析（建议先独立作答）');details.open=r.revealed;details.append(title);const steps=el('ol');q.solution.forEach(s=>steps.append(el('li',s)));details.append(steps);details.ontoggle=()=>{const current=records[q.id]||M.blank();if(current.revealed!==details.open){records[q.id]={...current,revealed:details.open};dirty.add(q.id);save();}};
+   const course=el('a','回到对应课程 →');course.href=new URL('courses/'+q.course+'/',base).href;card.append(details,course);showHints();list.append(card);
+  }
+ }
+ const backup=el('div',undefined,'practice-backup'),exportButton=el('button','导出练习记录'),rawButton=el('button','导出原始记录'),importButton=el('button','导入练习记录'),file=el('input');for(const b of [exportButton,rawButton,importButton])b.type='button';file.type='file';file.accept='.json,application/json';file.hidden=true;rawButton.hidden=report.writable;
+ function download(name,text){const url=URL.createObjectURL(new Blob([text],{type:'application/json'})),a=el('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+ exportButton.onclick=()=>{save();download('zhixin-practice.json',M.backup(records,questions));};rawButton.onclick=()=>{try{download('zhixin-practice-raw.txt',storage.getItem(M.KEY)||'');}catch{status.textContent='浏览器不允许读取原始记录。';}};
+ importButton.disabled=!report.writable;importButton.onclick=()=>file.click();file.onchange=async()=>{const selected=file.files[0];if(!selected)return;try{if(selected.size>M.LIMIT)throw Error('备份不能超过 256 KB。');const incoming=M.restore(await selected.text(),questions);if(!confirm('合并 '+Object.keys(incoming).length+' 道题的记录？当前已有的非空作答会优先保留。'))return;records=M.merge(records,incoming);Object.keys(incoming).forEach(id=>dirty.add(id));save();render();}catch(error){status.textContent=error.message;}finally{file.value='';}};
+ backup.append(exportButton,importButton,rawButton,file);host.append(controls,summary,list,more,backup,status);for(const c of [topic,level])c.onchange=()=>{limit=6;render();};search.oninput=()=>{limit=6;render();};addEventListener('pagehide',save);
+ const requested=new URLSearchParams(location.search).get('exercise');if(questions.some(q=>q.id===requested)){limit=questions.length;render();document.getElementById('exercise-'+requested)?.scrollIntoView();}else render();
+})();

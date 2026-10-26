@@ -491,3 +491,25 @@ git revert --no-edit <需要撤销的提交号>
 7. `main` 合并后，Actions 部署是否成功，正式页面是否核对？
 
 日常写作按“改一个小点 → 本地检查 → 看提交差异 → 发布核对”的节奏进行，比一次改动大量内容更容易发现和恢复问题。
+
+
+## 维护原创习题和本地 AI
+
+原创题保存在 `docs/assets/exercises.json`，每题使用不变的 `id`。新增题目需要填写课程 `course`（必须来自课程目录的 ID）、方向、难度、预计分钟数、题干、逐条提示和参考解析。`number` 题还要写 `expected`、`unit` 与正数 `absTolerance`；`choice` 题填写 `options` 与从 0 开始的 `correct`；`explain` 不自动判分。不要把学校试卷改称本站原创，答案请独立计算复核。
+
+记录由 `practice-model.js` 验证，`practice.js` 负责界面；练习 JSON 导入仅合并合法字段，并保留当前已有的非空作答。练习记录需要在原创习题页面单独导出，不包含在旧版综合备份内。AI 只拿到用户主动选择的那道题与作答，不应接入私密空间的自动扫描。
+
+AI 控制界面在 `docs/assets/local-ai.js`，输入约束与提示词在 `local-ai-model.js`。WebLLM 源文件在 `frontend/local-ai-runtime.js` 和 `frontend/local-ai-worker.js`，版本固定在 `frontend/package-lock.json`。只有主动点击加载或缓存操作才下载运行库；模型权重不提交到 GitHub。更换模型时需要同步网页列表、运行库与工作线程白名单、显存与下载量说明，并验证模型库路径。
+
+重新生成 AI 运行库：
+
+```powershell
+npm.cmd ci --prefix frontend --ignore-scripts
+npm.cmd run build:ai --prefix frontend
+python build.py
+python -m unittest discover -s tests -p 'test_*.py'
+node tests/practice.test.cjs
+node tests/local-ai.test.cjs
+```
+
+生成的 `docs/assets/vendor/local-ai-*.bundle.js` 和两份依赖许可需一起提交。正常文档构建直接使用已提交的包，不需要下载模型。浏览器运行依赖设备 WebGPU 与首次下载网络条件，维护时应区分“模拟 API 测试通过”和“真实设备完成模型推理”；没有实际加载就不能声称实测成功。

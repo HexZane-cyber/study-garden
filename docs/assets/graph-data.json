@@ -304,6 +304,89 @@
       ]
     },
     {
+      "id": "course-materials.md",
+      "title": "课程笔记与历年试卷",
+      "group": "guide",
+      "url": "course-materials/",
+      "sections": [
+        {
+          "id": "quick-start",
+          "title": "先拿一套试卷",
+          "level": 2
+        },
+        {
+          "id": "by-course",
+          "title": "按课程找资料",
+          "level": 2
+        },
+        {
+          "id": "berkeley-ee140",
+          "title": "Berkeley EE140 / 240A · 模拟集成电路",
+          "level": 3
+        },
+        {
+          "id": "stanford-ee214b",
+          "title": "Stanford EE214B · 高级集成电路设计",
+          "level": 3
+        },
+        {
+          "id": "epfl-ee320",
+          "title": "EPFL EE-320 · 模拟 IC",
+          "level": 3
+        },
+        {
+          "id": "berkeley-eecs151",
+          "title": "Berkeley EECS151 / 251A · 数字设计与 IC",
+          "level": 3
+        },
+        {
+          "id": "eth-vlsi2",
+          "title": "ETH Zürich VLSI 2 · 网表到 SoC",
+          "level": 3
+        },
+        {
+          "id": "epfl-ee429",
+          "title": "EPFL EE-429 · VLSI 设计基础",
+          "level": 3
+        },
+        {
+          "id": "cmu-18447",
+          "title": "CMU 18-447 · 计算机体系结构",
+          "level": 3
+        },
+        {
+          "id": "mit-6777",
+          "title": "MIT 6.777J · MEMS 设计与制造",
+          "level": 3
+        },
+        {
+          "id": "stanford-ee359",
+          "title": "Stanford EE359 · 无线通信",
+          "level": 3
+        },
+        {
+          "id": "berkeley-ee123",
+          "title": "Berkeley EE123 · DSP",
+          "level": 3
+        },
+        {
+          "id": "uiuc-ece453",
+          "title": "UIUC ECE453 · 无线通信系统",
+          "level": 3
+        },
+        {
+          "id": "stanford-ee364a",
+          "title": "Stanford EE364A · 凸优化 I",
+          "level": 3
+        },
+        {
+          "id": "sources",
+          "title": "来源、下载与副本说明",
+          "level": 2
+        }
+      ]
+    },
+    {
       "id": "course-practice.md",
       "title": "习题、测验与提交",
       "group": "guide",
@@ -2324,6 +2407,227 @@
       ]
     },
     {
+      "id": "editor-manual.md",
+      "title": "之芯网站编辑手册",
+      "group": "guide",
+      "url": "editor-manual/",
+      "sections": [
+        {
+          "id": "1",
+          "title": "1. 先选适合自己的编辑方式",
+          "level": 2
+        },
+        {
+          "id": "2",
+          "title": "2. 找对文件：项目地图",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "哪些文件不是日常编辑入口",
+          "level": 3
+        },
+        {
+          "id": "3-github",
+          "title": "3. 最简单：在 GitHub 修改现有页面",
+          "level": 2
+        },
+        {
+          "id": "4-pdf",
+          "title": "4. 新增公开笔记、图片和 PDF",
+          "level": 2
+        },
+        {
+          "id": "41",
+          "title": "4.1 一篇笔记的最小例子",
+          "level": 3
+        },
+        {
+          "id": "42",
+          "title": "4.2 附件路径怎么算",
+          "level": 3
+        },
+        {
+          "id": "43-obsidian",
+          "title": "4.3 Obsidian 笔记转公开文章",
+          "level": 3
+        },
+        {
+          "id": "5",
+          "title": "5. 本站可用的写作语法",
+          "level": 2
+        },
+        {
+          "id": "51",
+          "title": "5.1 提示框与折叠答案",
+          "level": 3
+        },
+        {
+          "id": "52",
+          "title": "5.2 可复制代码块",
+          "level": 3
+        },
+        {
+          "id": "53",
+          "title": "5.3 数学公式与图表的当前边界",
+          "level": 3
+        },
+        {
+          "id": "6",
+          "title": "6. 添加课程：文章和进度目录要分别维护",
+          "level": 2
+        },
+        {
+          "id": "61",
+          "title": "6.1 只增加课程链接",
+          "level": 3
+        },
+        {
+          "id": "62",
+          "title": "6.2 新增一篇正式课程指南",
+          "level": 3
+        },
+        {
+          "id": "63",
+          "title": "6.3 注册课程数据",
+          "level": 3
+        },
+        {
+          "id": "7",
+          "title": "7. 修改左侧导航与页面标题",
+          "level": 2
+        },
+        {
+          "id": "8",
+          "title": "8. 知识电路怎样随内容更新",
+          "level": 2
+        },
+        {
+          "id": "9",
+          "title": "9. 外观与背景：分清本机偏好和网站源码",
+          "level": 2
+        },
+        {
+          "id": "91",
+          "title": "9.1 只改变自己的观看效果",
+          "level": 3
+        },
+        {
+          "id": "92",
+          "title": "9.2 改给所有访客看的样式",
+          "level": 3
+        },
+        {
+          "id": "93",
+          "title": "9.3 改三维芯片",
+          "level": 3
+        },
+        {
+          "id": "10",
+          "title": "10. 课程材料、试卷与答案如何维护",
+          "level": 2
+        },
+        {
+          "id": "11",
+          "title": "11. 社区共建怎样避免乱改项目",
+          "level": 2
+        },
+        {
+          "id": "12",
+          "title": "12. 本地预览：真正修改前先能运行",
+          "level": 2
+        },
+        {
+          "id": "121",
+          "title": "12.1 进入正确项目目录",
+          "level": 3
+        },
+        {
+          "id": "122",
+          "title": "12.2 安装依赖并构建",
+          "level": 3
+        },
+        {
+          "id": "123",
+          "title": "12.3 该运行哪些检查",
+          "level": 3
+        },
+        {
+          "id": "13-git-github-pages",
+          "title": "13. Git 提交与 GitHub Pages 发布",
+          "level": 2
+        },
+        {
+          "id": "131",
+          "title": "13.1 先确认它真的是正确的克隆仓库",
+          "level": 3
+        },
+        {
+          "id": "132",
+          "title": "13.2 提交范围要明确",
+          "level": 3
+        },
+        {
+          "id": "133",
+          "title": "13.3 当前发布流程",
+          "level": 3
+        },
+        {
+          "id": "14",
+          "title": "14. 改坏了怎样恢复",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "没有提交时",
+          "level": 3
+        },
+        {
+          "id": "_4",
+          "title": "已经提交并发布时",
+          "level": 3
+        },
+        {
+          "id": "15",
+          "title": "15. 常见问题排查表",
+          "level": 2
+        },
+        {
+          "id": "16",
+          "title": "16. 每次编辑完成前的简短检查",
+          "level": 2
+        },
+        {
+          "id": "ai",
+          "title": "维护原创习题和本地 AI",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "exercises.md",
+      "title": "原创习题",
+      "group": "guide",
+      "url": "exercises/",
+      "sections": [
+        {
+          "id": "ai",
+          "title": "让本地 AI 帮助思考",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "不运行脚本时",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "做完以后",
+          "level": 2
+        }
+      ]
+    },
+    {
       "id": "graph.md",
       "title": "知识电路",
       "group": "guide",
@@ -2514,6 +2818,39 @@
         {
           "id": "_2",
           "title": "我的文件",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "local-ai.md",
+      "title": "本地 AI 助手",
+      "group": "guide",
+      "url": "local-ai/",
+      "sections": [
+        {
+          "id": "setup",
+          "title": "第一次使用",
+          "level": 2
+        },
+        {
+          "id": "_1",
+          "title": "方式一：网页内下载并运行",
+          "level": 3
+        },
+        {
+          "id": "ollama",
+          "title": "方式二：连接本机 Ollama",
+          "level": 3
+        },
+        {
+          "id": "_2",
+          "title": "与原创习题配合",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "来源与维护",
           "level": 2
         }
       ]
@@ -2961,6 +3298,10 @@
     },
     {
       "source": "catalog.md",
+      "target": "course-materials.md"
+    },
+    {
+      "source": "catalog.md",
       "target": "course-practice.md"
     },
     {
@@ -3110,6 +3451,14 @@
     {
       "source": "catalog.md",
       "target": "dashboard.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "editor-manual.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "exercises.md"
     },
     {
       "source": "catalog.md",
@@ -3289,6 +3638,10 @@
     },
     {
       "source": "contribute.md",
+      "target": "editor-manual.md"
+    },
+    {
+      "source": "contribute.md",
       "target": "guide.md"
     },
     {
@@ -3298,6 +3651,10 @@
     {
       "source": "contribute.md",
       "target": "publish.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "course-materials.md"
     },
     {
       "source": "course-links.md",
@@ -3365,6 +3722,10 @@
     },
     {
       "source": "course-links.md",
+      "target": "editor-manual.md"
+    },
+    {
+      "source": "course-links.md",
       "target": "ic-roadmap.md"
     },
     {
@@ -3376,12 +3737,40 @@
       "target": "university-courses.md"
     },
     {
+      "source": "course-materials.md",
+      "target": "course-practice.md"
+    },
+    {
+      "source": "course-materials.md",
+      "target": "dashboard.md"
+    },
+    {
+      "source": "course-materials.md",
+      "target": "editor-manual.md"
+    },
+    {
+      "source": "course-materials.md",
+      "target": "index.md"
+    },
+    {
+      "source": "course-materials.md",
+      "target": "university-courses.md"
+    },
+    {
       "source": "course-practice.md",
       "target": "courses/ic-eda.md"
     },
     {
       "source": "course-practice.md",
       "target": "dashboard.md"
+    },
+    {
+      "source": "course-practice.md",
+      "target": "editor-manual.md"
+    },
+    {
+      "source": "course-practice.md",
+      "target": "exercises.md"
     },
     {
       "source": "course-practice.md",
@@ -4204,6 +4593,34 @@
       "target": "publish.md"
     },
     {
+      "source": "editor-manual.md",
+      "target": "graph.md"
+    },
+    {
+      "source": "editor-manual.md",
+      "target": "local-ai.md"
+    },
+    {
+      "source": "editor-manual.md",
+      "target": "private.md"
+    },
+    {
+      "source": "editor-manual.md",
+      "target": "publish.md"
+    },
+    {
+      "source": "editor-manual.md",
+      "target": "university-courses.md"
+    },
+    {
+      "source": "exercises.md",
+      "target": "index.md"
+    },
+    {
+      "source": "exercises.md",
+      "target": "local-ai.md"
+    },
+    {
       "source": "graph.md",
       "target": "guide.md"
     },
@@ -4266,6 +4683,10 @@
     {
       "source": "index.md",
       "target": "library.md"
+    },
+    {
+      "source": "index.md",
+      "target": "local-ai.md"
     },
     {
       "source": "index.md",

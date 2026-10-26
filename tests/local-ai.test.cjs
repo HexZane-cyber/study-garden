@@ -1,0 +1,10 @@
+const assert=require('node:assert/strict'),M=require('../docs/assets/local-ai-model.js'),questions=require('../docs/assets/exercises.json').questions;
+for(const url of ['http://127.0.0.1:11434','http://localhost:11434/','http://[::1]:11434'])assert(M.endpoint(url));
+for(const url of ['https://example.com','http://192.168.1.1','file:///x','http://127.0.0.1@evil.test','http://localhost/x','http://localhost/?x=1','http://user:pass@localhost','http://localhost/#x'])assert.throws(()=>M.endpoint(url),url);
+assert.deepEqual(M.localModels({models:[{name:'local:latest'},{name:'remote:cloud'},{name:'other',remote_host:'x'},{name:'local:latest'}]}),['local:latest']);
+const q=questions[0],hint=M.exercisePrompt(q,'hint','8'),check=M.exercisePrompt(q,'check','8');assert(!hint.includes(q.solution[0]));assert(check.includes(q.solution[0]));assert(check.includes('【我的作答】8'));
+assert.equal(M.messages([],' hello ').at(-1).content,'hello');assert.throws(()=>M.messages([],'a'.repeat(2401)));assert.throws(()=>M.messages([],''));
+const msgs=M.messages(Array.from({length:100},(_,i)=>({role:i%2?'assistant':'user',content:'hello'.repeat(100)})),'题目');assert(msgs.reduce((n,m)=>n+m.content.length,0)<=2800);assert(msgs.length===2||msgs[1].role==='user');
+assert.equal(M.handoff(JSON.stringify({id:q.id,mode:'hint',answer:'8'}),questions).id,q.id);assert.equal(M.handoff(JSON.stringify({id:'unknown',mode:'hint',answer:''}),questions),null);
+assert.equal(M.handoff('{"id":"divider","mode":"hack","answer":""}',questions),null);
+console.log('Local AI endpoint restrictions, model filtering, prompts and context bounds passed.');

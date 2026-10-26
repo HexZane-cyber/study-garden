@@ -80,6 +80,8 @@ nav:
   - 名校课程重点与先修: university-courses.md
   - 课程笔记与历年试卷: course-materials.md
   - 习题与提交: course-practice.md
+  - 原创习题: exercises.md
+  - 本地 AI 助手: local-ai.md
   - 学习路线: roadmap.md
   - 电子信息与集成电路:
       - 学习路线与清华对标: ic-roadmap.md
