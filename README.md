@@ -158,6 +158,6 @@ node tests/graph3d.test.cjs
 
 ### 原创习题与本地 AI
 
-`docs/assets/exercises.json` 提供 20 道原创自测。`/exercises/` 可保存作答并单独导出备份；`/local-ai/` 支持用户主动下载 WebLLM 小模型或连接本机 Ollama。AI 对话仅在页面内存中保留，不自动读取私密空间，不参与练习判分。首次使用与兼容性说明见 `docs/local-ai.md`。
+`docs/assets/exercises.json` 提供 20 道原创自测。`/exercises/` 可保存作答、按未作答/待纠错/检查通过筛选、复制正式站点的单题链接并单独导出备份；`/local-ai/` 支持用户主动下载 WebLLM 小模型或连接本机 Ollama。AI 对话仅在页面内存中保留，不自动读取私密空间，不参与练习判分。首次使用与兼容性说明见 `docs/local-ai.md`。
 
 AI 运行库固定 WebLLM 0.2.86，更新时运行 `npm ci --prefix frontend --ignore-scripts` 和 `npm run build:ai --prefix frontend`；提交生成的两个 bundle 及许可。权重由用户点击下载，不包含在仓库。新增习题需同时补充独立答案复核测试。

@@ -148,3 +148,14 @@ body[data-md-color-scheme=default] .appearance-choices button{background:linear-
 
 .practice-controls{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);align-items:end}.practice-controls label,.practice-controls input{min-width:0}
 @media(max-width:600px){.practice-controls{grid-template-columns:1fr 1fr}.practice-controls>input{grid-column:1/-1}}
+
+/* Keep a correction visible until explicit refresh, preserving the typing position. */
+.practice-controls{grid-template-columns:repeat(3,minmax(0,1fr))}.practice-controls>input{grid-column:1/-1}
+.practice-state{display:inline-block;padding:.2rem .55rem;font-size:.65rem;border-radius:1rem;border:1px solid var(--md-default-fg-color--lightest);color:var(--md-default-fg-color--light)}
+.practice-state[data-state=wrong]{color:var(--md-accent-fg-color);border-color:currentColor}.practice-state[data-state=correct]{color:var(--md-default-fg-color);background:var(--md-code-bg-color)}
+.practice-card.practice-focused{border-color:var(--md-accent-fg-color);scroll-margin-top:5rem}
+.practice-share-link{width:100%;padding:.6rem;background:var(--md-code-bg-color);color:var(--md-default-fg-color);border:1px solid var(--md-default-fg-color--lightest);font:inherit}
+@media(max-width:900px){.practice-controls{grid-template-columns:repeat(3,minmax(0,1fr))}.practice-controls>input{grid-column:1/-1}}
+@media(max-width:480px){.practice-controls{grid-template-columns:1fr}.practice-controls>input{grid-column:auto}}
+
+@media(max-width:720px){.practice-controls{grid-template-columns:1fr}.practice-controls>input{grid-column:auto}}

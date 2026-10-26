@@ -54,7 +54,7 @@
     <script type="application/json" id="practice-data">{{ practice_data | safe }}</script>
     {% if page.file.src_uri == 'exercises.md' %}
     <script src="{{ 'assets/practice-model.js' | url }}?v={{ asset_versions.get('practice-model.js', '') }}" defer></script>
-    <script src="{{ 'assets/practice.js' | url }}?v={{ asset_versions.get('practice.js', '') }}" defer></script>
+    <script src="{{ 'assets/practice.js' | url }}?v={{ asset_versions.get('practice.js', '') }}" data-public-base="{{ config.site_url }}" defer></script>
     {% endif %}
     <script src="{{ 'assets/local-ai-model.js' | url }}?v={{ asset_versions.get('local-ai-model.js', '') }}" defer></script>
     <script src="{{ 'assets/local-ai.js' | url }}?v={{ asset_versions.get('local-ai.js', '') }}" data-runtime="{{ 'assets/vendor/local-ai-runtime.bundle.js' | url }}?v={{ asset_versions.get('vendor/local-ai-runtime.bundle.js', '') }}" data-worker="{{ 'assets/vendor/local-ai-worker.bundle.js' | url }}?v={{ asset_versions.get('vendor/local-ai-worker.bundle.js', '') }}" defer></script>

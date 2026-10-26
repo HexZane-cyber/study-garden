@@ -77,6 +77,7 @@ class PageAssetsTest(unittest.TestCase):
             self.assertNotIn('assets/vendor/local-ai-worker.bundle.js', scripts)
         html = (SITE / 'exercises/index.html').read_text(encoding='utf-8')
         self.assertIn('id="practice-data"', html)
+        self.assertIn('data-public-base="https://hexzane-cyber.github.io/study-garden/"', html)
         self.assertIn('data-runtime="../assets/vendor/local-ai-runtime.bundle.js?v=', html)
         self.assertIn('data-worker="../assets/vendor/local-ai-worker.bundle.js?v=', html)
 

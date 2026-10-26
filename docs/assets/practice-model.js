@@ -22,10 +22,22 @@
  }
  function read(storage,questions){try{const raw=storage.getItem(KEY);if(raw===null)return {records:{},writable:true};if(raw.length>LIMIT)throw Error('练习记录过大。');const data=JSON.parse(raw);if(data.version!==1)throw Error('练习记录版本不支持。');return {records:clean(data.records,questions),writable:true};}catch{return {records:{},writable:false,error:'无法读取原有练习记录，已停止覆盖。可导出原始记录后再处理；本次仍可临时作答。'};}}
  function save(storage,records,questions){if(!read(storage,questions).writable)return false;try{storage.setItem(KEY,JSON.stringify({version:1,records:clean(records,questions)}));return true;}catch{return false;}}
- function progress(questions,records){return {attempted:questions.filter(q=>records[q.id]?.answer.trim()).length,correct:questions.filter(q=>records[q.id]?.checked&&evaluate(q,records[q.id].answer).correct).length,total:questions.length};}
+ function state(q,record){
+  if(!record?.answer.trim())return 'unanswered';
+  if(q.kind==='explain')return 'manual';
+  const result=evaluate(q,record.answer);
+  if(!record.checked||!result.valid)return 'draft';
+  return result.correct?'correct':'wrong';
+ }
+ function counts(questions,records){const out={all:questions.length,unanswered:0,draft:0,wrong:0,correct:0,manual:0};for(const q of questions)out[state(q,records[q.id])]++;return out;}
+ function filter(questions,records,criteria={}){
+  const terms=String(criteria.query||'').normalize('NFKC').toLowerCase().trim().split(/\s+/).filter(Boolean);
+  return questions.filter(q=>(!criteria.id||q.id===criteria.id)&&(!criteria.topic||q.topic===criteria.topic)&&(!criteria.level||q.level===criteria.level)&&(!criteria.state||state(q,records[q.id])===criteria.state)&&terms.every(t=>[q.title,q.prompt,q.topic].join(' ').normalize('NFKC').toLowerCase().includes(t)));
+ }
+ function progress(questions,records){const c=counts(questions,records);return {attempted:c.all-c.unanswered,correct:c.correct,total:c.all};}
  function backup(records,questions){return JSON.stringify({format:'zhixin-practice',version:1,records:clean(records,questions)},null,2);}
  function restore(text,questions){if(text.length>LIMIT)throw Error('备份不能超过 256 KB。');let data;try{data=JSON.parse(text);}catch{throw Error('不是有效的 JSON 文件。');}if(data.format!=='zhixin-practice'||data.version!==1)throw Error('不是之芯练习记录备份。');return clean(data.records,questions);}
  function merge(current,incoming){const out={...incoming,...current};for(const [id,r]of Object.entries(incoming))if(!current[id]?.answer.trim()&&r.answer.trim())out[id]=r;return out;}
  function blank(){return {answer:'',checked:false,revealed:false,hints:0};}
- return {KEY,HANDOFF_KEY,LIMIT,evaluate,clean,read,save,progress,backup,restore,merge,blank};
+ return {KEY,HANDOFF_KEY,LIMIT,evaluate,clean,read,save,state,counts,filter,progress,backup,restore,merge,blank};
 });

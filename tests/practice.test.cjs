@@ -4,6 +4,18 @@ assert(M.evaluate(numeric,'３.１６０６').correct);assert(M.evaluate(numeric
 for(const value of ['','1/3','Infinity','NaN','0x3','3 V','1,5','1e999'])assert(!M.evaluate(numeric,value).valid,value);
 assert(M.evaluate(choice,'3').correct);assert(!M.evaluate(choice,'2').correct);assert(!M.evaluate(choice,'-1').valid);assert(!M.evaluate(choice,'4').valid);
 assert(M.evaluate(explain,'推理').manual);assert(!M.evaluate(explain,'推理').correct);
+assert.equal(M.state(choice), 'unanswered');
+assert.equal(M.state(choice,{...M.blank(),answer:'2'}),'draft');
+assert.equal(M.state(choice,{...M.blank(),answer:'2',checked:true}),'wrong');
+assert.equal(M.state(choice,{...M.blank(),answer:'3',checked:true}),'correct');
+assert.equal(M.state(choice,{...M.blank(),answer:'99',checked:true}),'draft');
+assert.equal(M.state(explain,{...M.blank(),answer:'说明',checked:true}),'manual');
+const filteredRecords={nand:{...M.blank(),answer:'2',checked:true},'rc-step':{...M.blank(),answer:'3.161',checked:true}};
+assert.equal(M.counts(questions,filteredRecords).wrong,1);assert.equal(M.counts(questions,filteredRecords).correct,1);
+assert.equal(M.filter(questions,filteredRecords,{state:'wrong'})[0].id,'nand');
+assert.equal(M.filter(questions,filteredRecords,{query:'ＭＯＳ 饱和'})[0].id,'mos-square');
+assert.equal(M.filter(questions,filteredRecords,{id:'rc-step',state:'correct'}).length,1);
+assert.equal(M.filter(questions,filteredRecords,{id:'rc-step',state:'wrong'}).length,0);
 const map=new Map(),storage={getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v)};
 const records={nand:{...M.blank(),answer:'3',checked:true}};assert(M.save(storage,records,questions));assert.equal(M.progress(questions,M.read(storage,questions).records).correct,1);
 const backup=M.backup(records,questions);assert.deepEqual(M.restore(backup,questions),records);
