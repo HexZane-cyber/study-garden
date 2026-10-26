@@ -2,7 +2,9 @@
 
 这一页把[12 门名校课程](university-courses.md)的讲义、课堂笔记、历年试题与答案分开整理。这里的“笔记”主要是教师发布的板书、讲义和复习材料。核对日期：**2026-10-26**。
 
-本批从 **6 门课程**中抓取并通过 PDF 文件校验的材料共 **78 份：60 份讲义笔记、10 份考试题卷、5 份答案材料、3 份习题 / 讨论课练习**。本站提供全部已验证原站链接，并为其中 **5 份开放许可 PDF** 提供本站副本。其他课程保留已找到的官方入口与具体限制，不表示 12 门课均有完整公开资料。
+累计从 **6 门课程**中抓取并通过 PDF 文件校验的材料共 **137 份：106 份讲义笔记、10 份考试题卷、10 份答案材料、9 份习题 / 讨论课练习、2 份项目说明**。本站提供全部已验证原站链接，并为其中 **5 份开放许可 PDF** 提供本站副本。其他课程保留已找到的官方入口与具体限制，不表示 12 门课均有完整公开资料。
+
+**本次新增 59 份：**MIT MEMS 补入其余 27 份讲义、6 份作业、5 份答案与 2 份项目说明；CMU 体系结构补入第 7–25 讲。按讲次、题号排列，答案默认收起。
 
 [先拿一套试卷](#quick-start){ .md-button .md-button--primary }
 [按课程找资料](#by-course){ .md-button }
@@ -34,15 +36,6 @@
 
     | 材料 | 年份 / 学期 | 文件 |
     | --- | --- | --- |
-    | W10L1.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W10L1.pdf) · 3 页 · 2.6 MB |
-    | W10L2.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W10L2.pdf) · 3 页 · 2.8 MB |
-    | W11random.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W11random.pdf) · 2 页 · 1.9 MB |
-    | W12L1.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W12L1.pdf) · 4 页 · 3.6 MB |
-    | W12L2.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W12L2.pdf) · 3 页 · 2.6 MB |
-    | W13L1.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W13L1.pdf) · 3 页 · 2.6 MB |
-    | W13L2.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W13L2.pdf) · 3 页 · 2.7 MB |
-    | W14L1.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W14L1.pdf) · 3 页 · 3.0 MB |
-    | W14L2.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W14L2.pdf) · 3 页 · 2.9 MB |
     | W1L1.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W1L1.pdf) · 4 页 · 3.8 MB |
     | W2L1.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W2L1.pdf) · 4 页 · 3.4 MB |
     | W2L2.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W2L2.pdf) · 3 页 · 2.9 MB |
@@ -55,6 +48,15 @@
     | W8L1.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W8L1.pdf) · 3 页 · 3.0 MB |
     | W8L2.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W8L2.pdf) · 3 页 · 2.6 MB |
     | W9L1.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W9L1.pdf) · 3 页 · 2.7 MB |
+    | W10L1.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W10L1.pdf) · 3 页 · 2.6 MB |
+    | W10L2.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W10L2.pdf) · 3 页 · 2.8 MB |
+    | W12L1.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W12L1.pdf) · 4 页 · 3.6 MB |
+    | W12L2.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W12L2.pdf) · 3 页 · 2.6 MB |
+    | W13L1.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W13L1.pdf) · 3 页 · 2.6 MB |
+    | W13L2.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W13L2.pdf) · 3 页 · 2.7 MB |
+    | W14L1.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W14L1.pdf) · 3 页 · 3.0 MB |
+    | W14L2.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W14L2.pdf) · 3 页 · 2.9 MB |
+    | W11random.pdf | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/lectures/W11random.pdf) · 2 页 · 1.9 MB |
 
 
 ??? question "考试题卷 · 2 份"
@@ -69,8 +71,8 @@
 
     | 材料 | 年份 / 学期 | 文件 |
     | --- | --- | --- |
-    | 2025 春第二次期中参考答案 | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/resources/25midterm2soln.pdf) · 5 页 · 735 KB |
     | 2015 春期末卷（含手写解答，非空白题卷） | 2015 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp16/resources/15spFINAL.pdf) · 9 页 · 4.1 MB |
+    | 2025 春第二次期中参考答案 | 2025 春 | [原站 PDF](https://people.eecs.berkeley.edu/~pister/140sp25/resources/25midterm2soln.pdf) · 5 页 · 735 KB |
 
 
 ### Stanford EE214B · 高级集成电路设计 { #stanford-ee214b }
@@ -121,47 +123,112 @@
 
 ### CMU 18-447 · 计算机体系结构 { #cmu-18447 }
 
-已从教师官网找到并抓取 2024 春 Lecture 1–6 的公开讲义；[完整课表与笔记目录](https://users.ece.cmu.edu/~jhoe/doku/doku.php?id=18-447_course_schedule_spring_2024)还列有后续讲义。本次未确认可稳定下载的原课试卷；2015 归档入口连接失败，没有按旧搜索结果宣称已抓取。
+已补齐教师官网列出的 2024 春 Lecture 1–25 共 25 份讲义，按微处理器、存储与 I/O、并行系统三部分推进。[完整课表与笔记目录](https://users.ece.cmu.edu/~jhoe/doku/doku.php?id=18-447_course_schedule_spring_2024)提供章节安排。未确认可稳定下载的原课试卷；不会把受限文件计为公开材料。
 
 [课程重点与先修](university-courses.md#cmu-18447)
 
-??? note "讲义与课堂笔记 · 6 份"
+??? note "讲义与课堂笔记 · 25 份"
 
     | 材料 | 年份 / 学期 | 文件 |
     | --- | --- | --- |
-    | L1 | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L01.pdf) · 40 页 · 3.0 MB |
-    | L2 | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L02.pdf) · 31 页 · 1.0 MB |
-    | L3 | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L03.pdf) · 39 页 · 1.9 MB |
-    | L4 | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L04.pdf) · 39 页 · 402 KB |
-    | L5 | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L05.pdf) · 31 页 · 876 KB |
-    | L6 | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L06.pdf) · 36 页 · 850 KB |
+    | Lecture 01 · Introduction | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L01.pdf) · 40 页 · 3.0 MB |
+    | Lecture 02 · ISA Design | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L02.pdf) · 31 页 · 1.0 MB |
+    | Lecture 03 · RISC-V RV32I ISA | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L03.pdf) · 39 页 · 1.9 MB |
+    | Lecture 04 · Single-Cycle Implementation | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L04.pdf) · 39 页 · 402 KB |
+    | Lecture 05 · Performance | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L05.pdf) · 31 页 · 876 KB |
+    | Lecture 06 · Multi-Cycle Implementations | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L06.pdf) · 36 页 · 850 KB |
+    | Lecture 07 · Pipelining: Basics | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L07.pdf) · 30 页 · 1.3 MB |
+    | Lecture 08 · Pipelining: Data Hazard and Resolution | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L08.pdf) · 28 页 · 907 KB |
+    | Lecture 09 · Pipelining: Control Hazard and Resolution | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L09.pdf) · 29 页 · 1.6 MB |
+    | Lecture 10 · Pipelining: Branch Prediction | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L10.pdf) · 26 页 · 1.0 MB |
+    | Lecture 11 · Pipelining: Exceptions | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L11.pdf) · 32 页 · 1.3 MB |
+    | Lecture 12 · Power and Energy | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L12.pdf) · 35 页 · 1.6 MB |
+    | Lecture 13 · Busses and I/O | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L13.pdf) · 32 页 · 1.3 MB |
+    | Lecture 14 · Memory Technology and Organization | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L14.pdf) · 32 页 · 899 KB |
+    | Lecture 15 · Caches | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L15.pdf) · 35 页 · 1.0 MB |
+    | Lecture 16 · More caches | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L16.pdf) · 38 页 · 1.1 MB |
+    | Lecture 17 · VM: protection and paging | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L17.pdf) · 23 页 · 1.1 MB |
+    | Lecture 18 · VM: page tables and TLB | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L18.pdf) · 23 页 · 775 KB |
+    | Lecture 19 · VM: survey of systems and security challenges | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L19.pdf) · 36 页 · 1.8 MB |
+    | Lecture 20 · ILP to multicore | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L20.pdf) · 36 页 · 1.3 MB |
+    | Lecture 21 · Parallel Computer Architecture | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L21.pdf) · 32 页 · 1.9 MB |
+    | Lecture 22 · Multithreaded Programming | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L22.pdf) · 25 页 · 1.2 MB |
+    | Lecture 23 · Parallel Performance | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L23.pdf) · 35 页 · 1.2 MB |
+    | Lecture 24 · Cache Coherence | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L24.pdf) · 36 页 · 1.3 MB |
+    | Lecture 25 · Synchronization | 2024 春 | [原站 PDF](https://users.ece.cmu.edu/~jhoe/course/ece447/S24handouts/L25.pdf) · 31 页 · 1.0 MB |
 
 
 ### MIT 6.777J · MEMS 设计与制造 { #mit-6777 }
 
-已验证 2007 春集中参数建模讲义、第一份习题及参考答案。完整[讲义目录](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/pages/lecture-notes/)与[作业目录](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/pages/assignments/)公开；本次未找到独立考试卷，习题不会标成考试。
+已补齐 2007 春公开的 28 份讲义、7 份作业、6 份解答及 2 份项目说明。[讲义目录](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/pages/lecture-notes/) · [作业目录](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/pages/assignments/) · [项目要求](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/pages/projects/)。作业 5 没有公开解答入口，未拼接其他年份答案；本次未找到独立考试卷。
 
 [课程重点与先修](university-courses.md#mit-6777)
 
-??? note "讲义与课堂笔记 · 1 份"
+??? note "讲义与课堂笔记 · 28 份"
 
     | 材料 | 年份 / 学期 | 文件 |
     | --- | --- | --- |
-    | Lecture 8: Lumped-element modeling | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/67b50298bc29ca07b7528b01deca6b12_07lecture08.pdf) · 46 页 · 343 KB |
+    | Lecture 01 · Introduction to MEMS; microfabrication for MEMS: part I | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/4edf8c7168c8ef8d6dbde54cc08aec2d_07lecture01.pdf) · 42 页 · 961 KB |
+    | Lecture 01_p2 · Electronics I | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/ea072f8f990d2358adb06e6c6b3ddae4_07lecture01_p2.pdf) · 21 页 · 360 KB |
+    | Lecture 02 · Microfabrication for MEMS: part II | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/e03a5e3af5263290a34c692ff87468a6_07lecture02.pdf) · 56 页 · 1.3 MB |
+    | Lecture 03 · Microfabrication for MEMS: part III | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/6f533cbf3074f26dad3b2e819442dfc5_07lecture03.pdf) · 65 页 · 1.5 MB |
+    | Lecture 04_fab · Microfabrication for MEMS: part IV; in-class fab problem | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/d84ef5748a3f798e0e64d70345a75fa8_07lecture04_fab.pdf) · 1 页 · 113 KB |
+    | Lecture 05 · Fabrication for the life sciences; material properties | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/511de50fb6460b31fd47ee2f9e4958a0_07lecture05.pdf) · 54 页 · 370 KB |
+    | Lecture 06e · Electronics I | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/2869c3087b8604d32f8e855919c1bdbb_07lecture06e.pdf) · 29 页 · 164 KB |
+    | Lecture 06split · Elasticity | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/1654337d7c64fdb073b2ab3b4aac7688_07lecture06split.pdf) · 49 页 · 484 KB |
+    | Lecture 07e · Electronics II | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/6de08ad7d4ee670c283ce5ec0e6a653b_07lecture07e.pdf) · 36 页 · 570 KB |
+    | Lecture 07split · Structures | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/80ed1dbb9e2320d5cf83f35ea55f51bf_07lecture07split.pdf) · 36 页 · 316 KB |
+    | Lecture 08 · Lumped-element modeling | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/67b50298bc29ca07b7528b01deca6b12_07lecture08.pdf) · 46 页 · 343 KB |
+    | 07lecture09: 9 Energy-conserving transducers | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/581eadb5c476613e921145d43462ebe5_07Lecture09.pdf) · 45 页 · 418 KB |
+    | Lecture 10 · Dynamics, especially nonlinear | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/8466ab8925a6677175f359858395be02_07lecture10.pdf) · 69 页 · 542 KB |
+    | Lecture 11 · Structures special topics | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/eea8d9296ebd676d3f6d10133b6942d7_07lecture11.pdf) · 47 页 · 612 KB |
+    | Lecture 12 · Thermal energy domain; dissipation | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/e188665ca7770e1adfb754abcc2ef05a_07lecture12.pdf) · 39 页 · 609 KB |
+    | 07lecture13: 13 Modeling dissipative processes | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/721ccd0994ba5018a27923f78857a7b8_07Lecture13.pdf) · 44 页 · 442 KB |
+    | Lecture 14 · Fluids 1 | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/fdc1ab6a552f0c6ddd4e0c382228d639_07lecture14.pdf) · 34 页 · 448 KB |
+    | Lecture 15 · Fluids 2 | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/ecbd3da50020e79e0cbb85a43a9604c1_07lecture15.pdf) · 44 页 · 535 KB |
+    | Lecture 16 · Mass transport in liquids | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/3ef5264bd079b86f461cda47fcbd282e_07lecture16.pdf) · 37 页 · 1.3 MB |
+    | Lecture 17 · Feedback | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/3a0e21e64ccf77d78acd5469406d7fc6_07lecture17.pdf) · 38 页 · 997 KB |
+    | Lecture 18 · Noise | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/9976d4ab39b0e55c81f8eda5eb663f27_07lecture18.pdf) · 47 页 · 857 KB |
+    | Lecture 19 · Packaging | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/0747e840cd680c26f540ccff7bc17c47_07lecture19.pdf) · 47 页 · 1.0 MB |
+    | Lecture 20_accl · In-class design problem | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/a4e57d4f571362739bd816f1a868c981_07lecture20_accl.pdf) · 3 页 · 140 KB |
+    | Lecture 21 · Design tradeoffs | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/65d3a76aacbabdcd217a60421ded87f0_07lecture21.pdf) · 50 页 · 1.6 MB |
+    | Lecture 22 · Power MEMS case study | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/f4f0bea9ba9345063cce447b843c5bd3_07lecture22.pdf) · 62 页 · 3.1 MB |
+    | Lecture 23 · Optical MEMS case study | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/e1e919990fc6e5f1767457f403a926c1_07lecture23.pdf) · 33 页 · 358 KB |
+    | Lecture 24 · Capacitive accelerometer case study | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/ac239b93c513076d77e12cb8b50d6b27_07lecture24.pdf) · 44 页 · 1.4 MB |
+    | Lecture 25 · BioMEMS case study | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/a37ad8fe5e60540db01e3480f8779992_07lecture25.pdf) · 43 页 · 925 KB |
 
 
-??? example "习题与讨论课 · 1 份"
+??? example "习题与讨论课 · 7 份"
 
     | 材料 | 年份 / 学期 | 文件 |
     | --- | --- | --- |
     | Problem set 1 | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/aab0d30a1ee9b33eefd94ff1cc1e0057_ps1.pdf) · [本站副本](assets/course-materials/mit-6777-ps1-2007.pdf) · 3 页 · 45 KB |
+    | Problem set 2 | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/739fb7d503c251be95886a8b92a1e74b_ps2.pdf) · 5 页 · 83 KB |
+    | Problem set 3 | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/b6c9292c8105249b43eb949202b6a4d8_ps3.pdf) · 3 页 · 98 KB |
+    | Problem set 4 | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/8b0f410a439808222456bf311e4f1f88_ps4.pdf) · 4 页 · 137 KB |
+    | Problem set 5 | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/c14f469f8065ed7c47797a2ee1afdf62_ps5.pdf) · 4 页 · 100 KB |
+    | Problem set 6 | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/255ce2a194bc7cb86f84b2ba3043479b_ps6.pdf) · 3 页 · 131 KB |
+    | Problem set 7 | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/31c133a61ca00646c5fcf7f9e3826370_ps7.pdf) · 3 页 · 136 KB |
 
 
-??? success "参考答案（完成后再看） · 1 份"
+??? tip "项目要求与报告 · 2 份"
+
+    | 材料 | 年份 / 学期 | 文件 |
+    | --- | --- | --- |
+    | 设计项目说明 | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/49da2e56dbc96934da311594734f36ca_design_projects.pdf) · 1 页 · 14 KB |
+    | 项目报告撰写要求 | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/8522eeb4e5c078b08c1bf94ea5ca70a3_reportguidelines.pdf) · 2 页 · 84 KB |
+
+
+??? success "参考答案（完成后再看） · 6 份"
 
     | 材料 | 年份 / 学期 | 文件 |
     | --- | --- | --- |
     | Problem set 1 solutions | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/488964aa06f663ec803b296e835f0a3f_ps1_soln.pdf) · 8 页 · 137 KB |
+    | Problem set 2 solutions | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/43b16ea06631049f71484af6a5816390_ps2_soln.pdf) · 7 页 · 534 KB |
+    | Problem set 3 solutions | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/9649128845f40e9d6cb51f7b78ec8fe7_ps3_soln.pdf) · 5 页 · 84 KB |
+    | Problem set 4 solutions | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/c8e0cffeec9e8c476fe862b75965fc98_ps4_soln.pdf) · 10 页 · 320 KB |
+    | Problem set 6 solutions | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/4f9884fa8de7643b32140eaf0d31052d_ps6_soln.pdf) · 5 页 · 134 KB |
+    | Problem set 7 solutions | 2007 春 | [原站 PDF](https://ocw.mit.edu/courses/6-777j-design-and-fabrication-of-microelectromechanical-devices-spring-2007/74a80a103418ef786898f73e75d9b641_ps7_soln.pdf) · 11 页 · 419 KB |
 
 
 ### Stanford EE359 · 无线通信 { #stanford-ee359 }
@@ -175,6 +242,14 @@
     | 材料 | 年份 / 学期 | 文件 |
     | --- | --- | --- |
     | Lecture 1 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture1.pdf) · 12 页 · 2.7 MB |
+    | Lecture 2 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture2.pdf) · 4 页 · 1.6 MB |
+    | Lecture 3 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture3.pdf) · 2 页 · 234 KB |
+    | Lecture 4 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture4.pdf) · 3 页 · 413 KB |
+    | Lecture 5 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture5.pdf) · 3 页 · 1.1 MB |
+    | Lecture 6 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture6.pdf) · 3 页 · 977 KB |
+    | Lecture 7 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture7.pdf) · 3 页 · 389 KB |
+    | Lecture 8 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture8.pdf) · 2 页 · 359 KB |
+    | Lecture 9 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture9.pdf) · 3 页 · 372 KB |
     | Lecture 10 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture10.pdf) · 3 页 · 465 KB |
     | Lecture 11 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture11.pdf) · 10 页 · 333 KB |
     | Lecture 12 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture12.pdf) · 3 页 · 236 KB |
@@ -185,25 +260,17 @@
     | Lecture 17 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture17.pdf) · 2 页 · 562 KB |
     | Lecture 18 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture18.pdf) · 3 页 · 625 KB |
     | Lecture 19 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture19.pdf) · 3 页 · 823 KB |
-    | Lecture 2 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture2.pdf) · 4 页 · 1.6 MB |
-    | Lecture 3 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture3.pdf) · 2 页 · 234 KB |
-    | Lecture 4 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture4.pdf) · 3 页 · 413 KB |
-    | Lecture 5 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture5.pdf) · 3 页 · 1.1 MB |
-    | Lecture 6 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture6.pdf) · 3 页 · 977 KB |
-    | Lecture 7 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture7.pdf) · 3 页 · 389 KB |
-    | Lecture 8 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture8.pdf) · 2 页 · 359 KB |
-    | Lecture 9 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/pdfs/lecture9.pdf) · 3 页 · 372 KB |
 
 
 ??? question "考试题卷 · 6 份"
 
     | 材料 | 年份 / 学期 | 文件 |
     | --- | --- | --- |
-    | 2015 秋期末试卷 | 2015 秋 | [原站 PDF](https://web.stanford.edu/class/ee359/exams/final15.pdf) · 3 页 · 71 KB |
-    | 2017 秋期末试卷 | 2017 秋 | [原站 PDF](https://web.stanford.edu/class/ee359/exams/final17.pdf) · 3 页 · 221 KB |
     | 2015 秋期中试卷 | 2015 秋 | [原站 PDF](https://web.stanford.edu/class/ee359/exams/mt15.pdf) · 2 页 · 165 KB |
+    | 2015 秋期末试卷 | 2015 秋 | [原站 PDF](https://web.stanford.edu/class/ee359/exams/final15.pdf) · 3 页 · 71 KB |
     | 2016 秋期中试卷 | 2016 秋 | [原站 PDF](https://web.stanford.edu/class/ee359/exams/mt16.pdf) · 2 页 · 242 KB |
     | 2017 秋期中试卷 | 2017 秋 | [原站 PDF](https://web.stanford.edu/class/ee359/exams/mt17.pdf) · 3 页 · 218 KB |
+    | 2017 秋期末试卷 | 2017 秋 | [原站 PDF](https://web.stanford.edu/class/ee359/exams/final17.pdf) · 3 页 · 221 KB |
     | 2020 冬期中试卷 | 2020 冬 | [原站 PDF](https://web.stanford.edu/class/ee359/exams/mt20.pdf) · 2 页 · 167 KB |
 
 
@@ -250,16 +317,16 @@
 
     | 材料 | 年份 / 学期 | 文件 |
     | --- | --- | --- |
-    | 2008 年期末试卷 | 2008 | [原站 PDF](https://see.stanford.edu/materials/lsocoee364a/final.pdf) · [本站副本](assets/course-materials/ee364a-final-2008.pdf) · 9 页 · 94 KB |
     | 2006 年期末试卷 | 2006 | [原站 PDF](https://see.stanford.edu/materials/lsocoee364a/final_06.pdf) · 12 页 · 106 KB |
+    | 2008 年期末试卷 | 2008 | [原站 PDF](https://see.stanford.edu/materials/lsocoee364a/final.pdf) · [本站副本](assets/course-materials/ee364a-final-2008.pdf) · 9 页 · 94 KB |
 
 
 ??? success "参考答案（完成后再看） · 2 份"
 
     | 材料 | 年份 / 学期 | 文件 |
     | --- | --- | --- |
-    | 2008 年期末参考答案 | 2008 | [原站 PDF](https://see.stanford.edu/materials/lsocoee364a/final-sols.pdf) · [本站副本](assets/course-materials/ee364a-final-2008-solutions.pdf) · 32 页 · 203 KB |
     | 2006 年期末参考答案 | 2006 | [原站 PDF](https://see.stanford.edu/materials/lsocoee364a/final_sol_06.pdf) · 34 页 · 203 KB |
+    | 2008 年期末参考答案 | 2008 | [原站 PDF](https://see.stanford.edu/materials/lsocoee364a/final-sols.pdf) · [本站副本](assets/course-materials/ee364a-final-2008-solutions.pdf) · 32 页 · 203 KB |
 
 
 ## 来源、下载与副本说明 { #sources }
