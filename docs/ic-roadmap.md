@@ -122,3 +122,7 @@ project/
 ## 与信息通信方向交叉学习
 
 如果更关心调制、编码、接收和无线系统，查看[信息与通信工程路线](communications-roadmap.md)。信号、概率与 DSP 可以共用；电路实现与通信系统模型各有自己的验收目标。
+
+## 更多原始课程链接 { #course-links }
+
+[中文电路、半导体与 IC 基础](course-links.md#chinese-circuits)整理了北邮、西电和华中科大课程；[芯片设计进阶链接](course-links.md#ic-extensions)提供 Berkeley EE105 讲义、NPTEL 模拟 IC 和 RTL 到 GDS 课程。可以按当前薄弱环节选择一种讲法，选学范围和预计投入见链接页。

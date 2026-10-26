@@ -124,6 +124,11 @@
           "id": "_9",
           "title": "现在就开始",
           "level": 2
+        },
+        {
+          "id": "course-links",
+          "title": "更多原始课程链接",
+          "level": 2
         }
       ]
     },
@@ -146,6 +151,99 @@
         {
           "id": "_4",
           "title": "审核与权限",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "course-links.md",
+      "title": "优质课程链接",
+      "group": "guide",
+      "url": "course-links/",
+      "sections": [
+        {
+          "id": "chinese-circuits",
+          "title": "中文电路与器件",
+          "level": 2
+        },
+        {
+          "id": "bupt-circuits",
+          "title": "北邮 · 电路分析基础",
+          "level": 3
+        },
+        {
+          "id": "xdu-semiconductor",
+          "title": "西电 · 半导体物理",
+          "level": 3
+        },
+        {
+          "id": "hust-ic",
+          "title": "华中科大 · 集成电路设计基础",
+          "level": 3
+        },
+        {
+          "id": "chinese-communications",
+          "title": "中文信号与通信",
+          "level": 2
+        },
+        {
+          "id": "bupt-signals",
+          "title": "北邮 · 信号与系统",
+          "level": 3
+        },
+        {
+          "id": "bupt-communications",
+          "title": "北邮 · 通信原理",
+          "level": 3
+        },
+        {
+          "id": "zju-dsp",
+          "title": "浙大 · 数字信号处理",
+          "level": 3
+        },
+        {
+          "id": "ic-extensions",
+          "title": "芯片设计进阶",
+          "level": 2
+        },
+        {
+          "id": "berkeley-ee105",
+          "title": "Berkeley EE105 · 器件与微电子电路",
+          "level": 3
+        },
+        {
+          "id": "nptel-analog",
+          "title": "IIT Madras · Analog IC Design",
+          "level": 3
+        },
+        {
+          "id": "nptel-rtl-gds",
+          "title": "IIIT Delhi · VLSI Design Flow: RTL to GDS",
+          "level": 3
+        },
+        {
+          "id": "systems-extensions",
+          "title": "无线、变换与系统实践",
+          "level": 2
+        },
+        {
+          "id": "nptel-wireless",
+          "title": "IIT Kanpur · CDMA / MIMO / OFDM 无线通信",
+          "level": 3
+        },
+        {
+          "id": "stanford-ee261",
+          "title": "Stanford EE261 · 傅里叶变换及其应用",
+          "level": 3
+        },
+        {
+          "id": "nand2tetris",
+          "title": "Nand to Tetris · 从逻辑门搭建计算机",
+          "level": 3
+        },
+        {
+          "id": "choose",
+          "title": "按当前目标选择",
           "level": 2
         }
       ]
@@ -2173,6 +2271,11 @@
           "id": "_8",
           "title": "与信息通信方向交叉学习",
           "level": 2
+        },
+        {
+          "id": "course-links",
+          "title": "更多原始课程链接",
+          "level": 2
         }
       ]
     },
@@ -2563,6 +2666,10 @@
     },
     {
       "source": "catalog.md",
+      "target": "course-links.md"
+    },
+    {
+      "source": "catalog.md",
       "target": "courses/algorithms.md"
     },
     {
@@ -2751,6 +2858,10 @@
     },
     {
       "source": "communications-roadmap.md",
+      "target": "course-links.md"
+    },
+    {
+      "source": "communications-roadmap.md",
       "target": "courses/comm-coding.md"
     },
     {
@@ -2880,6 +2991,46 @@
     {
       "source": "contribute.md",
       "target": "publish.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "courses/comm-intro.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "courses/comm-wireless.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "courses/ee-circuits.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "courses/ee-devices.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "courses/ee-dsp.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "courses/ee-signals.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "courses/ic-eda.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "dashboard.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "course-links.md",
+      "target": "index.md"
     },
     {
       "source": "courses/algorithms.md",

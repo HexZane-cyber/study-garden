@@ -101,3 +101,7 @@
 ## 现在就开始
 
 基础还在建立时，从[通信系统入门](courses/comm-intro.md)的框图和小实验开始，并补齐其先修。已经学过通信原理时，可选择[信息论](courses/comm-information.md)或[PySDR 实践](courses/comm-sdr.md)，先完成一个能独立解释的结果，再拓展方向。
+
+## 更多原始课程链接 { #course-links }
+
+需要中文主课时，查看[北邮信号与通信、浙大 DSP](course-links.md#chinese-communications)。希望补变换原理或无线多天线、多载波知识时，查看[Stanford EE261 与 NPTEL MIMO / OFDM](course-links.md#systems-extensions)。链接页注明了先修、材料形式和本站选学时长估算。
