@@ -77,6 +77,21 @@ nav:
   - 如何使用这本手册: guide.md
   - 课程目录: catalog.md
   - 学习路线: roadmap.md
+  - 电子信息与集成电路:
+      - 学习路线与清华对标: ic-roadmap.md
+      - MIT 18.01SC 微积分基础: courses/ee-calculus.md
+      - MIT 6.041SC 概率与随机过程基础: courses/ee-probability.md
+      - MIT 6.002 电路与电子学: courses/ee-circuits.md
+      - MIT 6.012 半导体器件与微电子电路: courses/ee-devices.md
+      - MIT 6.101 模拟电子电路与实验: courses/ee-analog.md
+      - MIT 6.004 数字逻辑与计算结构: courses/ee-digital.md
+      - MIT RES.6-007 信号与系统: courses/ee-signals.md
+      - MIT RES.6-008 数字信号处理: courses/ee-dsp.md
+      - MIT 6.013 电磁场与应用: courses/ee-em.md
+      - MIT 6.374 CMOS 数字集成电路设计: courses/ic-digital.md
+      - MIT 6.301 晶体管与模拟电路设计进阶: courses/ic-analog.md
+      - MIT 6.111 HDL 与数字系统实验: courses/ic-fpga.md
+      - OpenROAD RTL 到 GDS 设计实践: courses/ic-eda.md
   - 必学工具:
       - Missing Semester: tools/missing-semester.md
       - Git 与知识管理: tools/git.md

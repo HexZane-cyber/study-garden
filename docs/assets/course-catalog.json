@@ -13,8 +13,7 @@
       "prerequisites": [],
       "tracks": [
         "基础起步",
-        "系统方向",
-        "机器学习"
+        "系统方向"
       ],
       "hours": 8,
       "summary": "从计算思维进入 C、内存、数据结构及 Web，适合希望理解计算机全貌的初学者。",
@@ -33,7 +32,10 @@
       "prerequisites": [],
       "tracks": [
         "基础起步",
-        "机器学习"
+        "系统方向",
+        "机器学习",
+        "集成电路基础",
+        "数字IC与EDA"
       ],
       "hours": 6,
       "summary": "围绕 Python 语言与测试练习组织学习，用一个可运行的小工具检验掌握程度。",
@@ -52,7 +54,10 @@
       "prerequisites": [],
       "tracks": [
         "基础起步",
-        "机器学习"
+        "机器学习",
+        "集成电路基础",
+        "数字IC与EDA",
+        "模拟IC与器件"
       ],
       "hours": 6,
       "summary": "用矩阵、向量空间与线性变换建立数学直觉，为机器学习与数值计算打底。",
@@ -134,7 +139,9 @@
       "tracks": [
         "基础起步",
         "系统方向",
-        "机器学习"
+        "机器学习",
+        "集成电路基础",
+        "数字IC与EDA"
       ],
       "hours": 3,
       "summary": "练习命令行、版本控制和调试，把工具变成日常学习流程的一部分。",
@@ -203,6 +210,282 @@
       "summary": "从存储、索引、查询执行和事务认识数据库实现，逐步连接理论与系统工程。",
       "edition": "CMU 15-445 Fall 2024 归档",
       "checked": "2026-10-23"
+    },
+    {
+      "id": "ee-calculus",
+      "title": "MIT 18.01SC · 微积分基础",
+      "path": "courses/ee-calculus.md",
+      "url": "courses/ee-calculus/",
+      "category": "数学基础",
+      "level": "基础",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/",
+      "prerequisites": [],
+      "tracks": [
+        "集成电路基础",
+        "数字IC与EDA",
+        "模拟IC与器件"
+      ],
+      "hours": 6,
+      "summary": "用导数、积分和近似建立电路与器件分析所需的数学基础。",
+      "edition": "Fall 2010 自学归档",
+      "checked": "2026-10-26"
+    },
+    {
+      "id": "ee-probability",
+      "title": "MIT 6.041SC · 概率与随机过程基础",
+      "path": "courses/ee-probability.md",
+      "url": "courses/ee-probability/",
+      "category": "数学基础",
+      "level": "基础",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-041sc-probabilistic-systems-analysis-and-applied-probability-fall-2013/",
+      "prerequisites": [
+        "ee-calculus"
+      ],
+      "tracks": [
+        "集成电路基础",
+        "模拟IC与器件"
+      ],
+      "hours": 6,
+      "summary": "为噪声、失配和实验统计建立条件概率、随机变量与估计基础。",
+      "edition": "Fall 2013 自学归档",
+      "checked": "2026-10-26"
+    },
+    {
+      "id": "ee-circuits",
+      "title": "MIT 6.002 · 电路与电子学",
+      "path": "courses/ee-circuits.md",
+      "url": "courses/ee-circuits/",
+      "category": "电子信息基础",
+      "level": "基础",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-002-circuits-and-electronics-spring-2007/",
+      "prerequisites": [
+        "ee-calculus"
+      ],
+      "tracks": [
+        "集成电路基础",
+        "数字IC与EDA",
+        "模拟IC与器件"
+      ],
+      "hours": 8,
+      "summary": "从集总电路、动态响应和放大器进入电子信息的电路语言。",
+      "edition": "Spring 2007 归档",
+      "checked": "2026-10-26"
+    },
+    {
+      "id": "ee-devices",
+      "title": "MIT 6.012 · 半导体器件与微电子电路",
+      "path": "courses/ee-devices.md",
+      "url": "courses/ee-devices/",
+      "category": "微电子与器件",
+      "level": "基础",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-012-microelectronic-devices-and-circuits-spring-2009/",
+      "prerequisites": [
+        "ee-circuits"
+      ],
+      "tracks": [
+        "集成电路基础",
+        "数字IC与EDA",
+        "模拟IC与器件"
+      ],
+      "hours": 8,
+      "summary": "把半导体器件的物理图像连接到大信号与小信号电路模型。",
+      "edition": "Spring 2009 归档",
+      "checked": "2026-10-26"
+    },
+    {
+      "id": "ee-analog",
+      "title": "MIT 6.101 · 模拟电子电路与实验",
+      "path": "courses/ee-analog.md",
+      "url": "courses/ee-analog/",
+      "category": "电子信息基础",
+      "level": "基础",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-101-introductory-analog-electronics-laboratory-spring-2007/",
+      "prerequisites": [
+        "ee-circuits",
+        "ee-devices"
+      ],
+      "tracks": [
+        "集成电路基础",
+        "模拟IC与器件"
+      ],
+      "hours": 8,
+      "summary": "通过放大、滤波和调试训练，把理想电路分析变成可验证的设计。",
+      "edition": "Spring 2007 实验归档",
+      "checked": "2026-10-26"
+    },
+    {
+      "id": "ee-digital",
+      "title": "MIT 6.004 · 数字逻辑与计算结构",
+      "path": "courses/ee-digital.md",
+      "url": "courses/ee-digital/",
+      "category": "电子信息基础",
+      "level": "基础",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/",
+      "prerequisites": [
+        "ee-circuits"
+      ],
+      "tracks": [
+        "集成电路基础",
+        "数字IC与EDA"
+      ],
+      "hours": 8,
+      "summary": "从组合逻辑、时序电路和状态机连接到数据通路与处理器结构。",
+      "edition": "Spring 2017 归档",
+      "checked": "2026-10-26"
+    },
+    {
+      "id": "ee-signals",
+      "title": "MIT RES.6-007 · 信号与系统",
+      "path": "courses/ee-signals.md",
+      "url": "courses/ee-signals/",
+      "category": "信号处理",
+      "level": "基础",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/res-6-007-signals-and-systems-spring-2011/",
+      "prerequisites": [
+        "ee-calculus",
+        "math"
+      ],
+      "tracks": [
+        "集成电路基础",
+        "模拟IC与器件"
+      ],
+      "hours": 8,
+      "summary": "用时域和频域描述系统，为模拟滤波、采样及混合信号设计打底。",
+      "edition": "Spring 2011 资源归档；原始课程形成于 1987 年",
+      "checked": "2026-10-26"
+    },
+    {
+      "id": "ee-dsp",
+      "title": "MIT RES.6-008 · 数字信号处理",
+      "path": "courses/ee-dsp.md",
+      "url": "courses/ee-dsp/",
+      "category": "信号处理",
+      "level": "进阶",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/res-6-008-digital-signal-processing-spring-2011/",
+      "prerequisites": [
+        "ee-signals",
+        "python"
+      ],
+      "tracks": [
+        "模拟IC与器件"
+      ],
+      "hours": 6,
+      "summary": "把离散系统、FFT 和滤波器设计连接到芯片上的数字处理模块。",
+      "edition": "Spring 2011 资源归档；原始课程形成于 1987 年",
+      "checked": "2026-10-26"
+    },
+    {
+      "id": "ee-em",
+      "title": "MIT 6.013 · 电磁场与应用",
+      "path": "courses/ee-em.md",
+      "url": "courses/ee-em/",
+      "category": "电子信息基础",
+      "level": "进阶",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-013-electromagnetics-and-applications-spring-2009/",
+      "prerequisites": [
+        "ee-calculus"
+      ],
+      "tracks": [
+        "模拟IC与器件"
+      ],
+      "hours": 6,
+      "summary": "为高速互连、射频和封装补充场、波与传输线的基本解释。",
+      "edition": "Spring 2009 归档",
+      "checked": "2026-10-26"
+    },
+    {
+      "id": "ic-digital",
+      "title": "MIT 6.374 · CMOS 数字集成电路设计",
+      "path": "courses/ic-digital.md",
+      "url": "courses/ic-digital/",
+      "category": "集成电路设计",
+      "level": "进阶",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-374-analysis-and-design-of-digital-integrated-circuits-fall-2003/",
+      "prerequisites": [
+        "ee-devices",
+        "ee-digital"
+      ],
+      "tracks": [
+        "数字IC与EDA"
+      ],
+      "hours": 8,
+      "summary": "从逻辑正确走向晶体管级的延迟、功耗、互连与时序权衡。",
+      "edition": "Fall 2003 归档",
+      "checked": "2026-10-26"
+    },
+    {
+      "id": "ic-analog",
+      "title": "MIT 6.301 · 晶体管与模拟电路设计进阶",
+      "path": "courses/ic-analog.md",
+      "url": "courses/ic-analog/",
+      "category": "集成电路设计",
+      "level": "进阶",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-301-solid-state-circuits-fall-2010/",
+      "prerequisites": [
+        "ee-analog",
+        "ee-signals"
+      ],
+      "tracks": [
+        "模拟IC与器件"
+      ],
+      "hours": 8,
+      "summary": "训练晶体管电路的估算、设计直觉和频率响应分析，为模拟 IC 继续学习搭桥。",
+      "edition": "Fall 2010 归档",
+      "checked": "2026-10-26"
+    },
+    {
+      "id": "ic-fpga",
+      "title": "MIT 6.111 · HDL 与数字系统实验",
+      "path": "courses/ic-fpga.md",
+      "url": "courses/ic-fpga/",
+      "category": "集成电路设计",
+      "level": "进阶",
+      "provider": "MIT OCW",
+      "official": "https://ocw.mit.edu/courses/6-111-introductory-digital-systems-laboratory-spring-2006/",
+      "prerequisites": [
+        "ee-digital",
+        "python"
+      ],
+      "tracks": [
+        "数字IC与EDA"
+      ],
+      "hours": 8,
+      "summary": "用 Verilog、状态机和测试组织一个可解释、可验证的数字系统。",
+      "edition": "Spring 2006 实验归档",
+      "checked": "2026-10-26"
+    },
+    {
+      "id": "ic-eda",
+      "title": "OpenROAD · RTL 到 GDS 设计实践",
+      "path": "courses/ic-eda.md",
+      "url": "courses/ic-eda/",
+      "category": "集成电路设计",
+      "level": "进阶",
+      "provider": "OpenROAD",
+      "official": "https://openroad-flow-scripts.readthedocs.io/en/latest/",
+      "prerequisites": [
+        "ic-fpga",
+        "ic-digital",
+        "tools"
+      ],
+      "tracks": [
+        "数字IC与EDA"
+      ],
+      "hours": 8,
+      "summary": "沿着综合、布局布线与时序报告认识数字芯片实现流程。",
+      "edition": "OpenROAD-flow-scripts 官方文档，使用时固定版本",
+      "checked": "2026-10-26"
     }
   ],
   "tracks": {
@@ -228,6 +511,42 @@
       "python",
       "math",
       "ml"
+    ],
+    "集成电路基础": [
+      "tools",
+      "python",
+      "ee-calculus",
+      "math",
+      "ee-probability",
+      "ee-circuits",
+      "ee-devices",
+      "ee-digital",
+      "ee-analog",
+      "ee-signals"
+    ],
+    "数字IC与EDA": [
+      "tools",
+      "python",
+      "ee-calculus",
+      "math",
+      "ee-circuits",
+      "ee-devices",
+      "ee-digital",
+      "ic-digital",
+      "ic-fpga",
+      "ic-eda"
+    ],
+    "模拟IC与器件": [
+      "ee-calculus",
+      "math",
+      "ee-probability",
+      "ee-circuits",
+      "ee-devices",
+      "ee-analog",
+      "ee-signals",
+      "ic-analog",
+      "ee-dsp",
+      "ee-em"
     ]
   }
 }

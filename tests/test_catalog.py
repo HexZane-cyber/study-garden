@@ -24,7 +24,9 @@ class CatalogTest(unittest.TestCase):
 
     def test_catalog_guides_and_built_fallback(self):
         data = hooks.load_course_catalog(ROOT / 'docs')
-        self.assertEqual(len(data['courses']), 10)
+        self.assertGreaterEqual(len(data['courses']), 23)
+        self.assertTrue({'ee-devices', 'ic-digital', 'ic-analog', 'ic-fpga', 'ic-eda'} <= {c['id'] for c in data['courses']})
+        self.assertIn('集成电路基础', data['tracks'])
         html = (ROOT / 'site/catalog/index.html').read_text(encoding='utf-8')
         self.assertIn('<table>', html)
         self.assertIn('id="learning-data"', html)

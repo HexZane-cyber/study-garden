@@ -225,6 +225,630 @@
       ]
     },
     {
+      "id": "courses/ee-analog.md",
+      "title": "MIT 6.101 · 模拟电子电路与实验",
+      "group": "course",
+      "url": "courses/ee-analog/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ee-calculus.md",
+      "title": "MIT 18.01SC · 微积分基础",
+      "group": "course",
+      "url": "courses/ee-calculus/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ee-circuits.md",
+      "title": "MIT 6.002 · 电路与电子学",
+      "group": "course",
+      "url": "courses/ee-circuits/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ee-devices.md",
+      "title": "MIT 6.012 · 半导体器件与微电子电路",
+      "group": "course",
+      "url": "courses/ee-devices/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ee-digital.md",
+      "title": "MIT 6.004 · 数字逻辑与计算结构",
+      "group": "course",
+      "url": "courses/ee-digital/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ee-dsp.md",
+      "title": "MIT RES.6-008 · 数字信号处理",
+      "group": "course",
+      "url": "courses/ee-dsp/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ee-em.md",
+      "title": "MIT 6.013 · 电磁场与应用",
+      "group": "course",
+      "url": "courses/ee-em/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ee-probability.md",
+      "title": "MIT 6.041SC · 概率与随机过程基础",
+      "group": "course",
+      "url": "courses/ee-probability/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ee-signals.md",
+      "title": "MIT RES.6-007 · 信号与系统",
+      "group": "course",
+      "url": "courses/ee-signals/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ic-analog.md",
+      "title": "MIT 6.301 · 晶体管与模拟电路设计进阶",
+      "group": "course",
+      "url": "courses/ic-analog/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ic-digital.md",
+      "title": "MIT 6.374 · CMOS 数字集成电路设计",
+      "group": "course",
+      "url": "courses/ic-digital/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ic-eda.md",
+      "title": "OpenROAD · RTL 到 GDS 设计实践",
+      "group": "course",
+      "url": "courses/ic-eda/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ic-fpga.md",
+      "title": "MIT 6.111 · HDL 与数字系统实验",
+      "group": "course",
+      "url": "courses/ic-fpga/",
+      "sections": [
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "口头解释练习",
+          "level": 2
+        },
+        {
+          "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
       "id": "courses/math.md",
       "title": "MIT 18.06 · 线性代数",
       "group": "course",
@@ -605,6 +1229,54 @@
       ]
     },
     {
+      "id": "ic-roadmap.md",
+      "title": "集成电路与微电子：从基础到项目",
+      "group": "guide",
+      "url": "ic-roadmap/",
+      "sections": [
+        {
+          "id": "_2",
+          "title": "先判断自己在哪一层",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "公共基础：先把电路语言说清楚",
+          "level": 2
+        },
+        {
+          "id": "ic-eda",
+          "title": "分支一：数字 IC 与 EDA",
+          "level": 2
+        },
+        {
+          "id": "ic",
+          "title": "分支二：模拟 IC 与器件",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "与清华公开课程的能力参照",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "项目与申请材料怎样积累",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "推免信息：核对年份和项目",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "现在就开始",
+          "level": 2
+        }
+      ]
+    },
+    {
       "id": "index.md",
       "title": "之芯",
       "group": "guide",
@@ -856,6 +1528,11 @@
           "id": "_8",
           "title": "继续扩展系统方向",
           "level": 2
+        },
+        {
+          "id": "_9",
+          "title": "集成电路与微电子",
+          "level": 2
         }
       ]
     },
@@ -984,6 +1661,58 @@
     },
     {
       "source": "catalog.md",
+      "target": "courses/ee-analog.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ee-calculus.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ee-circuits.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ee-devices.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ee-digital.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ee-dsp.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ee-em.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ee-probability.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ee-signals.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ic-analog.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ic-digital.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ic-eda.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ic-fpga.md"
+    },
+    {
+      "source": "catalog.md",
       "target": "courses/math.md"
     },
     {
@@ -1013,6 +1742,10 @@
     {
       "source": "catalog.md",
       "target": "guide.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "ic-roadmap.md"
     },
     {
       "source": "catalog.md",
@@ -1135,8 +1868,248 @@
       "target": "roadmap.md"
     },
     {
+      "source": "courses/ee-analog.md",
+      "target": "courses/ee-circuits.md"
+    },
+    {
+      "source": "courses/ee-analog.md",
+      "target": "courses/ee-devices.md"
+    },
+    {
+      "source": "courses/ee-analog.md",
+      "target": "courses/ic-analog.md"
+    },
+    {
+      "source": "courses/ee-analog.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ee-analog.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ee-analog.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ee-calculus.md",
+      "target": "courses/ee-circuits.md"
+    },
+    {
+      "source": "courses/ee-calculus.md",
+      "target": "courses/ee-em.md"
+    },
+    {
+      "source": "courses/ee-calculus.md",
+      "target": "courses/ee-probability.md"
+    },
+    {
+      "source": "courses/ee-calculus.md",
+      "target": "courses/ee-signals.md"
+    },
+    {
+      "source": "courses/ee-calculus.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ee-calculus.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ee-calculus.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ee-circuits.md",
+      "target": "courses/ee-devices.md"
+    },
+    {
+      "source": "courses/ee-circuits.md",
+      "target": "courses/ee-digital.md"
+    },
+    {
+      "source": "courses/ee-circuits.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ee-circuits.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ee-circuits.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ee-devices.md",
+      "target": "courses/ic-digital.md"
+    },
+    {
+      "source": "courses/ee-devices.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ee-devices.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ee-devices.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ee-digital.md",
+      "target": "courses/ic-digital.md"
+    },
+    {
+      "source": "courses/ee-digital.md",
+      "target": "courses/ic-fpga.md"
+    },
+    {
+      "source": "courses/ee-digital.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ee-digital.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ee-digital.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ee-dsp.md",
+      "target": "courses/ee-signals.md"
+    },
+    {
+      "source": "courses/ee-dsp.md",
+      "target": "courses/python.md"
+    },
+    {
+      "source": "courses/ee-dsp.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ee-dsp.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ee-dsp.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ee-em.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ee-em.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ee-em.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ee-probability.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ee-probability.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ee-probability.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ee-signals.md",
+      "target": "courses/ic-analog.md"
+    },
+    {
+      "source": "courses/ee-signals.md",
+      "target": "courses/math.md"
+    },
+    {
+      "source": "courses/ee-signals.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ee-signals.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ee-signals.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ic-analog.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ic-analog.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ic-analog.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ic-digital.md",
+      "target": "courses/ic-eda.md"
+    },
+    {
+      "source": "courses/ic-digital.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ic-digital.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ic-digital.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ic-eda.md",
+      "target": "courses/ic-fpga.md"
+    },
+    {
+      "source": "courses/ic-eda.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ic-eda.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ic-eda.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ic-eda.md",
+      "target": "tools/missing-semester.md"
+    },
+    {
+      "source": "courses/ic-fpga.md",
+      "target": "courses/python.md"
+    },
+    {
+      "source": "courses/ic-fpga.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ic-fpga.md",
+      "target": "private.md"
+    },
+    {
+      "source": "courses/ic-fpga.md",
+      "target": "roadmap.md"
+    },
+    {
       "source": "courses/math.md",
       "target": "courses/ml.md"
+    },
+    {
+      "source": "courses/math.md",
+      "target": "ic-roadmap.md"
     },
     {
       "source": "courses/math.md",
@@ -1296,6 +2269,10 @@
     },
     {
       "source": "graph.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "graph.md",
       "target": "index.md"
     },
     {
@@ -1328,6 +2305,18 @@
     },
     {
       "source": "guide.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "ic-roadmap.md",
+      "target": "index.md"
+    },
+    {
+      "source": "ic-roadmap.md",
+      "target": "private.md"
+    },
+    {
+      "source": "ic-roadmap.md",
       "target": "roadmap.md"
     },
     {

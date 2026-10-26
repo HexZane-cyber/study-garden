@@ -16,7 +16,7 @@ const swap=one.x;one.x=two.x;two.x=swap;
 let saved;const storage={getItem:()=>saved,setItem:(k,v)=>{assert.equal(k,Stack.KEY);saved=v;}};
 assert(Stack.save(storage,editable));const restored=Stack.layout(fixture(12));assert(Stack.load(storage,restored));
 for(const n of editable.nodes){const copy=restored.byId.get(n.id);for(const key of ['x','z'])assert.equal(copy[key],n[key]);assert.equal(Stack.shape(copy),Stack.shape(n));assert.equal(Stack.footprint(copy).scale,Stack.footprint(n).scale);}
-const before=JSON.stringify(restored.nodes);saved=JSON.stringify({version:1,nodes:[{id:one.id,x:two.x,z:two.z,shape:'die',scale:1}]});assert(!Stack.load(storage,restored));assert.equal(JSON.stringify(restored.nodes),before);
+const before=JSON.stringify(restored.nodes);saved=JSON.stringify({version:1,nodes:[{id:one.id,x:two.x,z:two.z,shape:'die',scale:1},{id:two.id,x:two.x,z:two.z,shape:'die',scale:1}]});assert(!Stack.load(storage,restored));assert.equal(JSON.stringify(restored.nodes),before);
 for(const bad of ['{bad','null','{}']){saved=bad;assert(!Stack.load(storage,restored));}
 assert(!Stack.save({setItem(){throw Error('quota');}},editable));assert(!Stack.load(null,editable));
 const bound=Stack.placement(Stack.layout(fixture(1)),Stack.layout(fixture(1)).nodes[0],1e5,-1e5,{shape:'io',scale:.8});assert(bound.x+Stack.footprint(bound).x<=290);assert(bound.z-Stack.footprint(bound).z>=-150);
@@ -30,3 +30,5 @@ console.log('Physical chip model passed: rectangular macro types, legacy shape m
 
 const sparse=Stack.layout(fixture(1));assert.equal(Stack.placement(sparse,sparse.nodes[0],-265,135),null,'TSV region is reserved from macro placement');
 let legacySaved=JSON.stringify({version:1,nodes:[{id:sparse.nodes[0].id,x:0,z:0,shape:'round',scale:1}]});assert(Stack.load({getItem:()=>legacySaved},sparse));assert.equal(Stack.shape(sparse.nodes[0]),'io');assert.equal(sparse.nodes[0].x,0);
+
+const older=Stack.layout(fixture(12));let olderJSON;assert(Stack.save({setItem:(k,v)=>olderJSON=v},older));const enlargedData=fixture(12);enlargedData.nodes.unshift({id:'notes/!new',title:'Added article',group:'note'});const enlarged=Stack.layout(enlargedData);assert(Stack.load({getItem:()=>olderJSON},enlarged));for(const original of older.nodes){const n=enlarged.byId.get(original.id);assert.equal(n.x,original.x);assert.equal(n.z,original.z);}for(const layer of enlarged.layers)for(const n of layer.nodes)assert(Stack.placement(enlarged,n,n.x,n.z),'new articles keep saved layouts usable');
