@@ -4,6 +4,7 @@ from urllib.parse import unquote
 import json
 import posixpath
 import re
+import math
 from html.parser import HTMLParser
 
 ROOT = Path(__file__).resolve().parent
@@ -84,6 +85,16 @@ def load_course_catalog(docs):
             raise ValueError('Course guide is missing')
         if course['url'] != rel[:-3] + '/' or not course['official'].startswith('https://'):
             raise ValueError('Invalid course URL')
+        total = course.get('totalHours')
+        weekly = course.get('hours')
+        if (not isinstance(total, list) or len(total) != 2
+                or any(type(x) is not int or not 0 < x <= 2000 for x in total)
+                or total[0] > total[1]
+                or type(weekly) is not int or not 0 < weekly <= 40):
+            raise ValueError('Invalid course workload estimate')
+        if (course.get('level') not in {'入门', '基础', '进阶'}
+                or not course.get('studyScope') or not course.get('difficultyNote')):
+            raise ValueError('Missing course difficulty or estimate scope')
     dependencies = {c['id']: c['prerequisites'] for c in data['courses']}
     def visit(cid, stack):
         if cid in stack or cid not in ids:
@@ -109,13 +120,33 @@ def on_page_context(context, page, config, nav):
 
 
 def on_page_markdown(markdown, page, config, files):
+    data = load_course_catalog(config['docs_dir'])
     if page.file.src_uri == 'catalog.md':
-        data = load_course_catalog(config['docs_dir'])
-        lines = ['<details id="course-catalog-fallback" markdown="1"><summary>按列表浏览全部课程（无需脚本）</summary>', '', '| 课程 | 方向 | 难度 |', '| --- | --- | --- |']
+        lines = ['<details id="course-catalog-fallback" markdown="1"><summary>按列表浏览全部课程（无需脚本）</summary>', '', '| 课程 | 方向 | 难度 | 预计总时长 | 建议周投入 |', '| --- | --- | --- | --- | --- |']
         for c in data['courses']:
-            lines.append(f"| [{c['title']}]({c['path']}) | {c['category']} | {c['level']} |")
+            low, high = c['totalHours']
+            lines.append(f"| [{c['title']}]({c['path']}) | {c['category']} | {c['level']} | {low}–{high} 小时 | {c['hours']} 小时 |")
         lines.extend(['', '</details>'])
         return markdown.replace('<!-- course-catalog-fallback -->', '\n'.join(lines))
+    course = next((c for c in data['courses'] if c['path'] == page.file.src_uri), None)
+    if course:
+        low, high = course['totalHours']
+        weekly = course['hours']
+        block = f'''## 难度与学习时长 {{ #study-effort }}
+
+| 项目 | 本站建议 |
+| --- | --- |
+| 难度 | **{course['level']}**：{course['difficultyNote']} |
+| 预计总投入 | **{low}–{high} 小时** |
+| 建议周投入 | 每周约 **{weekly} 小时** |
+| 按此节奏 | 约 **{math.ceil(low / weekly)}–{math.ceil(high / weekly)} 周**，不含暂停和假期 |
+| 估算范围 | {course['studyScope']} |
+
+时长是本站为安排自学所作的估算，包含阅读 / 听课、独立练习和复盘，不是视频总长度、官方课时或完成保证。默认已具备先修；英文阅读、补基础与反复调试可能增加投入。先记录两周的实际用时，再调整计划。难度按当前所选学习范围判断，不等同于学校年级或官方分级。
+
+'''
+        marker = '<div id="course-progress"></div>'
+        return markdown.replace(marker, marker + '\n\n' + block, 1)
     return markdown
 
 

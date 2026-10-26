@@ -24,15 +24,21 @@ class CatalogTest(unittest.TestCase):
 
     def test_catalog_guides_and_built_fallback(self):
         data = hooks.load_course_catalog(ROOT / 'docs')
-        self.assertGreaterEqual(len(data['courses']), 31)
+        self.assertGreaterEqual(len(data['courses']), 37)
+        self.assertTrue({'ic-process', 'ic-rf', 'ic-hdlbits', 'comm-inference', 'comm-receivers', 'comm-system-design'} <= {c['id'] for c in data['courses']})
         self.assertTrue({'comm-intro', 'comm-principles', 'comm-information', 'comm-wireless', 'comm-sdr'} <= {c['id'] for c in data['courses']})
         self.assertIn('信息通信基础', data['tracks'])
         self.assertTrue({'ee-devices', 'ic-digital', 'ic-analog', 'ic-fpga', 'ic-eda'} <= {c['id'] for c in data['courses']})
         self.assertIn('集成电路基础', data['tracks'])
         html = (ROOT / 'site/catalog/index.html').read_text(encoding='utf-8')
         self.assertIn('<table>', html)
+        self.assertIn('预计总时长', html)
         self.assertIn('id="learning-data"', html)
         for course in data['courses']:
+            self.assertLessEqual(course['totalHours'][0], course['totalHours'][1])
+            built = (ROOT / 'site' / course['url'] / 'index.html').read_text(encoding='utf-8')
+            self.assertIn('难度与学习时长', built)
+            self.assertIn(f"{course['totalHours'][0]}–{course['totalHours'][1]} 小时", built)
             text = (ROOT / 'docs' / course['path']).read_text(encoding='utf-8')
             self.assertIn(course['official'], text)
             self.assertNotIn('待补充', text)
@@ -58,3 +64,13 @@ class CatalogTest(unittest.TestCase):
                 (root / 'assets/course-catalog.json').write_text(json.dumps(data), encoding='utf-8')
                 with self.assertRaises(ValueError):
                     hooks.load_course_catalog(root)
+
+    def test_invalid_workload_rejected(self):
+        from copy import deepcopy
+        data = hooks.load_course_catalog(ROOT / 'docs')
+        for value in [None, [80, 20], [-1, 30], [10, True], [1], [10, '30']]:
+            invalid = deepcopy(data)
+            invalid['courses'][0]['totalHours'] = value
+            with patch.object(hooks.json, 'loads', return_value=invalid):
+                with self.assertRaisesRegex(ValueError, 'workload'):
+                    hooks.load_course_catalog(ROOT / 'docs')

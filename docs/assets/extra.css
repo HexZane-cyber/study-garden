@@ -119,3 +119,5 @@ body[data-md-color-scheme=default] .appearance-choices button{background:linear-
 .chip-expanded .chip-heading,.chip-expanded .chip-learning-summary{display:none}.chip-expanded .chip-panel{max-height:20vh}.chip-expanded{overflow:auto}
 
 .chip-drag-feedback{position:absolute;right:12px;bottom:12px;max-width:calc(100% - 24px);padding:7px 10px;border:1px solid #a8795a;border-radius:5px;background:#241a14ed;color:#f4dcc0;font-size:11px;line-height:1.5;pointer-events:none;z-index:2}.chip-drag-feedback[hidden]{display:none}
+
+.learning-effort{font-weight:600;color:var(--md-accent-fg-color);font-variant-numeric:tabular-nums}.learning-route-list .learning-effort{font-size:12px;margin:.4rem 0}

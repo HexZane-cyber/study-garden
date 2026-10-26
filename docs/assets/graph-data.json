@@ -91,6 +91,11 @@
           "level": 2
         },
         {
+          "id": "advanced-extensions",
+          "title": "可选进阶：随机信号、接收与实现",
+          "level": 2
+        },
+        {
           "id": "_7",
           "title": "三个可复现的小项目",
           "level": 2
@@ -152,6 +157,11 @@
       "url": "courses/algorithms/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -194,6 +204,11 @@
       "group": "course",
       "url": "courses/comm-coding/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -243,6 +258,11 @@
       "url": "courses/comm-detection/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -285,11 +305,64 @@
       ]
     },
     {
+      "id": "courses/comm-inference.md",
+      "title": "MIT 6.011 · 信号、系统与推断",
+      "group": "course",
+      "url": "courses/comm-inference/",
+      "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
       "id": "courses/comm-information.md",
       "title": "MIT 6.441 · 信息论",
       "group": "course",
       "url": "courses/comm-information/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -339,6 +412,11 @@
       "url": "courses/comm-intro/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -386,6 +464,11 @@
       "group": "course",
       "url": "courses/comm-principles/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -435,6 +518,11 @@
       "url": "courses/comm-random/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -471,6 +559,54 @@
         },
         {
           "id": "_8",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/comm-receivers.md",
+      "title": "MIT 6.661 · 接收机、天线与信号",
+      "group": "course",
+      "url": "courses/comm-receivers/",
+      "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
           "title": "相关学习",
           "level": 2
         }
@@ -483,6 +619,11 @@
       "url": "courses/comm-sdr/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -525,11 +666,64 @@
       ]
     },
     {
+      "id": "courses/comm-system-design.md",
+      "title": "MIT 6.973 · 通信系统设计",
+      "group": "course",
+      "url": "courses/comm-system-design/",
+      "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
       "id": "courses/comm-wireless.md",
       "title": "Tse / Viswanath · 无线通信基础",
       "group": "course",
       "url": "courses/comm-wireless/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -592,6 +786,11 @@
       "url": "courses/cs-intro/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -635,6 +834,11 @@
       "url": "courses/databases/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -677,6 +881,11 @@
       "group": "course",
       "url": "courses/ee-analog/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -726,6 +935,11 @@
       "url": "courses/ee-calculus/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -773,6 +987,11 @@
       "group": "course",
       "url": "courses/ee-circuits/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -822,6 +1041,11 @@
       "url": "courses/ee-devices/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -869,6 +1093,11 @@
       "group": "course",
       "url": "courses/ee-digital/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -918,6 +1147,11 @@
       "url": "courses/ee-dsp/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -965,6 +1199,11 @@
       "group": "course",
       "url": "courses/ee-em/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -1014,6 +1253,11 @@
       "url": "courses/ee-probability/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -1061,6 +1305,11 @@
       "group": "course",
       "url": "courses/ee-signals/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -1110,6 +1359,11 @@
       "url": "courses/ic-analog/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -1157,6 +1411,11 @@
       "group": "course",
       "url": "courses/ic-digital/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -1206,6 +1465,11 @@
       "url": "courses/ic-eda/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -1254,6 +1518,11 @@
       "url": "courses/ic-fpga/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -1296,11 +1565,160 @@
       ]
     },
     {
+      "id": "courses/ic-hdlbits.md",
+      "title": "HDLBits · Verilog 电路练习",
+      "group": "course",
+      "url": "courses/ic-hdlbits/",
+      "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ic-process.md",
+      "title": "MIT 6.152J · 微纳加工技术",
+      "group": "course",
+      "url": "courses/ic-process/",
+      "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "courses/ic-rf.md",
+      "title": "MIT 6.776 · 高速通信电路",
+      "group": "course",
+      "url": "courses/ic-rf/",
+      "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
+          "id": "_1",
+          "title": "课程信息",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "先修与学习范围",
+          "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "官方资源与作者入口",
+          "level": 2
+        },
+        {
+          "id": "_4",
+          "title": "建议学习顺序",
+          "level": 2
+        },
+        {
+          "id": "_5",
+          "title": "练习与项目",
+          "level": 2
+        },
+        {
+          "id": "_6",
+          "title": "阶段验收",
+          "level": 2
+        },
+        {
+          "id": "_7",
+          "title": "相关学习",
+          "level": 2
+        }
+      ]
+    },
+    {
       "id": "courses/math.md",
       "title": "MIT 18.06 · 线性代数",
       "group": "course",
       "url": "courses/math/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -1345,6 +1763,11 @@
       "url": "courses/ml/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -1387,6 +1810,11 @@
       "group": "course",
       "url": "courses/networks/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -1431,6 +1859,11 @@
       "url": "courses/os/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -1474,6 +1907,11 @@
       "url": "courses/python/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -1516,6 +1954,11 @@
       "group": "course",
       "url": "courses/systems/",
       "sections": [
+        {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
         {
           "id": "_1",
           "title": "课程信息",
@@ -1714,6 +2157,11 @@
         {
           "id": "_6",
           "title": "推免信息：核对年份和项目",
+          "level": 2
+        },
+        {
+          "id": "advanced-extensions",
+          "title": "可选扩展：工艺、HDL 与射频",
           "level": 2
         },
         {
@@ -2046,6 +2494,11 @@
       "url": "tools/missing-semester/",
       "sections": [
         {
+          "id": "study-effort",
+          "title": "难度与学习时长",
+          "level": 2
+        },
+        {
           "id": "_1",
           "title": "课程信息",
           "level": 2
@@ -2122,6 +2575,10 @@
     },
     {
       "source": "catalog.md",
+      "target": "courses/comm-inference.md"
+    },
+    {
+      "source": "catalog.md",
       "target": "courses/comm-information.md"
     },
     {
@@ -2138,7 +2595,15 @@
     },
     {
       "source": "catalog.md",
+      "target": "courses/comm-receivers.md"
+    },
+    {
+      "source": "catalog.md",
       "target": "courses/comm-sdr.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/comm-system-design.md"
     },
     {
       "source": "catalog.md",
@@ -2203,6 +2668,18 @@
     {
       "source": "catalog.md",
       "target": "courses/ic-fpga.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ic-hdlbits.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ic-process.md"
+    },
+    {
+      "source": "catalog.md",
+      "target": "courses/ic-rf.md"
     },
     {
       "source": "catalog.md",
@@ -2282,6 +2759,10 @@
     },
     {
       "source": "communications-roadmap.md",
+      "target": "courses/comm-inference.md"
+    },
+    {
+      "source": "communications-roadmap.md",
       "target": "courses/comm-information.md"
     },
     {
@@ -2298,7 +2779,15 @@
     },
     {
       "source": "communications-roadmap.md",
+      "target": "courses/comm-receivers.md"
+    },
+    {
+      "source": "communications-roadmap.md",
       "target": "courses/comm-sdr.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/comm-system-design.md"
     },
     {
       "source": "communications-roadmap.md",
@@ -2331,6 +2820,18 @@
     {
       "source": "communications-roadmap.md",
       "target": "courses/ic-fpga.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/ic-hdlbits.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/ic-process.md"
+    },
+    {
+      "source": "communications-roadmap.md",
+      "target": "courses/ic-rf.md"
     },
     {
       "source": "communications-roadmap.md",
@@ -2438,6 +2939,10 @@
     },
     {
       "source": "courses/comm-detection.md",
+      "target": "courses/comm-receivers.md"
+    },
+    {
+      "source": "courses/comm-detection.md",
       "target": "courses/ee-signals.md"
     },
     {
@@ -2454,6 +2959,26 @@
     },
     {
       "source": "courses/comm-detection.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/comm-inference.md",
+      "target": "courses/ee-probability.md"
+    },
+    {
+      "source": "courses/comm-inference.md",
+      "target": "courses/ee-signals.md"
+    },
+    {
+      "source": "courses/comm-inference.md",
+      "target": "courses/math.md"
+    },
+    {
+      "source": "courses/comm-inference.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/comm-inference.md",
       "target": "roadmap.md"
     },
     {
@@ -2514,6 +3039,14 @@
     },
     {
       "source": "courses/comm-principles.md",
+      "target": "courses/comm-receivers.md"
+    },
+    {
+      "source": "courses/comm-principles.md",
+      "target": "courses/comm-system-design.md"
+    },
+    {
+      "source": "courses/comm-principles.md",
       "target": "courses/comm-wireless.md"
     },
     {
@@ -2557,6 +3090,18 @@
       "target": "roadmap.md"
     },
     {
+      "source": "courses/comm-receivers.md",
+      "target": "courses/ee-em.md"
+    },
+    {
+      "source": "courses/comm-receivers.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/comm-receivers.md",
+      "target": "roadmap.md"
+    },
+    {
       "source": "courses/comm-sdr.md",
       "target": "courses/ee-dsp.md"
     },
@@ -2574,6 +3119,22 @@
     },
     {
       "source": "courses/comm-sdr.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/comm-system-design.md",
+      "target": "courses/ee-dsp.md"
+    },
+    {
+      "source": "courses/comm-system-design.md",
+      "target": "courses/ic-fpga.md"
+    },
+    {
+      "source": "courses/comm-system-design.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/comm-system-design.md",
       "target": "roadmap.md"
     },
     {
@@ -2690,6 +3251,10 @@
     },
     {
       "source": "courses/ee-circuits.md",
+      "target": "courses/ic-process.md"
+    },
+    {
+      "source": "courses/ee-circuits.md",
       "target": "ic-roadmap.md"
     },
     {
@@ -2703,6 +3268,10 @@
     {
       "source": "courses/ee-devices.md",
       "target": "courses/ic-digital.md"
+    },
+    {
+      "source": "courses/ee-devices.md",
+      "target": "courses/ic-process.md"
     },
     {
       "source": "courses/ee-devices.md",
@@ -2723,6 +3292,10 @@
     {
       "source": "courses/ee-digital.md",
       "target": "courses/ic-fpga.md"
+    },
+    {
+      "source": "courses/ee-digital.md",
+      "target": "courses/ic-hdlbits.md"
     },
     {
       "source": "courses/ee-digital.md",
@@ -2758,6 +3331,10 @@
     },
     {
       "source": "courses/ee-em.md",
+      "target": "courses/ic-rf.md"
+    },
+    {
+      "source": "courses/ee-em.md",
       "target": "ic-roadmap.md"
     },
     {
@@ -2786,6 +3363,10 @@
     },
     {
       "source": "courses/ee-signals.md",
+      "target": "courses/ic-rf.md"
+    },
+    {
+      "source": "courses/ee-signals.md",
       "target": "courses/math.md"
     },
     {
@@ -2799,6 +3380,10 @@
     {
       "source": "courses/ee-signals.md",
       "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ic-analog.md",
+      "target": "courses/ic-rf.md"
     },
     {
       "source": "courses/ic-analog.md",
@@ -2862,6 +3447,30 @@
     },
     {
       "source": "courses/ic-fpga.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ic-hdlbits.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ic-hdlbits.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ic-process.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ic-process.md",
+      "target": "roadmap.md"
+    },
+    {
+      "source": "courses/ic-rf.md",
+      "target": "ic-roadmap.md"
+    },
+    {
+      "source": "courses/ic-rf.md",
       "target": "roadmap.md"
     },
     {

@@ -50,7 +50,8 @@ class GraphTest(unittest.TestCase):
             ids.feed(html)
             self.assertTrue(all(section['id'] in ids.headings for section in node['sections']), node['id'])
         intro = next(n for n in data['nodes'] if n['id'] == 'courses/cs-intro.md')
-        self.assertEqual(intro['sections'][0], {'id': '_1', 'title': '课程信息', 'level': 2})
+        self.assertEqual(intro['sections'][0], {'id': 'study-effort', 'title': '难度与学习时长', 'level': 2})
+        self.assertIn({'id': '_1', 'title': '课程信息', 'level': 2}, intro['sections'])
         self.assertTrue(any(section['title'] == '阶段验收' for section in intro['sections']))
 
     def test_repository_graph_has_only_valid_endpoints(self):

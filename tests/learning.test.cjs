@@ -8,4 +8,8 @@ assert.equal(M.route(data,'机器学习',{tools:'done',python:'done',math:'done'
 assert.deepEqual(M.restore(M.backup({python:'done'}),courses),{python:'done'});assert.throws(()=>M.restore('{',courses));assert.throws(()=>M.restore(JSON.stringify({format:'zhixin-learning-progress',version:1,entries:{python:'bad'}}),courses));assert.throws(()=>M.restore('x'.repeat(128*1024+1),courses));
 assert.deepEqual(M.restore(JSON.stringify({format:'zhixin-learning-progress',version:1,entries:{unknown:'done'}}),courses),{});
 assert.equal(M.save({setItem(){throw Error('quota');}},{}),false);
+assert.deepEqual(M.effort({totalHours:[31,61],hours:6}),{min:31,max:61,weeksMin:6,weeksMax:11});
+const short=M.filter(courses,{}, {maxHours:60});assert(short.length>0);assert(short.every(c=>c.totalHours[1]<=60));
+const originalOrder=courses.map(c=>c.id);const sorted=M.filter(courses,{}, {sort:'hours'});assert(sorted.every((c,i)=>!i||sorted[i-1].totalHours[0]<=c.totalHours[0]));assert.deepEqual(courses.map(c=>c.id),originalOrder,'sorting must not mutate the source catalog');
+const ranked=M.filter(courses,{}, {sort:'level'}),ranks={'入门':0,'基础':1,'进阶':2};assert(ranked.every((c,i)=>!i||ranks[ranked[i-1].level]<=ranks[c.level]));
 console.log('Learning model passed: filters, prerequisite readiness, route next steps, progress persistence and validated backup.');

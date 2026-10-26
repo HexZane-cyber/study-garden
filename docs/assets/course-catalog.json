@@ -18,7 +18,13 @@
       "hours": 8,
       "summary": "从计算思维进入 C、内存、数据结构及 Web，适合希望理解计算机全貌的初学者。",
       "edition": "CS50x 当前主页，随开课年份更新",
-      "checked": "2026-10-23"
+      "checked": "2026-10-23",
+      "totalHours": [
+        100,
+        180
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "可从本领域起步；仍需预留英文阅读、练习与调试时间。"
     },
     {
       "id": "python",
@@ -43,7 +49,13 @@
       "hours": 6,
       "summary": "围绕 Python 语言与测试练习组织学习，用一个可运行的小工具检验掌握程度。",
       "edition": "CS50P 官方开放课程",
-      "checked": "2026-10-23"
+      "checked": "2026-10-23",
+      "totalHours": [
+        50,
+        90
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "可从本领域起步；仍需预留英文阅读、练习与调试时间。"
     },
     {
       "id": "math",
@@ -63,12 +75,19 @@
         "模拟IC与器件",
         "信息通信基础",
         "无线通信与信息理论",
-        "通信信号处理与实践"
+        "通信信号处理与实践",
+        "射频与接收系统"
       ],
       "hours": 6,
       "summary": "用矩阵、向量空间与线性变换建立数学直觉，为机器学习与数值计算打底。",
       "edition": "MIT OCW Spring 2010 归档",
-      "checked": "2026-10-23"
+      "checked": "2026-10-23",
+      "totalHours": [
+        70,
+        110
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要对应数学或编程基础；重点是核心概念和独立练习。"
     },
     {
       "id": "algorithms",
@@ -89,7 +108,13 @@
       "hours": 8,
       "summary": "把数据结构、复杂度分析与算法正确性结合起来，训练解释解法的能力。",
       "edition": "MIT OCW Spring 2020 归档",
-      "checked": "2026-10-23"
+      "checked": "2026-10-23",
+      "totalHours": [
+        100,
+        160
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要对应数学或编程基础；重点是核心概念和独立练习。"
     },
     {
       "id": "systems",
@@ -109,7 +134,13 @@
       "hours": 10,
       "summary": "从程序员视角理解机器代码、内存、性能与系统接口，为内核和网络学习建立基础。",
       "edition": "CMU 15-213 官方主页；实验须匹配所选学期",
-      "checked": "2026-10-23"
+      "checked": "2026-10-23",
+      "totalHours": [
+        120,
+        200
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "ml",
@@ -130,7 +161,13 @@
       "hours": 6,
       "summary": "通过回归、分类和模型评估理解机器学习的基本流程，并建立防止数据泄漏的习惯。",
       "edition": "Google Machine Learning Crash Course 官方模块",
-      "checked": "2026-10-23"
+      "checked": "2026-10-23",
+      "totalHours": [
+        25,
+        45
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要对应数学或编程基础；重点是核心概念和独立练习。"
     },
     {
       "id": "tools",
@@ -152,7 +189,13 @@
       "hours": 3,
       "summary": "练习命令行、版本控制和调试，把工具变成日常学习流程的一部分。",
       "edition": "Missing Semester 官方主页，当前入口会随年份变化",
-      "checked": "2026-10-23"
+      "checked": "2026-10-23",
+      "totalHours": [
+        20,
+        35
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "可从本领域起步；仍需预留英文阅读、练习与调试时间。"
     },
     {
       "id": "os",
@@ -173,7 +216,13 @@
       "hours": 10,
       "summary": "配合 xv6 教材和实验理解系统调用、地址空间与并发，而不只背诵操作系统概念。",
       "edition": "MIT 6.1810 Fall 2024 归档日程",
-      "checked": "2026-10-23"
+      "checked": "2026-10-23",
+      "totalHours": [
+        120,
+        200
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "networks",
@@ -194,7 +243,13 @@
       "hours": 8,
       "summary": "从数据传输、可靠性与网络分层建立连接，把协议解释落实到代码和实验。",
       "edition": "CS144 官方主页，日程与实验按当前学期提供",
-      "checked": "2026-10-23"
+      "checked": "2026-10-23",
+      "totalHours": [
+        100,
+        180
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "databases",
@@ -215,7 +270,13 @@
       "hours": 10,
       "summary": "从存储、索引、查询执行和事务认识数据库实现，逐步连接理论与系统工程。",
       "edition": "CMU 15-445 Fall 2024 归档",
-      "checked": "2026-10-23"
+      "checked": "2026-10-23",
+      "totalHours": [
+        120,
+        200
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "ee-calculus",
@@ -233,12 +294,19 @@
         "模拟IC与器件",
         "信息通信基础",
         "无线通信与信息理论",
-        "通信信号处理与实践"
+        "通信信号处理与实践",
+        "射频与接收系统"
       ],
       "hours": 6,
       "summary": "用导数、积分和近似建立电路与器件分析所需的数学基础。",
       "edition": "Fall 2010 自学归档",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        80,
+        140
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要对应数学或编程基础；重点是核心概念和独立练习。"
     },
     {
       "id": "ee-probability",
@@ -257,12 +325,19 @@
         "模拟IC与器件",
         "信息通信基础",
         "无线通信与信息理论",
-        "通信信号处理与实践"
+        "通信信号处理与实践",
+        "射频与接收系统"
       ],
       "hours": 6,
       "summary": "为噪声、失配和实验统计建立条件概率、随机变量与估计基础。",
       "edition": "Fall 2013 自学归档",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        80,
+        130
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要对应数学或编程基础；重点是核心概念和独立练习。"
     },
     {
       "id": "ee-circuits",
@@ -279,12 +354,19 @@
       "tracks": [
         "集成电路基础",
         "数字IC与EDA",
-        "模拟IC与器件"
+        "模拟IC与器件",
+        "射频与接收系统"
       ],
       "hours": 8,
       "summary": "从集总电路、动态响应和放大器进入电子信息的电路语言。",
       "edition": "Spring 2007 归档",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        90,
+        150
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要对应数学或编程基础；重点是核心概念和独立练习。"
     },
     {
       "id": "ee-devices",
@@ -301,12 +383,19 @@
       "tracks": [
         "集成电路基础",
         "数字IC与EDA",
-        "模拟IC与器件"
+        "模拟IC与器件",
+        "射频与接收系统"
       ],
       "hours": 8,
       "summary": "把半导体器件的物理图像连接到大信号与小信号电路模型。",
       "edition": "Spring 2009 归档",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        90,
+        150
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要对应数学或编程基础；重点是核心概念和独立练习。"
     },
     {
       "id": "ee-analog",
@@ -323,12 +412,19 @@
       ],
       "tracks": [
         "集成电路基础",
-        "模拟IC与器件"
+        "模拟IC与器件",
+        "射频与接收系统"
       ],
       "hours": 8,
       "summary": "通过放大、滤波和调试训练，把理想电路分析变成可验证的设计。",
       "edition": "Spring 2007 实验归档",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        80,
+        140
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要对应数学或编程基础；重点是核心概念和独立练习。"
     },
     {
       "id": "ee-digital",
@@ -349,7 +445,13 @@
       "hours": 8,
       "summary": "从组合逻辑、时序电路和状态机连接到数据通路与处理器结构。",
       "edition": "Spring 2017 归档",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        90,
+        150
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要对应数学或编程基础；重点是核心概念和独立练习。"
     },
     {
       "id": "ee-signals",
@@ -369,12 +471,19 @@
         "模拟IC与器件",
         "信息通信基础",
         "无线通信与信息理论",
-        "通信信号处理与实践"
+        "通信信号处理与实践",
+        "射频与接收系统"
       ],
       "hours": 8,
       "summary": "用时域和频域描述系统，为模拟滤波、采样及混合信号设计打底。",
       "edition": "Spring 2011 资源归档；原始课程形成于 1987 年",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        90,
+        150
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要对应数学或编程基础；重点是核心概念和独立练习。"
     },
     {
       "id": "ee-dsp",
@@ -397,7 +506,13 @@
       "hours": 6,
       "summary": "把离散系统、FFT 和滤波器设计连接到芯片上的数字处理模块。",
       "edition": "Spring 2011 资源归档；原始课程形成于 1987 年",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        80,
+        130
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "ee-em",
@@ -412,12 +527,19 @@
         "ee-calculus"
       ],
       "tracks": [
-        "模拟IC与器件"
+        "模拟IC与器件",
+        "射频与接收系统"
       ],
       "hours": 6,
       "summary": "为高速互连、射频和封装补充场、波与传输线的基本解释。",
       "edition": "Spring 2009 归档",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        90,
+        150
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "ic-digital",
@@ -438,7 +560,13 @@
       "hours": 8,
       "summary": "从逻辑正确走向晶体管级的延迟、功耗、互连与时序权衡。",
       "edition": "Fall 2003 归档",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        100,
+        160
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "ic-analog",
@@ -454,12 +582,19 @@
         "ee-signals"
       ],
       "tracks": [
-        "模拟IC与器件"
+        "模拟IC与器件",
+        "射频与接收系统"
       ],
       "hours": 8,
       "summary": "训练晶体管电路的估算、设计直觉和频率响应分析，为模拟 IC 继续学习搭桥。",
       "edition": "Fall 2010 归档",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        100,
+        160
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "ic-fpga",
@@ -480,7 +615,13 @@
       "hours": 8,
       "summary": "用 Verilog、状态机和测试组织一个可解释、可验证的数字系统。",
       "edition": "Spring 2006 实验归档",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        80,
+        140
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "ic-eda",
@@ -502,7 +643,13 @@
       "hours": 8,
       "summary": "沿着综合、布局布线与时序报告认识数字芯片实现流程。",
       "edition": "OpenROAD-flow-scripts 官方文档，使用时固定版本",
-      "checked": "2026-10-26"
+      "checked": "2026-10-26",
+      "totalHours": [
+        60,
+        100
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "comm-intro",
@@ -524,9 +671,16 @@
       "tracks": [
         "信息通信基础",
         "无线通信与信息理论",
-        "通信信号处理与实践"
+        "通信信号处理与实践",
+        "射频与接收系统"
       ],
-      "summary": "从比特、波形与分组的联系建立端到端通信系统的整体图像。"
+      "summary": "从比特、波形与分组的联系建立端到端通信系统的整体图像。",
+      "totalHours": [
+        60,
+        100
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要对应数学或编程基础；重点是核心概念和独立练习。"
     },
     {
       "id": "comm-principles",
@@ -547,9 +701,16 @@
       ],
       "tracks": [
         "信息通信基础",
-        "无线通信与信息理论"
+        "无线通信与信息理论",
+        "射频与接收系统"
       ],
-      "summary": "用信号空间、调制与检测的数学模型分析数字通信链路。"
+      "summary": "用信号空间、调制与检测的数学模型分析数字通信链路。",
+      "totalHours": [
+        100,
+        160
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "comm-random",
@@ -569,9 +730,16 @@
       ],
       "tracks": [
         "无线通信与信息理论",
-        "通信信号处理与实践"
+        "通信信号处理与实践",
+        "射频与接收系统"
       ],
-      "summary": "用随时间演化的概率模型解释通信系统中的随机性。"
+      "summary": "用随时间演化的概率模型解释通信系统中的随机性。",
+      "totalHours": [
+        80,
+        130
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "comm-information",
@@ -592,7 +760,13 @@
       "tracks": [
         "无线通信与信息理论"
       ],
-      "summary": "用熵、互信息和容量理解压缩与可靠通信的边界。"
+      "summary": "用熵、互信息和容量理解压缩与可靠通信的边界。",
+      "totalHours": [
+        80,
+        130
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "comm-detection",
@@ -612,9 +786,16 @@
         "math"
       ],
       "tracks": [
-        "通信信号处理与实践"
+        "通信信号处理与实践",
+        "射频与接收系统"
       ],
-      "summary": "为通信接收、统计信号处理与感知建立假设检验和参数估计基础。"
+      "summary": "为通信接收、统计信号处理与感知建立假设检验和参数估计基础。",
+      "totalHours": [
+        90,
+        150
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "comm-coding",
@@ -635,7 +816,13 @@
       "tracks": [
         "无线通信与信息理论"
       ],
-      "summary": "从译码与性能分析理解编码如何改善可靠性，以及需要付出的代价。"
+      "summary": "从译码与性能分析理解编码如何改善可靠性，以及需要付出的代价。",
+      "totalHours": [
+        80,
+        140
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "comm-wireless",
@@ -656,7 +843,13 @@
       "tracks": [
         "无线通信与信息理论"
       ],
-      "summary": "从无线信道、分集到 MIMO，学习衰落与资源共享下的通信取舍。"
+      "summary": "从无线信道、分集到 MIMO，学习衰落与资源共享下的通信取舍。",
+      "totalHours": [
+        90,
+        150
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要先修知识和较强推导或实现能力；建议按章节选学。"
     },
     {
       "id": "comm-sdr",
@@ -678,7 +871,170 @@
       "tracks": [
         "通信信号处理与实践"
       ],
-      "summary": "把 IQ 采样、滤波、调制与同步变成可观察、可复现的通信实验。"
+      "summary": "把 IQ 采样、滤波、调制与同步变成可观察、可复现的通信实验。",
+      "totalHours": [
+        40,
+        80
+      ],
+      "studyScope": "按本站指南选读核心材料，完成代表性练习与一个小项目；不含补先修、全部官方作业和正式考试。",
+      "difficultyNote": "需要对应数学或编程基础；重点是核心概念和独立练习。"
+    },
+    {
+      "id": "ic-process",
+      "title": "MIT 6.152J · 微纳加工技术",
+      "category": "微电子与器件",
+      "level": "进阶",
+      "hours": 6,
+      "official": "https://ocw.mit.edu/courses/6-152j-micro-nano-processing-technology-fall-2005/",
+      "edition": "Fall 2005 本科课程归档",
+      "prerequisites": [
+        "ee-devices",
+        "ee-circuits"
+      ],
+      "totalHours": [
+        60,
+        100
+      ],
+      "summary": "理解器件背后的加工步骤，练习把工艺流程、截面与电学目标联系起来。",
+      "difficultyNote": "需器件物理、基础化学与材料知识；工艺步骤之间相互约束。",
+      "studyScope": "选学基础工艺讲义、做流程与截面练习；不含洁净室实验和完整课程实验。",
+      "provider": "MIT OCW",
+      "path": "courses/ic-process.md",
+      "url": "courses/ic-process/",
+      "checked": "2026-10-26",
+      "tracks": []
+    },
+    {
+      "id": "ic-rf",
+      "title": "MIT 6.776 · 高速通信电路",
+      "category": "集成电路设计",
+      "level": "进阶",
+      "hours": 8,
+      "official": "https://ocw.mit.edu/courses/6-776-high-speed-communication-circuits-spring-2005/",
+      "edition": "Spring 2005 研究生课程归档",
+      "prerequisites": [
+        "ic-analog",
+        "ee-em",
+        "ee-signals"
+      ],
+      "totalHours": [
+        100,
+        160
+      ],
+      "summary": "从收发机结构进入高速、低噪声与频率产生电路，连接通信指标和电路实现。",
+      "difficultyNote": "需熟练分析晶体管小信号电路、频率响应、传输线与噪声。",
+      "studyScope": "核心讲义、代表性习题和一个仿真对照；不含全部实验与硬件制作。",
+      "provider": "MIT OCW",
+      "path": "courses/ic-rf.md",
+      "url": "courses/ic-rf/",
+      "checked": "2026-10-26",
+      "tracks": [
+        "射频与接收系统"
+      ]
+    },
+    {
+      "id": "comm-system-design",
+      "title": "MIT 6.973 · 通信系统设计",
+      "category": "信息与通信工程",
+      "level": "进阶",
+      "hours": 8,
+      "official": "https://ocw.mit.edu/courses/6-973-communication-system-design-spring-2006/",
+      "edition": "Spring 2006 研究生课程归档",
+      "prerequisites": [
+        "comm-principles",
+        "ee-dsp",
+        "ic-fpga"
+      ],
+      "totalHours": [
+        100,
+        180
+      ],
+      "summary": "沿系统指标、算法、架构到 RTL 的顺序，理解通信实现中的设计取舍。",
+      "difficultyNote": "同时需要通信、DSP 和 HDL 基础，项目调试时间波动较大。",
+      "studyScope": "选读系统与架构材料，完成一个小模块的浮点、定点和 RTL 对照；不含完整 WLAN SoC。",
+      "provider": "MIT OCW",
+      "path": "courses/comm-system-design.md",
+      "url": "courses/comm-system-design/",
+      "checked": "2026-10-26",
+      "tracks": []
+    },
+    {
+      "id": "comm-inference",
+      "title": "MIT 6.011 · 信号、系统与推断",
+      "category": "信号处理",
+      "level": "进阶",
+      "hours": 6,
+      "official": "https://ocw.mit.edu/courses/6-011-introduction-to-communication-control-and-signal-processing-spring-2010/",
+      "edition": "Spring 2010 本科课程归档",
+      "prerequisites": [
+        "ee-signals",
+        "ee-probability",
+        "math"
+      ],
+      "totalHours": [
+        80,
+        130
+      ],
+      "summary": "把确定信号与随机信号放进系统模型，为通信、控制和统计信号处理搭桥。",
+      "difficultyNote": "虽为本科课程，仍需信号与系统、概率和矩阵分析基础。",
+      "studyScope": "选读系统与随机信号相关教材章节，完成代表性推导、习题和小实验。",
+      "provider": "MIT OCW",
+      "path": "courses/comm-inference.md",
+      "url": "courses/comm-inference/",
+      "checked": "2026-10-26",
+      "tracks": []
+    },
+    {
+      "id": "comm-receivers",
+      "title": "MIT 6.661 · 接收机、天线与信号",
+      "category": "信息与通信工程",
+      "level": "进阶",
+      "hours": 6,
+      "official": "https://ocw.mit.edu/courses/6-661-receivers-antennas-and-signals-spring-2003/",
+      "edition": "Spring 2003 研究生课程归档",
+      "prerequisites": [
+        "ee-em",
+        "comm-detection",
+        "comm-principles"
+      ],
+      "totalHours": [
+        90,
+        150
+      ],
+      "summary": "从接收与测量角度连接电磁信号、天线和统计信号处理。",
+      "difficultyNote": "需电磁场、概率、检测估计基础；场与统计模型需要一起使用。",
+      "studyScope": "选学接收、天线和匹配滤波相关讲义与代表性习题；不含完整天线制作或测量实验。",
+      "provider": "MIT OCW",
+      "path": "courses/comm-receivers.md",
+      "url": "courses/comm-receivers/",
+      "checked": "2026-10-26",
+      "tracks": [
+        "射频与接收系统"
+      ]
+    },
+    {
+      "id": "ic-hdlbits",
+      "title": "HDLBits · Verilog 电路练习",
+      "category": "集成电路设计",
+      "level": "基础",
+      "hours": 4,
+      "official": "https://hdlbits.01xz.net/wiki/Main_Page",
+      "edition": "在线题库，内容随站点更新",
+      "provider": "HDLBits",
+      "prerequisites": [
+        "ee-digital"
+      ],
+      "totalHours": [
+        30,
+        60
+      ],
+      "summary": "用小电路与即时仿真反馈练习 Verilog，把语法、组合逻辑和时序设计连起来。",
+      "difficultyNote": "先懂组合逻辑、触发器和时序；后半部分题目需要更强设计能力。",
+      "studyScope": "语法、组合与时序逻辑的入门选题及错题复盘；不含刷完全部题库。",
+      "path": "courses/ic-hdlbits.md",
+      "url": "courses/ic-hdlbits/",
+      "checked": "2026-10-26",
+      "tracks": []
     }
   ],
   "tracks": {
@@ -775,6 +1131,23 @@
       "comm-random",
       "comm-detection",
       "comm-sdr"
+    ],
+    "射频与接收系统": [
+      "ee-calculus",
+      "math",
+      "ee-probability",
+      "ee-circuits",
+      "ee-devices",
+      "ee-analog",
+      "ee-signals",
+      "ee-em",
+      "comm-intro",
+      "comm-principles",
+      "comm-random",
+      "comm-detection",
+      "ic-analog",
+      "ic-rf",
+      "comm-receivers"
     ]
   }
 }
