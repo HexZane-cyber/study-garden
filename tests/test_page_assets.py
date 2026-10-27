@@ -166,6 +166,17 @@ class PageAssetsTest(unittest.TestCase):
             expected = hashlib.sha256((ROOT / 'docs/assets' / name).read_bytes()).hexdigest()[:12]
             self.assertIn('assets/' + name + '?v=' + expected, html)
 
+    def test_reading_scripts_have_one_versioned_copy_in_order(self):
+        for page in ['index.html', 'library/index.html', 'backup/index.html', 'courses/python/index.html']:
+            html = (SITE / page).read_text(encoding='utf-8')
+            positions = []
+            for name in ['reading-model.js', 'reading.js']:
+                expected = hashlib.sha256((ROOT / 'docs/assets' / name).read_bytes()).hexdigest()[:12]
+                url = 'assets/' + name + '?v=' + expected
+                self.assertEqual(html.count(url), 1, page)
+                positions.append(html.index(url))
+            self.assertEqual(positions, sorted(positions))
+
     def test_backup_dependencies_and_scope(self):
         scripts = [name for name, _ in self.scripts('backup/index.html')]
         expected = ['assets/reading-model.js', 'assets/review-model.js', 'assets/learning-model.js', 'assets/practice-model.js', 'assets/planner-model.js', 'assets/backup-model.js', 'assets/backup.js']

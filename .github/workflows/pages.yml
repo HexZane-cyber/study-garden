@@ -35,6 +35,7 @@ jobs:
           node tests/backup.test.cjs
           node tests/backup-practice.test.cjs
           node tests/review.test.cjs
+          node tests/reading.test.cjs
           node tests/learning.test.cjs
           node tests/core.test.cjs
           node tests/chip-learning.test.cjs

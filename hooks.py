@@ -50,6 +50,18 @@ def on_config(config):
     stylesheet = Path(config['docs_dir']) / 'assets/extra.css'
     css_version = hashlib.sha256(stylesheet.read_bytes()).hexdigest()[:12]
     config['extra_css'] = [f'assets/extra.css?v={css_version}' if str(item).split('?')[0] == 'assets/extra.css' else item for item in config.get('extra_css', [])]
+    # Reading tools are global; preserve their order and any configured script attributes.
+    scripts = []
+    for item in config.get('extra_javascript', []):
+        path = str(item).split('?')[0]
+        if path in ['assets/reading-model.js', 'assets/reading.js']:
+            version = hashlib.sha256((Path(config['docs_dir']) / path).read_bytes()).hexdigest()[:12]
+            if isinstance(item, str):
+                item = f'{path}?v={version}'
+            else:
+                item.path = f'{path}?v={version}'
+        scripts.append(item)
+    config['extra_javascript'] = scripts
     return config
 
 def on_pre_build(config):
