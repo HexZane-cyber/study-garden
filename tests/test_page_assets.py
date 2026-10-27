@@ -86,6 +86,17 @@ class PageAssetsTest(unittest.TestCase):
         self.assertIn('assets/review-model.js', scripts)
         self.assertNotIn('assets/review.js', scripts)
 
+    def test_dashboard_reads_practice_without_loading_its_editor(self):
+        html = (SITE / 'dashboard/index.html').read_text(encoding='utf-8')
+        data = json.loads(re.search(r'<script type="application/json" id="practice-data">(.*?)</script>', html, re.S).group(1))
+        expected = json.loads((ROOT / 'docs/assets/exercises.json').read_text(encoding='utf-8'))
+        self.assertEqual(data, expected)
+        self.assertNotIn('id="ai-course-data"', html)
+        scripts = [name for name, _ in self.scripts('dashboard/index.html')]
+        self.assertLess(scripts.index('assets/practice-model.js'), scripts.index('assets/planner.js'))
+        for name in ['assets/practice.js', 'assets/local-ai.js', 'assets/local-ai-model.js', 'assets/vendor/local-ai-worker.bundle.js']:
+            self.assertNotIn(name, scripts)
+
     def test_course_ai_context_contains_only_public_catalog_fields(self):
         catalog = json.loads((ROOT / 'docs/assets/course-catalog.json').read_text(encoding='utf-8'))
         fields = ('id', 'title', 'url', 'provider', 'category', 'level', 'summary', 'prerequisites')
@@ -103,6 +114,16 @@ class PageAssetsTest(unittest.TestCase):
             scripts = [name for name, _ in self.scripts(course['url'] + 'index.html')]
             for name in ['assets/local-ai.js', 'assets/local-ai-model.js', 'assets/vendor/local-ai-runtime.bundle.js', 'assets/vendor/local-ai-worker.bundle.js']:
                 self.assertNotIn(name, scripts)
+
+    def test_backup_reads_practice_without_loading_its_editor(self):
+        html = (SITE / 'backup/index.html').read_text(encoding='utf-8')
+        data = json.loads(re.search(r'<script type="application/json" id="practice-data">(.*?)</script>', html, re.S).group(1))
+        self.assertEqual(data, json.loads((ROOT / 'docs/assets/exercises.json').read_text(encoding='utf-8')))
+        self.assertNotIn('id="ai-course-data"', html)
+        scripts = [name for name, _ in self.scripts('backup/index.html')]
+        self.assertLess(scripts.index('assets/practice-model.js'), scripts.index('assets/backup-model.js'))
+        self.assertNotIn('assets/practice.js', scripts)
+        self.assertNotIn('assets/local-ai.js', scripts)
 
     def test_chip_does_not_download_retired_graph_runtimes(self):
         scripts = [name for name, _ in self.scripts('graph/index.html')]
@@ -130,7 +151,7 @@ class PageAssetsTest(unittest.TestCase):
 
     def test_backup_dependencies_and_scope(self):
         scripts = [name for name, _ in self.scripts('backup/index.html')]
-        expected = ['assets/reading-model.js', 'assets/review-model.js', 'assets/learning-model.js', 'assets/planner-model.js', 'assets/backup-model.js', 'assets/backup.js']
+        expected = ['assets/reading-model.js', 'assets/review-model.js', 'assets/learning-model.js', 'assets/practice-model.js', 'assets/planner-model.js', 'assets/backup-model.js', 'assets/backup.js']
         positions = [scripts.index(name) for name in expected]
         self.assertEqual(positions, sorted(positions))
         self.assertNotIn('assets/learning.js', scripts)

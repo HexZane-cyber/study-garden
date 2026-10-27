@@ -19,6 +19,7 @@ function page(query=''){
  // Unrelated changes in another tab are preserved when refreshing the current view.
  const current=JSON.parse(w.localStorage.getItem(M.KEY));current.records.nand.answer='2';w.localStorage.setItem(M.KEY,JSON.stringify(current));w.dispatchEvent(new w.StorageEvent('storage',{key:M.KEY}));assert(d.querySelector('.practice-status').textContent.includes('其他标签页'));
  button(d,'刷新题目列表').click();state.value='wrong';state.dispatchEvent(new w.Event('change'));assert(d.getElementById('exercise-nand'));assert.equal(JSON.parse(w.localStorage.getItem(M.KEY)).records.nand.answer,'2');dom.window.close();
+ const wrongPage=page('?status=wrong');assert.equal(wrongPage.d.querySelectorAll('.practice-card').length,1);assert(wrongPage.d.querySelector('.practice-schedule').href.endsWith('dashboard/?exercise=divider'));wrongPage.dom.window.close();
  const p=page('?exercise=nand&keep=1');assert.equal(p.d.querySelectorAll('.practice-card').length,1);assert(p.d.querySelector('.practice-focused'));button(p.d,'返回全部习题').click();assert.equal(p.w.location.search,'?keep=1');assert.equal(p.d.querySelectorAll('.practice-card').length,6);p.dom.window.close();
  console.log('Practice UI passed: correction filters, stable typing, refresh, reset without data loss, public single-question links, clipboard fallback, cross-tab preservation and focused URLs.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

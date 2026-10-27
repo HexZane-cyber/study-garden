@@ -51,7 +51,7 @@ def on_config(config):
 def on_pre_build(config):
     ARTICLE_SECTIONS.clear()
     ASSET_VERSIONS.clear()
-    for name in ['learning-model.js', 'learning.js', 'planner-model.js', 'planner.js', 'practice-model.js', 'practice.js', 'local-ai-model.js', 'local-ai.js', 'vendor/local-ai-runtime.bundle.js', 'vendor/local-ai-worker.bundle.js']:
+    for name in ['learning-model.js', 'learning.js', 'planner-model.js', 'planner.js', 'backup-model.js', 'backup.js', 'practice-model.js', 'practice.js', 'local-ai-model.js', 'local-ai.js', 'vendor/local-ai-runtime.bundle.js', 'vendor/local-ai-worker.bundle.js']:
         path = Path(config['docs_dir']) / 'assets' / name
         ASSET_VERSIONS[name] = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
     data = graph_data(config['docs_dir'])
@@ -146,8 +146,9 @@ def load_exercises(docs):
 def on_page_context(context, page, config, nav):
     data = load_course_catalog(config['docs_dir'])
     context['asset_versions'] = ASSET_VERSIONS
-    if page.file.src_uri in {'exercises.md', 'local-ai.md'}:
+    if page.file.src_uri in {'exercises.md', 'local-ai.md', 'dashboard.md', 'backup.md'}:
         context['practice_data'] = json.dumps(load_exercises(config['docs_dir']), ensure_ascii=False).replace('<', r'\u003c')
+    if page.file.src_uri in {'exercises.md', 'local-ai.md'}:
         context['ai_course_data'] = json.dumps({'courses': [{key: c[key] for key in ('id', 'title', 'url', 'provider', 'category', 'level', 'summary', 'prerequisites')} for c in data['courses']]}, ensure_ascii=False).replace('<', r'\u003c')
     if page.file.src_uri in {'graph.md', 'chip.md'}:
         context['chip_courses'] = json.dumps({'courses': [{key: course[key] for key in ('id', 'title', 'path', 'url', 'prerequisites')} for course in data['courses']]}, ensure_ascii=False).replace('<', r'\u003c')

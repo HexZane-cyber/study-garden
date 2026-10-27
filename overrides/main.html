@@ -40,10 +40,14 @@
     <script type="application/json" id="learning-data">{{ learning_catalog | safe }}</script>
     <script src="{{ 'assets/learning-model.js' | url }}?v={{ asset_versions.get('learning-model.js', '') }}" defer></script>
     {% if page.file.src_uri == 'backup.md' %}
+    <script type="application/json" id="practice-data">{{ practice_data | safe }}</script>
+    <script src="{{ 'assets/practice-model.js' | url }}?v={{ asset_versions.get('practice-model.js', '') }}" defer></script>
     <script src="{{ 'assets/planner-model.js' | url }}?v={{ asset_versions.get('planner-model.js', '') }}" defer></script>
-    <script src="{{ 'assets/backup-model.js' | url }}" defer></script>
-    <script src="{{ 'assets/backup.js' | url }}" defer></script>
+    <script src="{{ 'assets/backup-model.js' | url }}?v={{ asset_versions.get('backup-model.js', '') }}" defer></script>
+    <script src="{{ 'assets/backup.js' | url }}?v={{ asset_versions.get('backup.js', '') }}" defer></script>
     {% elif page.file.src_uri == 'dashboard.md' %}
+    <script type="application/json" id="practice-data">{{ practice_data | safe }}</script>
+    <script src="{{ 'assets/practice-model.js' | url }}?v={{ asset_versions.get('practice-model.js', '') }}" defer></script>
     <script src="{{ 'assets/planner-model.js' | url }}?v={{ asset_versions.get('planner-model.js', '') }}" defer></script>
     <script src="{{ 'assets/planner.js' | url }}?v={{ asset_versions.get('planner.js', '') }}" defer></script>
     {% else %}

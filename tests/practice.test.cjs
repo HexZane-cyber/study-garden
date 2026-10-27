@@ -24,3 +24,5 @@ assert.deepEqual(M.merge(records,{nand:{...M.blank(),answer:'0'}}),records);
 map.set(M.KEY,'corrupt');assert(!M.read(storage,questions).writable);assert(!M.save(storage,{},questions));assert.equal(map.get(M.KEY),'corrupt');
 const blocked={getItem(){throw Error('blocked');},setItem(){throw Error('blocked');}};assert(!M.read(blocked,questions).writable);
 console.log('Practice validation, grading, backup and read-only recovery passed.');
+
+assert.throws(()=>M.restore(JSON.stringify({format:'zhixin-practice',version:1,records:{'unknown-question':M.blank()}}),questions),/未知/);

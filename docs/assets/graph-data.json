@@ -2378,6 +2378,11 @@
       "sections": [
         {
           "id": "_2",
+          "title": "把错题变成下一次行动",
+          "level": 2
+        },
+        {
+          "id": "_3",
           "title": "数据与使用",
           "level": 2
         }
@@ -2615,6 +2620,16 @@
         {
           "id": "ai_2",
           "title": "课程 AI 入口与讨论范围",
+          "level": 3
+        },
+        {
+          "id": "_6",
+          "title": "错题任务与草稿恢复",
+          "level": 3
+        },
+        {
+          "id": "_7",
+          "title": "综合备份中的原创习题记录",
           "level": 3
         }
       ]
@@ -3293,6 +3308,10 @@
     }
   ],
   "edges": [
+    {
+      "source": "backup.md",
+      "target": "exercises.md"
+    },
     {
       "source": "backup.md",
       "target": "guide.md"
@@ -4584,6 +4603,10 @@
     {
       "source": "courses/systems.md",
       "target": "roadmap.md"
+    },
+    {
+      "source": "dashboard.md",
+      "target": "exercises.md"
     },
     {
       "source": "dashboard.md",

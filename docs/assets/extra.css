@@ -168,3 +168,8 @@ body[data-md-color-scheme=default] .appearance-choices button{background:linear-
 .local-ai-scope{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.7rem;margin:1rem 0;padding:.7rem .85rem;border-left:3px solid var(--md-accent-fg-color);background:var(--md-code-bg-color);border-radius:.35rem;font-size:.75rem}
 .local-ai-course{display:flex;gap:.65rem;flex-wrap:wrap;align-items:end;margin:1rem 0}.local-ai-course>label{min-width:11rem}.local-ai-course>button{align-self:end}.local-ai-course-info{width:100%;font-size:.74rem}.local-ai-course-info p{white-space:pre-wrap;line-height:1.75}
 .local-ai-message-scope{display:block;color:var(--md-default-fg-color--light);font-size:.65rem;margin-top:.2rem}.local-ai-divider{padding:.7rem;border-bottom:1px dashed var(--md-default-fg-color--lightest);font-size:.7rem;color:var(--md-default-fg-color--light)}
+
+.study-practice-queue{grid-column:1/-1}.study-practice-queue>button{margin:.5rem .5rem .5rem 0}.task-draft-tools,.task-draft-source{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin:.6rem 0}.task-draft-source span{font-size:.7rem}.task-draft-source a,.practice-schedule{font-size:.72rem}
+.practice-actions .practice-schedule{display:inline-block;padding:.5rem .75rem;border:1px solid var(--md-default-fg-color--lightest);border-radius:.45rem;background:var(--md-code-bg-color);color:var(--md-default-fg-color)}
+.study-task-actions a{font-size:.65rem;padding:.4rem;align-self:center}
+.task-draft-tools[hidden],.task-draft-source[hidden]{display:none!important}
