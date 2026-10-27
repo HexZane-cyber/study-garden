@@ -86,6 +86,24 @@ class PageAssetsTest(unittest.TestCase):
         self.assertIn('assets/review-model.js', scripts)
         self.assertNotIn('assets/review.js', scripts)
 
+    def test_course_ai_context_contains_only_public_catalog_fields(self):
+        catalog = json.loads((ROOT / 'docs/assets/course-catalog.json').read_text(encoding='utf-8'))
+        fields = ('id', 'title', 'url', 'provider', 'category', 'level', 'summary', 'prerequisites')
+        expected = {'courses': [{key: c[key] for key in fields} for c in catalog['courses']]}
+        for page in ['exercises/index.html', 'local-ai/index.html']:
+            html = (SITE / page).read_text(encoding='utf-8')
+            payload = json.loads(re.search(r'<script type="application/json" id="ai-course-data">(.*?)</script>', html, re.S).group(1))
+            self.assertEqual(payload, expected)
+        for course in catalog['courses']:
+            html = (SITE / course['url'] / 'index.html').read_text(encoding='utf-8')
+            self.assertIn('local-ai/?course=' + course['id'] + '&amp;intent=review', html)
+            self.assertIn('local-ai/?course=' + course['id'] + '&amp;intent=prerequisites', html)
+            self.assertIn('local-ai/?course=' + course['id'] + '&amp;intent=quiz', html)
+            self.assertNotIn('id="ai-course-data"', html)
+            scripts = [name for name, _ in self.scripts(course['url'] + 'index.html')]
+            for name in ['assets/local-ai.js', 'assets/local-ai-model.js', 'assets/vendor/local-ai-runtime.bundle.js', 'assets/vendor/local-ai-worker.bundle.js']:
+                self.assertNotIn(name, scripts)
+
     def test_chip_does_not_download_retired_graph_runtimes(self):
         scripts = [name for name, _ in self.scripts('graph/index.html')]
         for retired in ['assets/vendor/graph3d.bundle.js', 'assets/vendor/matter.min.js', 'assets/graph.js', 'assets/gravity-controls.js', 'assets/graph-transfer.js', 'assets/learning.js']:

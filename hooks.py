@@ -148,6 +148,7 @@ def on_page_context(context, page, config, nav):
     context['asset_versions'] = ASSET_VERSIONS
     if page.file.src_uri in {'exercises.md', 'local-ai.md'}:
         context['practice_data'] = json.dumps(load_exercises(config['docs_dir']), ensure_ascii=False).replace('<', r'\u003c')
+        context['ai_course_data'] = json.dumps({'courses': [{key: c[key] for key in ('id', 'title', 'url', 'provider', 'category', 'level', 'summary', 'prerequisites')} for c in data['courses']]}, ensure_ascii=False).replace('<', r'\u003c')
     if page.file.src_uri in {'graph.md', 'chip.md'}:
         context['chip_courses'] = json.dumps({'courses': [{key: course[key] for key in ('id', 'title', 'path', 'url', 'prerequisites')} for course in data['courses']]}, ensure_ascii=False).replace('<', r'\u003c')
     paths = {c['path'] for c in data['courses']} | {'catalog.md', 'roadmap.md', 'dashboard.md', 'backup.md'}
@@ -197,6 +198,7 @@ def on_page_markdown(markdown, page, config, files):
         related = next((q for q in load_exercises(config['docs_dir'])['questions'] if q['course'] == course['id']), None)
         if related:
             block += f"本站原创自测：[从相关习题开始](../exercises.md?exercise={related['id']})，支持逐条提示、参考解析与本地 AI 讨论。\n\n"
+        block += f"本地 AI 学习辅助：[安排复习](../local-ai.md?course={course['id']}&intent=review) · [核对先修](../local-ai.md?course={course['id']}&intent=prerequisites) · [基础自测](../local-ai.md?course={course['id']}&intent=quiz)。只带入本站公开课程简介，打开后仍需手动发送。\n\n"
         marker = '<div id="course-progress"></div>'
         return markdown.replace(marker, marker + '\n\n' + block, 1)
     return markdown

@@ -15,4 +15,10 @@ const diagnostic=M.diagnostic({backend:'ollama',model:'qwen2.5:1.5b',phase:'erro
 assert.equal(diagnostic.siteOrigin,'https://example.test');assert.equal(diagnostic.localEndpoint,'http://127.0.0.1:11434');assert.equal(diagnostic.runtimeLoaded,true);assert(!JSON.stringify(diagnostic).includes('private'));
 assert.equal(M.diagnostic({backend:'ollama',endpoint:'https://user:secret@example.test',origin:'file:///x'}).localEndpoint,null);
 assert.equal(new Set(M.templates.map(t=>t.id)).size,3);assert(M.templates.every(t=>t.text.length<=2400));
+const courses=require('../docs/assets/course-catalog.json').courses,course=courses.find(c=>c.id==='ee-dsp');
+const facts=M.courseFacts(course,courses);assert(facts.includes(course.summary));assert(facts.includes(courses.find(c=>c.id===course.prerequisites[0]).title));assert(facts.includes('不是完整讲义'));assert(!facts.includes('个人成绩'));
+assert.equal(M.courseFacts({id:'unknown'},courses),'');assert(M.coursePrompt(course,'quiz').includes('不是学校真题'));assert(M.coursePrompt(course,'prerequisites').includes('先修准备'));
+for(const c of courses){const background=M.courseFacts(c,courses);assert(background.length<=1100);assert(M.messages([],'我该怎么开始？',background)[0].content.includes(c.title));}
+assert(!M.exerciseFacts({...q,solution:['secret solution'],expected:1234567,answer:'private answer'}).includes('secret solution'));
+assert.throws(()=>M.messages([],'x'.repeat(2400),'b'.repeat(1100)));assert.throws(()=>M.messages([],'hello','b'.repeat(1101)));
 console.log('Local AI endpoint restrictions, model filtering, prompts and context bounds passed.');

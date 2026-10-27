@@ -533,3 +533,12 @@ node tests/local-ai.test.cjs
 设备检测需要用户主动点击检测或加载按钮。`StorageManager.estimate()` 返回的站点存储余量不是显存，不应以它或系统内存推断某模型必定可运行。检测结果不完整时应明确显示“未提供”，不能编造硬件数值。
 
 诊断导出采用字段白名单：网页来源（不带路径和查询参数）、运行方式、模型、有效回环服务地址、当前阶段、运行库是否加载、错误分类与有限的能力信息。不要把完整状态对象、原始异常、输入框或聊天记录直接序列化到诊断文件。每次修改需执行 `node tests/local-ai.test.cjs`、`node tests/local-ai-ui.test.cjs` 与 `node tests/local-ai-support-ui.test.cjs`，验证草稿恢复、取消和诊断中没有对话数据。
+
+
+### 课程 AI 入口与讨论范围
+
+课程页的三个 AI 入口由 `hooks.py` 生成，URL 只包含课程 ID 与 `review`、`prerequisites` 或 `quiz` 辅助方式。助手页面从构建时的 `ai-course-data` 读取字段白名单：`id/title/url/provider/category/level/summary/prerequisites`。课程页本身不加载 AI 脚本或运行库。
+
+发送时由 `local-ai-model.js` 构造有限长度的公开背景，再与本主题对话合并。`local-ai.js` 在主题切换时清空下一次请求使用的历史数组，页面中的旧消息仍保留供用户主动导出；消息带有主题标签。新主题清除旧主题的失败提问恢复入口，跨主题恢复草稿回到自由问答。不要把全部聊天 DOM、学习进度或私密空间内容作为课程上下文。
+
+回归检查包含 `node tests/local-ai-course-ui.test.cjs`：检查 URL 选择优先级、禁用存储时的公开链接、切换课程/习题/自由问答后的请求内容、复用模型、草稿恢复、分主题导出与个人记录未被修改。更新入口和字段投影后运行严格构建及 `test_page_assets.py`，确保课程页不会下载 AI 引擎。

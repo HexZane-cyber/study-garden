@@ -52,6 +52,7 @@
   {% endif %}
   {% if page and page.file.src_uri in ['exercises.md', 'local-ai.md'] %}
     <script type="application/json" id="practice-data">{{ practice_data | safe }}</script>
+    <script type="application/json" id="ai-course-data">{{ ai_course_data | safe }}</script>
     {% if page.file.src_uri == 'exercises.md' %}
     <script src="{{ 'assets/practice-model.js' | url }}?v={{ asset_versions.get('practice-model.js', '') }}" defer></script>
     <script src="{{ 'assets/practice.js' | url }}?v={{ asset_versions.get('practice.js', '') }}" data-public-base="{{ config.site_url }}" defer></script>

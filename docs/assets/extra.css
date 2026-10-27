@@ -164,3 +164,7 @@ body[data-md-color-scheme=default] .appearance-choices button{background:linear-
 .local-ai-device summary{cursor:pointer;font-weight:600}.local-ai-device ul,.local-ai-help ol{margin:.6rem 0}.local-ai-help{border-left:3px solid var(--md-accent-fg-color)}.local-ai-help h3{font-size:.85rem;margin:0}
 .local-ai-quick{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}.local-ai-quick p{width:100%;margin:0;font-size:.75rem;color:var(--md-default-fg-color--light)}
 #local-ai-app[data-phase=ready]>.local-ai-status{border-left:2px solid var(--md-accent-fg-color);padding-left:.7rem}
+
+.local-ai-scope{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.7rem;margin:1rem 0;padding:.7rem .85rem;border-left:3px solid var(--md-accent-fg-color);background:var(--md-code-bg-color);border-radius:.35rem;font-size:.75rem}
+.local-ai-course{display:flex;gap:.65rem;flex-wrap:wrap;align-items:end;margin:1rem 0}.local-ai-course>label{min-width:11rem}.local-ai-course>button{align-self:end}.local-ai-course-info{width:100%;font-size:.74rem}.local-ai-course-info p{white-space:pre-wrap;line-height:1.75}
+.local-ai-message-scope{display:block;color:var(--md-default-fg-color--light);font-size:.65rem;margin-top:.2rem}.local-ai-divider{padding:.7rem;border-bottom:1px dashed var(--md-default-fg-color--lightest);font-size:.7rem;color:var(--md-default-fg-color--light)}
