@@ -218,6 +218,14 @@ class PageAssetsTest(unittest.TestCase):
         self.assertNotIn(marker, (SITE / 'courses/python/index.html').read_text(encoding='utf-8'))
         self.assertNotIn(marker, (SITE / 'index.html').read_text(encoding='utf-8'))
 
+    def test_task_focus_assets_are_versioned_and_scoped(self):
+        html = (SITE / 'dashboard/index.html').read_text(encoding='utf-8')
+        for name in ['planner-model.js', 'planner.js']:
+            expected = hashlib.sha256((ROOT / 'docs/assets' / name).read_bytes()).hexdigest()[:12]
+            self.assertEqual(html.count('assets/' + name + '?v=' + expected), 1)
+        self.assertIn('最近 7 天的专注记录', html)
+        self.assertNotIn('assets/planner.js', (SITE / 'courses/ee-circuits/index.html').read_text(encoding='utf-8'))
+
     def test_backup_dependencies_and_scope(self):
         scripts = [name for name, _ in self.scripts('backup/index.html')]
         expected = ['assets/reading-model.js', 'assets/review-model.js', 'assets/learning-model.js', 'assets/practice-model.js', 'assets/planner-model.js', 'assets/backup-model.js', 'assets/backup.js']

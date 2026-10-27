@@ -33,6 +33,7 @@ jobs:
           node tests/practice-answers.test.cjs
           node tests/local-ai.test.cjs
           node tests/planner.test.cjs
+          node tests/planner-focus.test.cjs
           node tests/backup.test.cjs
           node tests/backup-practice.test.cjs
           node tests/review.test.cjs
