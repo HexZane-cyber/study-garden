@@ -550,7 +550,7 @@ node tests/local-ai.test.cjs
 
 任务可附带可选的 `exercise` 原题编号，只保存受限字符的编号，不保存答案、任意 URL 或参考解析。新任务草稿必须经“加入任务”确认。原题编号随当前工作台单独备份和综合备份保留；目录里已不存在的编号不会生成外部链接。编辑标题保留来源，同日原题待办按编号去重。
 
-课程动作、学习挑战和错题安排统一经过草稿填入函数，保留上一份尚未提交的草稿及原题关联。修改这些行为后运行 `planner.test.cjs`、`planner-practice-ui.test.cjs`、`planner-integration.test.cjs`、`backup.test.cjs`，核对确认前无写入、任务完成与判分互不影响、正在运行的计时和其他页面记录保持完整。
+课程动作、学习挑战和错题安排统一经过草稿填入函数，保留上一份尚未提交的草稿及原题关联。快捷入口只移动焦点；日期快捷键只修改草稿，不保存任务或启动计时。任务成功保存后才清除草稿恢复快照、重置列表筛选并显示新任务；保存失败时保留输入和原筛选。关闭任务编辑弹窗及展开更多列表后，焦点应回到对应任务或新显示的第一条。修改这些行为后运行 `planner.test.cjs`、`planner-practice-ui.test.cjs`、`planner-integration.test.cjs`、`planner-navigation-ui.test.cjs`、`backup.test.cjs`，核对确认前无写入、任务完成与判分互不影响、正在运行的计时和其他页面记录保持完整。
 
 
 ### 综合备份中的原创习题记录
@@ -562,3 +562,5 @@ node tests/local-ai.test.cjs
 `backup-model.js` 的读写方法增加末尾 `questions` 参数；旧调用仍可处理原有类型与空白练习记录，非空练习记录必须提供题库。任务的可选 `exercise` 编号由计划模型保留。工作台单独备份导入同样采用本机同编号记录优先，并在合并前检查任务与专注记录容量，避免旧备份覆盖更新或自动截断。
 
 改动后运行 `backup.test.cjs`、`backup-integration.test.cjs`、`backup-practice.test.cjs` 与 `backup-practice-ui.test.cjs`，核对空白合并、已有答案保留、预览前零写入、损坏数据保护及多类型写入回退。
+
+样式缓存：构建钩子会为全站 `extra.css` 自动添加内容哈希版本参数，样式改动后 URL 才变化。修改样式后重新运行 `python build.py`，不要手动填写固定版本号；`test_page_assets.py` 会检查首页、工作台和课程页各只有一个可解析的版本化样式链接。

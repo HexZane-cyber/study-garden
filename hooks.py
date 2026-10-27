@@ -46,6 +46,10 @@ def on_config(config):
     for path in sorted((Path(config['docs_dir']) / 'courses/community').glob('*.md')):
         if path.name != 'index.md':
             community_nav.append({title(path): path.relative_to(config['docs_dir']).as_posix()})
+    # Keep caching between releases, but invalidate styles when their content changes.
+    stylesheet = Path(config['docs_dir']) / 'assets/extra.css'
+    css_version = hashlib.sha256(stylesheet.read_bytes()).hexdigest()[:12]
+    config['extra_css'] = [f'assets/extra.css?v={css_version}' if str(item).split('?')[0] == 'assets/extra.css' else item for item in config.get('extra_css', [])]
     return config
 
 def on_pre_build(config):

@@ -2,6 +2,7 @@
 from html.parser import HTMLParser
 from pathlib import Path
 import json
+import hashlib
 import re
 import unittest
 from urllib.parse import urljoin, urlparse
@@ -148,6 +149,16 @@ class PageAssetsTest(unittest.TestCase):
         self.assertIn('navigation.tracking', article['features'])
         self.assertEqual(chip['features'], [feature for feature in article['features'] if feature != 'navigation.tracking'])
         self.assertEqual(chip['translations'], article['translations'])
+
+    def test_shared_stylesheet_has_one_content_versioned_url(self):
+        expected = hashlib.sha256((ROOT / 'docs/assets/extra.css').read_bytes()).hexdigest()[:12]
+        for page in ['index.html', 'dashboard/index.html', 'courses/python/index.html']:
+            html = (SITE / page).read_text(encoding='utf-8')
+            urls = re.findall(r'<link[^>]+href="([^"]*assets/extra\.css[^"\s]*)"', html)
+            self.assertEqual(len(urls), 1, page)
+            self.assertTrue(urls[0].endswith('?v=' + expected), urls[0])
+            resolved = urlparse(urljoin('https://example.test/study-garden/' + page, urls[0]))
+            self.assertEqual(resolved.path, '/study-garden/assets/extra.css')
 
     def test_backup_dependencies_and_scope(self):
         scripts = [name for name, _ in self.scripts('backup/index.html')]
