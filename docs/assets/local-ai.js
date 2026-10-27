@@ -79,7 +79,7 @@
  connect.onclick=async()=>{const token=++epoch;ready=false;busy=true;phase='connecting';clearIssue();refresh();status.textContent='正在读取本机模型……';try{const names=M.localModels(await request('/api/tags',null,10000));if(token!==epoch)return;installed.replaceChildren();names.forEach(name=>{const o=el('option',name);o.value=name;installed.append(o);});ready=names.length>0;phase=ready?'ready':'idle';status.textContent=ready?'已读取本机模型，发送时交给该服务运行；请确认所选模型已完整下载。':'没有检测到已安装的本地模型，请先按下方步骤下载。';if(!ready)showIssue(Error('没有已安装的本地模型。'));}catch(error){if(token===epoch){showIssue(error);status.textContent='未能连接：'+errorText(error);}}finally{if(token===epoch){busy=false;refresh();}}};
  backend.onchange=()=>reset('已切换运行方式，请先加载网页模型或读取本机模型。');models.onchange=()=>{modelInfo();};address.oninput=()=>{ready=false;phase='idle';clearIssue();installed.replaceChildren();refresh();};
  function fill(originScope=scope){if(context)setDraft(M.exercisePrompt(context,mode.value,answer.value),originScope);}
- function receive(data){const q=questions.find(q=>q.id===data.id);if(!q)return;if(busy){status.textContent='助手正在处理当前操作。请先停止或等待完成，再选择另一道题。';return;}const oldScope=scope;activateScope('exercise:'+q.id,'习题：'+q.title);activeCourse=null;courseInfo.hidden=true;coursePicker.value='';context=q;contextTitle.textContent='正在讨论：'+q.title+'（只传入这道公开题目与下方作答）';mode.value=['hint','check','explain'].includes(data.mode)?data.mode:'hint';answer.value=String(data.answer||'').slice(0,2000);contextBox.hidden=false;fill(oldScope);syncTopicURL();host.scrollIntoView?.({behavior:'smooth',block:'start'});input.focus({preventScroll:true});}
+ function receive(data){const q=questions.find(q=>q.id===data.id);if(!q)return;if(busy){status.textContent='助手正在处理当前操作。请先停止或等待完成，再选择另一道题。';return;}const oldScope=scope;activateScope('exercise:'+q.id,'习题：'+q.title);activeCourse=null;courseInfo.hidden=true;coursePicker.value='';context=q;contextTitle.textContent='正在讨论：'+q.title+'（只传入这道公开题目与下方作答）';mode.value=['hint','check','explain'].includes(data.mode)?data.mode:'hint';answer.value=String(data.answer||'').slice(0,2000);contextBox.hidden=false;fill(oldScope);syncTopicURL();host.scrollIntoView?.({behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches?'auto':'smooth',block:'start'});input.focus({preventScroll:true});}
  draft.onclick=()=>fill();mode.onchange=()=>{fill();syncTopicURL();};leave.onclick=()=>{returnFree();input.value='';countInput();refresh();};addEventListener('zhixin:exercise',event=>receive(event.detail||{}));
  send.onclick=async()=>{
   if(busy||!ready)return;let messages;try{messages=M.messages(history,input.value,activeCourse?M.courseFacts(activeCourse,courses):M.exerciseFacts(context));}catch(error){status.textContent=errorText(error);return;}
@@ -93,6 +93,9 @@
  exportChat.onclick=()=>{const text=[...chat.querySelectorAll('.local-ai-message')].map(n=>n.querySelector('strong').textContent+' · '+n.querySelector('.local-ai-message-scope').textContent+'\n'+n.querySelector('p').textContent).join('\n\n');if(!text){status.textContent='本次还没有可导出的对话。';return;}const url=URL.createObjectURL(new Blob(['之芯本地 AI 对话（请自行核验）\n\n'+text],{type:'text/plain;charset=utf-8'})),a=el('a');a.href=url;a.download='zhixin-local-ai.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
  addEventListener('pagehide',()=>{controller?.abort();session?.close();});
  modelInfo();refresh();
+ // Embedded exercise pages keep their own navigation; only explicit AI buttons activate this panel.
+ const standalone=/\/local-ai\/(?:index\.html)?$/.test(location.pathname);
+ if(standalone){
  const params=new URLSearchParams(location.search);let carried=null;
  try{const raw=sessionStorage.getItem('zhixin-ai-exercise-v1');carried=M.handoff(raw,questions);if(raw)sessionStorage.removeItem('zhixin-ai-exercise-v1');}catch{}
  const linkedCourse=courses.find(c=>c.id===params.get('course')),linkedExercise=questions.find(q=>q.id===params.get('exercise'));
@@ -100,5 +103,6 @@
  else if(linkedExercise)receive({id:linkedExercise.id,mode:params.get('mode'),answer:carried?.id===linkedExercise.id?carried.answer:''});
  else if(carried&&!params.has('course')&&!params.has('exercise'))receive(carried);
  else if(params.has('course')||params.has('exercise'))status.textContent='链接中的课程或题目不在当前目录中，可以手动选择课程或开始自由问答。';
+ }
 
 })();

@@ -1,6 +1,6 @@
 # 原创习题
 
-先独立作答，再逐条查看提示，最后对照解析。这 20 道题由之芯编写，覆盖电路与模拟 IC、数字 IC、信号处理、通信与信息论，**不是学校真题或官方作业**。建议用纸笔保留推导过程。
+先独立作答，再逐条查看提示，最后对照解析。这 28 道题由之芯编写，覆盖电路与模拟 IC、数字 IC、信号处理、通信与信息论，**不是学校真题或官方作业**。建议用纸笔保留推导过程。
 
 ??? info "答题、筛选与分享说明"
 
@@ -10,7 +10,24 @@
 
     每题的“安排重做”会打开学习工作台并填入任务草稿，只有确认加入才保存；任务完成不会自动判定题目答对。
 
-    每题的“复制单题链接”只分享题目编号，不包含个人作答。即使在本机预览中使用，分享链接也使用配置的正式网站地址；打开后聚焦这一道题。
+    每题的“复制单题链接”只分享题目编号，不包含个人作答。即使在本机预览中使用，分享链接也使用配置的正式网站地址；打开后聚焦这一道题，不会自动跳到 AI 助手；需要辅助时再点击题目旁的 AI 按钮。
+
+??? tip "新增 8 道练习与对应课程"
+
+    这些题目是本站原创的基础自测，建议用时由本站估计，不代表课程官方要求。
+
+    | 练习 | 对应课程 | 难度与建议用时 |
+    | --- | --- | --- |
+    | [保持时间需要补多少最小延迟](?exercise=hold-min-delay) | [HDL 与数字系统实验](courses/ic-fpga.md) | 基础 · 6 分钟 |
+    | [两段互连的 Elmore 时间常数](?exercise=elmore-two-section) | [RTL 到 GDS 设计实践](courses/ic-eda.md) | 进阶 · 7 分钟 |
+    | [由方块电阻估算薄膜电阻](?exercise=sheet-resistor) | [微纳加工技术](courses/ic-process.md) | 基础 · 4 分钟 |
+    | [理想 ADC 的量化步长](?exercise=adc-quantization-step) | [通信仿真与 SDR](courses/comm-sdr.md) | 基础 · 5 分钟 |
+    | [从 QPSK 比特率到带宽](?exercise=qpsk-rrc-bandwidth) | [通信系统设计](courses/comm-system-design.md) | 基础 · 6 分钟 |
+    | [码率与编码后的传输比特率](?exercise=block-code-bitrate) | [信道编码与数字通信](courses/comm-coding.md) | 基础 · 4 分钟 |
+    | [两状态马尔可夫链的稳态概率](?exercise=markov-two-state) | [离散随机过程](courses/comm-random.md) | 进阶 · 7 分钟 |
+    | [复序列匹配滤波的反转与共轭](?exercise=complex-matched-filter) | [检测与估计](courses/comm-detection.md) | 基础 · 6 分钟 |
+
+    点击表中练习名称可直接打开单题，也可在上方搜索名称定位。新题沿用现有提示、检查、错题安排和记录备份流程；原有题号与已保存作答保持兼容。
 
 <div id="practice-app"></div>
 

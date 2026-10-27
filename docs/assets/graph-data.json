@@ -3879,6 +3879,10 @@
     },
     {
       "source": "courses/comm-coding.md",
+      "target": "exercises.md"
+    },
+    {
+      "source": "courses/comm-coding.md",
       "target": "ic-roadmap.md"
     },
     {
@@ -3904,6 +3908,10 @@
     {
       "source": "courses/comm-detection.md",
       "target": "courses/math.md"
+    },
+    {
+      "source": "courses/comm-detection.md",
+      "target": "exercises.md"
     },
     {
       "source": "courses/comm-detection.md",
@@ -4039,6 +4047,10 @@
     },
     {
       "source": "courses/comm-random.md",
+      "target": "exercises.md"
+    },
+    {
+      "source": "courses/comm-random.md",
       "target": "ic-roadmap.md"
     },
     {
@@ -4071,6 +4083,10 @@
     },
     {
       "source": "courses/comm-sdr.md",
+      "target": "exercises.md"
+    },
+    {
+      "source": "courses/comm-sdr.md",
       "target": "ic-roadmap.md"
     },
     {
@@ -4088,6 +4104,10 @@
     {
       "source": "courses/comm-system-design.md",
       "target": "courses/ic-fpga.md"
+    },
+    {
+      "source": "courses/comm-system-design.md",
+      "target": "exercises.md"
     },
     {
       "source": "courses/comm-system-design.md",
@@ -4411,6 +4431,10 @@
     },
     {
       "source": "courses/ic-eda.md",
+      "target": "exercises.md"
+    },
+    {
+      "source": "courses/ic-eda.md",
       "target": "ic-roadmap.md"
     },
     {
@@ -4435,6 +4459,10 @@
     },
     {
       "source": "courses/ic-fpga.md",
+      "target": "exercises.md"
+    },
+    {
+      "source": "courses/ic-fpga.md",
       "target": "ic-roadmap.md"
     },
     {
@@ -4456,6 +4484,10 @@
     {
       "source": "courses/ic-hdlbits.md",
       "target": "university-courses.md"
+    },
+    {
+      "source": "courses/ic-process.md",
+      "target": "exercises.md"
     },
     {
       "source": "courses/ic-process.md",

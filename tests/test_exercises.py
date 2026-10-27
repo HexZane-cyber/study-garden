@@ -27,6 +27,13 @@ class ExerciseAnswers(unittest.TestCase):
             'shannon': 1e6 * math.log2(1 + 15) / 1e6,
             'binary-entropy': sum(-p * math.log2(p) for p in [.25, .75]),
             'snr-db': 10 ** (10 / 10),
+            'hold-min-delay': max(0, .12e-9 - (.06e-9 + .02e-9)) / 1e-12,
+            'elmore-two-section': (1000 * 10e-15 + (1000 + 2000) * 20e-15) / 1e-12,
+            'sheet-resistor': 50 * (30e-6 / 3e-6),
+            'adc-quantization-step': (2 / 2 ** 12) / 1e-3,
+            'qpsk-rrc-bandwidth': ((4e6 / math.log2(4)) * (1 + .25)) / 1e6,
+            'block-code-bitrate': (1e6 / (4 / 7)) / 1e6,
+            'markov-two-state': .1 / (.1 + .2),
         }
         self.assertEqual(set(answers), {q['id'] for q in QUESTIONS if q['kind'] == 'number'})
         for id_, answer in answers.items():
@@ -45,12 +52,16 @@ class ExerciseAnswers(unittest.TestCase):
         viable = [o for o in Q['sampling']['options'] if float(o.split()[0]) > 2 * 3]
         self.assertEqual(viable, [chosen('sampling')])
         self.assertEqual(chosen('bpsk'), 'Q(sqrt(2Eb/N0))')
+        sequence = [1, 1j, -1]
+        matched = [complex(value).conjugate() for value in reversed(sequence)]
+        self.assertEqual(matched, [-1, -1j, 1])
+        self.assertEqual(chosen('complex-matched-filter'), '[−1, −j, 1]')
 
     def test_build_validator(self):
         import sys
         sys.path.insert(0, str(ROOT))
         import hooks
-        self.assertEqual(len(hooks.load_exercises(ROOT / 'docs')['questions']), 20)
+        self.assertEqual(len(hooks.load_exercises(ROOT / 'docs')['questions']), len(QUESTIONS))
 
 
 if __name__ == '__main__':

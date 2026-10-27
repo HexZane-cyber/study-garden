@@ -2,18 +2,23 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 function dependency(name){try{return require(name);}catch{return require('../.tooling/node_modules/'+name);}}
 const {JSDOM}=dependency('jsdom'),root=path.join(__dirname,'..'),data=require('../docs/assets/exercises.json'),P=require('../docs/assets/practice-model.js');
 const tick=()=>new Promise(resolve=>setImmediate(resolve)),button=(d,text)=>[...d.querySelectorAll('button')].find(b=>b.textContent===text);
-function page(blocked=false){
- const dom=new JSDOM('<div id="practice-app"></div><div id="local-ai-app"></div><script id="practice-data" type="application/json"></script>',{url:'https://test.invalid/study-garden/exercises/',runScripts:'outside-only'}),w=dom.window,d=w.document;
- d.getElementById('practice-data').textContent=JSON.stringify(data);w.HTMLElement.prototype.scrollIntoView=function(){};w.confirm=()=>true;
+function page(blocked=false,options={}){
+ const dom=new JSDOM((options.route==='local-ai/'?'':'<div id="practice-app"></div>')+'<div id="local-ai-app"></div><script id="practice-data" type="application/json"></script>',{url:'https://test.invalid/study-garden/'+(options.route||'exercises/')+(options.query||''),runScripts:'outside-only'}),w=dom.window,d=w.document;
+ d.getElementById('practice-data').textContent=JSON.stringify(data);const scrolls=[];w.HTMLElement.prototype.scrollIntoView=function(options){scrolls.push({id:this.id,options});};w.matchMedia=()=>({matches:options.reducedMotion===true});w.confirm=()=>true;if(options.handoff)w.sessionStorage.setItem('zhixin-ai-exercise-v1',JSON.stringify(options.handoff));
  if(blocked)Object.defineProperty(w,'localStorage',{get(){throw Error('blocked');}});
  let starts=0,requests=0,closed=0,resolveLoad,progress,fail=false;
  Object.defineProperty(w,'isSecureContext',{value:true});Object.defineProperty(w.navigator,'gpu',{value:{requestAdapter:async()=>({features:new Set(['shader-f16'])})}});
  w.fetch=async()=>{requests++;throw Error('unexpected network');};
  w.ZhixinWebLLM={start(url,id,cb){starts++;progress=cb;return{ready:fail?Promise.reject(Error('mock failure')):new Promise(resolve=>{resolveLoad=resolve;}),close(){closed++;},async generate(messages,onToken){assert(messages.at(-1).content);onToken('<img src=x onerror=alert(1)>');return '<img src=x onerror=alert(1)>';}};},cached:async()=>false,remove:async()=>true};
  for(const name of ['practice-model.js','practice.js','local-ai-model.js','local-ai.js']){Object.defineProperty(d,'currentScript',{value:{src:'https://test.invalid/study-garden/assets/'+name,dataset:{runtime:'../assets/vendor/local-ai-runtime.bundle.js',worker:'../assets/vendor/local-ai-worker.bundle.js'}},configurable:true});w.eval(fs.readFileSync(path.join(root,'docs/assets',name),'utf8'));}
- return{dom,w,d,get starts(){return starts;},get requests(){return requests;},get closed(){return closed;},finish(){resolveLoad();},progress(p){progress(p);},fail(){fail=true;}};
+ return{dom,w,d,scrolls,get starts(){return starts;},get requests(){return requests;},get closed(){return closed;},finish(){resolveLoad();},progress(p){progress(p);},fail(){fail=true;}};
 }
 (async()=>{
+ const handoff={id:'divider',mode:'hint',answer:'pending-private-draft'},deep=page(false,{query:'?exercise=complex-matched-filter&mode=check',handoff,reducedMotion:true});
+ assert(deep.d.querySelector('.practice-card').id==='exercise-complex-matched-filter');assert(deep.d.querySelector('.local-ai-context').hidden);assert.equal(deep.d.querySelector('[aria-label="向本地 AI 提问"]').value,'');assert.notEqual(deep.d.activeElement,deep.d.querySelector('[aria-label="向本地 AI 提问"]'));assert(!deep.scrolls.some(s=>s.id==='local-ai-app'),'plain question link must not scroll to AI');assert.deepEqual(JSON.parse(deep.w.sessionStorage.getItem('zhixin-ai-exercise-v1')),handoff);assert.equal(deep.requests,0);assert.equal(deep.starts,0);
+ button(deep.d,'本地 AI 提示').click();assert(!deep.d.querySelector('.local-ai-context').hidden);assert(deep.d.querySelector('.local-ai-scope').textContent.includes('复序列匹配滤波'));assert.equal(deep.d.activeElement,deep.d.querySelector('[aria-label="向本地 AI 提问"]'));assert.equal(deep.scrolls.at(-1).id,'local-ai-app');assert.equal(deep.scrolls.at(-1).options.behavior,'auto');assert.equal(deep.requests,0);assert.equal(deep.starts,0);deep.dom.window.close();
+ const standalone=page(false,{route:'local-ai/',query:'?exercise=hold-min-delay&mode=hint',handoff});assert(!standalone.d.querySelector('.local-ai-context').hidden);assert(standalone.d.querySelector('.local-ai-scope').textContent.includes('保持时间'));assert.equal(standalone.w.sessionStorage.getItem('zhixin-ai-exercise-v1'),null);assert(!standalone.d.querySelector('[aria-label="交给 AI 的习题作答"]').value.includes('pending-private-draft'));assert.equal(standalone.starts,0);assert.equal(standalone.requests,0);standalone.dom.window.close();
+ console.log('Exercise navigation passed: direct question links preserve focus and queued handoff, explicit AI buttons activate the panel with reduced motion, standalone helper still receives links and no models auto-load.');
  const p=page(),{w,d}=p;
  assert.equal(p.starts,0);assert.equal(p.requests,0);assert(!d.querySelector('script[src*="runtime"]'));
  const first=d.querySelector('.practice-card'),answer=first.querySelector('input[type=text]');answer.value='8';answer.dispatchEvent(new w.Event('input'));first.querySelector('button').click();
