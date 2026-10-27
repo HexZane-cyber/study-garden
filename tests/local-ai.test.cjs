@@ -7,4 +7,12 @@ assert.equal(M.messages([],' hello ').at(-1).content,'hello');assert.throws(()=>
 const msgs=M.messages(Array.from({length:100},(_,i)=>({role:i%2?'assistant':'user',content:'hello'.repeat(100)})),'题目');assert(msgs.reduce((n,m)=>n+m.content.length,0)<=2800);assert(msgs.length===2||msgs[1].role==='user');
 assert.equal(M.handoff(JSON.stringify({id:q.id,mode:'hint',answer:'8'}),questions).id,q.id);assert.equal(M.handoff(JSON.stringify({id:'unknown',mode:'hint',answer:''}),questions),null);
 assert.equal(M.handoff('{"id":"divider","mode":"hack","answer":""}',questions),null);
+assert.equal(M.freeBytes({quota:100,usage:40}),60);assert.equal(M.freeBytes({quota:100,usage:101}),0);assert.equal(M.freeBytes({quota:'100',usage:0}),null);
+assert(M.deviceAdvice({webgpu:true,f16:true,quota:1e8,usage:0},M.models[0].id).some(x=>x.includes('小于')));
+assert(M.deviceAdvice({webgpu:true,f16:false},M.models[0].id).some(x=>x.includes('不是显存')||x.includes('不能证明显存')));
+assert.equal(M.failure(Error('Failed to fetch')).code,'network');assert.equal(M.failure({name:'QuotaExceededError',message:'quota'}).code,'storage');assert.equal(M.failure(Error('out of memory')).code,'memory');assert.equal(M.failure(Error('WebGPU unavailable')).code,'gpu');assert.equal(M.failure(Error('timeout')).code,'timeout');assert.equal(M.failure(Error('Failed to fetch'),'ollama').code,'ollama');
+const diagnostic=M.diagnostic({backend:'ollama',model:'qwen2.5:1.5b',phase:'error',origin:'https://example.test/study-garden/?secret=private',endpoint:'http://127.0.0.1:11434',issue:{code:'network',message:'private question'},profile:{webgpu:true,f16:true,quota:100,usage:40},runtimeLoaded:true,history:[{content:'private answer'}],input:'private draft'});
+assert.equal(diagnostic.siteOrigin,'https://example.test');assert.equal(diagnostic.localEndpoint,'http://127.0.0.1:11434');assert.equal(diagnostic.runtimeLoaded,true);assert(!JSON.stringify(diagnostic).includes('private'));
+assert.equal(M.diagnostic({backend:'ollama',endpoint:'https://user:secret@example.test',origin:'file:///x'}).localEndpoint,null);
+assert.equal(new Set(M.templates.map(t=>t.id)).size,3);assert(M.templates.every(t=>t.text.length<=2400));
 console.log('Local AI endpoint restrictions, model filtering, prompts and context bounds passed.');

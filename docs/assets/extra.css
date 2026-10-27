@@ -159,3 +159,8 @@ body[data-md-color-scheme=default] .appearance-choices button{background:linear-
 @media(max-width:480px){.practice-controls{grid-template-columns:1fr}.practice-controls>input{grid-column:auto}}
 
 @media(max-width:720px){.practice-controls{grid-template-columns:1fr}.practice-controls>input{grid-column:auto}}
+
+.local-ai-device,.local-ai-help{padding:.85rem 1rem;margin:.8rem 0;border:1px solid var(--md-default-fg-color--lightest);border-radius:.6rem;background:var(--md-code-bg-color);font-size:.74rem;line-height:1.75}
+.local-ai-device summary{cursor:pointer;font-weight:600}.local-ai-device ul,.local-ai-help ol{margin:.6rem 0}.local-ai-help{border-left:3px solid var(--md-accent-fg-color)}.local-ai-help h3{font-size:.85rem;margin:0}
+.local-ai-quick{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}.local-ai-quick p{width:100%;margin:0;font-size:.75rem;color:var(--md-default-fg-color--light)}
+#local-ai-app[data-phase=ready]>.local-ai-status{border-left:2px solid var(--md-accent-fg-color);padding-left:.7rem}
