@@ -564,3 +564,7 @@ node tests/local-ai.test.cjs
 改动后运行 `backup.test.cjs`、`backup-integration.test.cjs`、`backup-practice.test.cjs` 与 `backup-practice-ui.test.cjs`，核对空白合并、已有答案保留、预览前零写入、损坏数据保护及多类型写入回退。
 
 样式缓存：构建钩子会为全站 `extra.css` 自动添加内容哈希版本参数，样式改动后 URL 才变化。修改样式后重新运行 `python build.py`，不要手动填写固定版本号；`test_page_assets.py` 会检查首页、工作台和课程页各只有一个可解析的版本化样式链接。
+
+复习卡列表与草稿保护：`ReviewModel.cardsFor` 只筛选、排序列表副本，不改变当前回忆卡片或复习进度。`upsert` 可传入第四个参数 `expected`（打开编辑时的卡片快照），核对问题、答案、分组和来源；文字发生冲突或原卡删除时拒绝覆盖，仅更新复习进度时保留新进度并允许编辑。不要用旧卡片整体替换新状态。
+
+编辑和恢复草稿只在 `review.js` 页面内存中；未保存时及仍有恢复草稿时按需注册离开提示，保存或明确清除后移除。普通卡片备份与综合备份都不包含这些草稿。来源文章使用经 `ReviewModel.source` 校验的站内路径，并在新标签页打开。修改后运行 `review.test.cjs`、`review-integration.test.cjs` 和 `review-editor-ui.test.cjs`，核对跨页冲突、失败时草稿保留、恢复/清除流程与计时/作答无关。复习模型与交互脚本由构建钩子自动添加内容版本。

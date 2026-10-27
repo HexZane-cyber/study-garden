@@ -14,3 +14,10 @@ for(const source of ['javascript:alert(1)','https://evil.test/','//evil.test/','
 let raw;const storage={getItem:()=>raw,setItem:(k,v)=>{raw=v;}};assert.deepEqual(R.load(storage),R.blank());R.save(storage,state);assert.deepEqual(R.load(storage),state);raw='bad';assert.throws(()=>R.load(storage));assert.throws(()=>R.save({setItem(){throw Error('quota');}},state));
 const full={version:1,cards:Array.from({length:1000},(_,i)=>({...state.cards[0],id:'card-'+i}))};assert.throws(()=>R.upsert(full,input,now));assert.throws(()=>R.merge(full,text));assert.equal(R.upsert(full,{...input,id:'card-0'},now).cards.length,1000);
 console.log('Review model passed: intervals, due boundaries, edit history, backup merge, validation, source safety, capacity and storage failures.');
+
+const snapshot={...edited.cards[0]},ratedWhileEditing=R.rate(edited,snapshot.id,'good',now+200);
+const safeEdit=R.upsert(ratedWhileEditing,{...input,question:'继续修改'},now+300,snapshot);assert.equal(safeEdit.cards[0].due,ratedWhileEditing.cards[0].due);assert.equal(safeEdit.cards[0].reps,ratedWhileEditing.cards[0].reps);
+assert.throws(()=>R.upsert(safeEdit,{...input,question:'旧页面覆盖'},now+400,snapshot),/其他页面/);assert.throws(()=>R.upsert(R.blank(),input,now+400,snapshot),/其他页面/);
+const library={version:1,cards:[{...snapshot,id:'late',deck:'系统',due:now+R.DAY,updated:now+30},{...snapshot,id:'due',question:'CMOS 动态功耗',deck:'电路',due:now,updated:now+20},{...snapshot,id:'old',question:'MOS 器件',deck:'电路',due:now-1,updated:now+10}]},original=JSON.stringify(library);
+assert.deepEqual(R.cardsFor(library,{status:'due',order:'due'},now).map(c=>c.id),['old','due']);assert.deepEqual(R.cardsFor(library,{status:'upcoming'},now).map(c=>c.id),['late']);assert.deepEqual(R.cardsFor(library,{query:'cmos',deck:'电路'},now).map(c=>c.id),['due']);assert.deepEqual(R.cardsFor(library,{order:'updated'},now).map(c=>c.id),['late','due','old']);assert.equal(JSON.stringify(library),original);
+console.log('Review content conflicts and library filters passed: schedule-only changes survive editing, stale content/deletion blocked, due boundary and nonmutating sort.');

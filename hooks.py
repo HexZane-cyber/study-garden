@@ -55,7 +55,7 @@ def on_config(config):
 def on_pre_build(config):
     ARTICLE_SECTIONS.clear()
     ASSET_VERSIONS.clear()
-    for name in ['learning-model.js', 'learning.js', 'planner-model.js', 'planner.js', 'backup-model.js', 'backup.js', 'practice-model.js', 'practice.js', 'local-ai-model.js', 'local-ai.js', 'vendor/local-ai-runtime.bundle.js', 'vendor/local-ai-worker.bundle.js']:
+    for name in ['review-model.js', 'review.js', 'learning-model.js', 'learning.js', 'planner-model.js', 'planner.js', 'backup-model.js', 'backup.js', 'practice-model.js', 'practice.js', 'local-ai-model.js', 'local-ai.js', 'vendor/local-ai-runtime.bundle.js', 'vendor/local-ai-worker.bundle.js']:
         path = Path(config['docs_dir']) / 'assets' / name
         ASSET_VERSIONS[name] = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
     data = graph_data(config['docs_dir'])

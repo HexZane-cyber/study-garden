@@ -160,6 +160,12 @@ class PageAssetsTest(unittest.TestCase):
             resolved = urlparse(urljoin('https://example.test/study-garden/' + page, urls[0]))
             self.assertEqual(resolved.path, '/study-garden/assets/extra.css')
 
+    def test_review_scripts_have_content_versions(self):
+        html = (SITE / 'review/index.html').read_text(encoding='utf-8')
+        for name in ['review-model.js', 'review.js']:
+            expected = hashlib.sha256((ROOT / 'docs/assets' / name).read_bytes()).hexdigest()[:12]
+            self.assertIn('assets/' + name + '?v=' + expected, html)
+
     def test_backup_dependencies_and_scope(self):
         scripts = [name for name, _ in self.scripts('backup/index.html')]
         expected = ['assets/reading-model.js', 'assets/review-model.js', 'assets/learning-model.js', 'assets/practice-model.js', 'assets/planner-model.js', 'assets/backup-model.js', 'assets/backup.js']
