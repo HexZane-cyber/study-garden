@@ -177,6 +177,24 @@ class PageAssetsTest(unittest.TestCase):
                 positions.append(html.index(url))
             self.assertEqual(positions, sorted(positions))
 
+    def test_course_pages_link_every_related_exercise_without_runtime(self):
+        catalog = json.loads((ROOT / 'docs/assets/course-catalog.json').read_text(encoding='utf-8'))
+        questions = json.loads((ROOT / 'docs/assets/exercises.json').read_text(encoding='utf-8'))['questions']
+        for course in catalog['courses']:
+            html = (SITE / course['url'] / 'index.html').read_text(encoding='utf-8')
+            related = [q for q in questions if q['course'] == course['id']]
+            if related:
+                self.assertIn('exercises/?course=' + course['id'], html)
+                self.assertIn('本课自测目录 · ' + str(len(related)) + ' 道', html)
+                for question in related:
+                    self.assertIn('exercises/?exercise=' + question['id'], html)
+                    self.assertIn(question['title'], html)
+            else:
+                self.assertNotIn('class="course-exercise-list"', html)
+            scripts = [name for name, _ in self.scripts(course['url'] + 'index.html')]
+            for name in ['assets/practice-model.js', 'assets/practice.js', 'assets/local-ai.js']:
+                self.assertNotIn(name, scripts)
+
     def test_backup_dependencies_and_scope(self):
         scripts = [name for name, _ in self.scripts('backup/index.html')]
         expected = ['assets/reading-model.js', 'assets/review-model.js', 'assets/learning-model.js', 'assets/practice-model.js', 'assets/planner-model.js', 'assets/backup-model.js', 'assets/backup.js']

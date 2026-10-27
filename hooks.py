@@ -212,9 +212,16 @@ def on_page_markdown(markdown, page, config, files):
 时长是本站为安排自学所作的估算，包含阅读 / 听课、独立练习和复盘，不是视频总长度、官方课时或完成保证。默认已具备先修；英文阅读、补基础与反复调试可能增加投入。先记录两周的实际用时，再调整计划。难度按当前所选学习范围判断，不等同于学校年级或官方分级。
 
 '''
-        related = next((q for q in load_exercises(config['docs_dir'])['questions'] if q['course'] == course['id']), None)
+        related = [q for q in load_exercises(config['docs_dir'])['questions'] if q['course'] == course['id']]
         if related:
-            block += f"本站原创自测：[从相关习题开始](../exercises.md?exercise={related['id']})，支持逐条提示、参考解析与本地 AI 讨论。\n\n"
+            count = len(related)
+            block += f"本站原创自测：[练习本课全部 {count} 道题](../exercises.md?course={course['id']})。用于知识点自查，不是课程官方作业或考试题。\n\n"
+            rows = [f'<details class="course-exercise-list" markdown="1"><summary>本课自测目录 · {count} 道</summary>', '', '| 自测题目 | 难度 | 建议用时 |', '| --- | --- | --- |']
+            for question in related:
+                name = question['title'].replace('|', '&#124;')
+                rows.append(f"| [{name}](../exercises.md?exercise={question['id']}) | {question['level']} | {question['minutes']} 分钟 |")
+            rows.extend(['', '</details>', ''])
+            block += '\n'.join(rows) + '\n'
         block += f"本地 AI 学习辅助：[安排复习](../local-ai.md?course={course['id']}&intent=review) · [核对先修](../local-ai.md?course={course['id']}&intent=prerequisites) · [基础自测](../local-ai.md?course={course['id']}&intent=quiz)。只带入本站公开课程简介，打开后仍需手动发送。\n\n"
         marker = '<div id="course-progress"></div>'
         return markdown.replace(marker, marker + '\n\n' + block, 1)

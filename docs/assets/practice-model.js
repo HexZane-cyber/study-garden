@@ -32,7 +32,7 @@
  function counts(questions,records){const out={all:questions.length,unanswered:0,draft:0,wrong:0,correct:0,manual:0};for(const q of questions)out[state(q,records[q.id])]++;return out;}
  function filter(questions,records,criteria={}){
   const terms=String(criteria.query||'').normalize('NFKC').toLowerCase().trim().split(/\s+/).filter(Boolean);
-  return questions.filter(q=>(!criteria.id||q.id===criteria.id)&&(!criteria.topic||q.topic===criteria.topic)&&(!criteria.level||q.level===criteria.level)&&(!criteria.state||state(q,records[q.id])===criteria.state)&&terms.every(t=>[q.title,q.prompt,q.topic].join(' ').normalize('NFKC').toLowerCase().includes(t)));
+  return questions.filter(q=>(!criteria.id||q.id===criteria.id)&&(!criteria.course||q.course===criteria.course)&&(!criteria.topic||q.topic===criteria.topic)&&(!criteria.level||q.level===criteria.level)&&(!criteria.state||state(q,records[q.id])===criteria.state)&&terms.every(t=>[q.title,q.prompt,q.topic].join(' ').normalize('NFKC').toLowerCase().includes(t)));
  }
  function progress(questions,records){const c=counts(questions,records);return {attempted:c.all-c.unanswered,correct:c.correct,total:c.all};}
  function backup(records,questions){return JSON.stringify({format:'zhixin-practice',version:1,records:clean(records,questions)},null,2);}

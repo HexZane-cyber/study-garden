@@ -26,3 +26,5 @@ const blocked={getItem(){throw Error('blocked');},setItem(){throw Error('blocked
 console.log('Practice validation, grading, backup and read-only recovery passed.');
 
 assert.throws(()=>M.restore(JSON.stringify({format:'zhixin-practice',version:1,records:{'unknown-question':M.blank()}}),questions),/未知/);
+
+assert.equal(M.filter(questions,filteredRecords,{course:"ee-circuits",state:"wrong"}).length,0);assert(M.filter(questions,{}, {course:"ic-fpga"}).every(q=>q.course==="ic-fpga"));assert.equal(M.filter(questions,{}, {course:"unknown"}).length,0);
