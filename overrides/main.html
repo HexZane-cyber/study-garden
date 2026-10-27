@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 
+{% block extrahead %}
+  {{ super() }}
+  {% if page and page.file.src_uri == "catalog.md" %}
+  <script id="catalog-filter-legacy-url">
+  (() => { try { const url = new URL(location.href); if (url.searchParams.has('q')) { if (!url.searchParams.has('courseQuery')) url.searchParams.set('courseQuery', url.searchParams.get('q')); url.searchParams.delete('q'); history.replaceState(history.state, '', url); } } catch {} })();
+  </script>
+  {% endif %}
+{% endblock %}
+
 {% block config %}
   {% set default_config = super() %}
   {% if page and page.file.src_uri in ["graph.md", "chip.md"] %}

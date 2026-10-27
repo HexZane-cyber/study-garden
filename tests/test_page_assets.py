@@ -195,6 +195,29 @@ class PageAssetsTest(unittest.TestCase):
             for name in ['assets/practice-model.js', 'assets/practice.js', 'assets/local-ai.js']:
                 self.assertNotIn(name, scripts)
 
+    def test_learning_path_metadata_contains_counts_without_exercise_answers(self):
+        questions = json.loads((ROOT / 'docs/assets/exercises.json').read_text(encoding='utf-8'))['questions']
+        expected = {}
+        for question in questions:
+            expected[question['course']] = expected.get(question['course'], 0) + 1
+        catalog = json.loads((ROOT / 'docs/assets/course-catalog.json').read_text(encoding='utf-8'))
+        for page in ['catalog/index.html', 'roadmap/index.html', 'courses/ic-digital/index.html']:
+            html = (SITE / page).read_text(encoding='utf-8')
+            data = json.loads(re.search(r'<script type="application/json" id="learning-data">(.*?)</script>', html, re.S).group(1))
+            self.assertEqual(data['exerciseCounts'], expected)
+            self.assertEqual(data['courses'], catalog['courses'])
+            self.assertNotIn('questions', data)
+            self.assertNotIn('records', data)
+            self.assertNotIn('id="practice-data"', html)
+
+    def test_catalog_legacy_query_migrates_before_theme_search_loads(self):
+        html = (SITE / 'catalog/index.html').read_text(encoding='utf-8')
+        marker = 'id="catalog-filter-legacy-url"'
+        self.assertIn(marker, html)
+        self.assertLess(html.index(marker), html.index('<body'))
+        self.assertNotIn(marker, (SITE / 'courses/python/index.html').read_text(encoding='utf-8'))
+        self.assertNotIn(marker, (SITE / 'index.html').read_text(encoding='utf-8'))
+
     def test_backup_dependencies_and_scope(self):
         scripts = [name for name, _ in self.scripts('backup/index.html')]
         expected = ['assets/reading-model.js', 'assets/review-model.js', 'assets/learning-model.js', 'assets/practice-model.js', 'assets/planner-model.js', 'assets/backup-model.js', 'assets/backup.js']

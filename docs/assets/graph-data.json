@@ -33,6 +33,11 @@
           "id": "_2",
           "title": "如何使用",
           "level": 2
+        },
+        {
+          "id": "_3",
+          "title": "看清先修，再决定补哪些基础",
+          "level": 2
         }
       ]
     },
@@ -3313,6 +3318,10 @@
     }
   ],
   "edges": [
+    {
+      "source": "backup.md",
+      "target": "catalog.md"
+    },
     {
       "source": "backup.md",
       "target": "exercises.md"

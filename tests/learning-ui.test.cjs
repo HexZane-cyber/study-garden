@@ -26,7 +26,7 @@ const button=(d,text)=>[...d.querySelectorAll('button')].find(b=>b.textContent==
  search.value='ＨＤＬＢｉｔｓ';search.dispatchEvent(new w.Event('input'));assert.equal(d.querySelectorAll('.learning-card').length,1);
  assert.equal(d.querySelector('.learning-course-links a:last-child').href,data.courses.find(c=>c.id==='ic-hdlbits').official);
  let copied='';Object.defineProperty(w.navigator,'clipboard',{value:{writeText:async value=>{copied=value;}},configurable:true});
- button(d,'复制筛选链接').click();await new Promise(resolve=>setImmediate(resolve));assert.equal(new URL(copied).searchParams.get('q'),'ＨＤＬＢｉｔｓ');assert(!copied.includes('python'));assert(d.querySelector('.learning-share-fallback').hidden);
+ button(d,'复制筛选链接').click();await new Promise(resolve=>setImmediate(resolve));assert.equal(new URL(copied).searchParams.get('courseQuery'),'ＨＤＬＢｉｔｓ');assert(!copied.includes('python'));assert(d.querySelector('.learning-share-fallback').hidden);
  Object.defineProperty(w.navigator,'clipboard',{value:{writeText:async()=>{throw Error('denied');}},configurable:true});button(d,'复制筛选链接').click();await new Promise(resolve=>setImmediate(resolve));
  const share=d.querySelector('[aria-label="当前课程筛选链接"]');assert(!d.querySelector('.learning-share-fallback').hidden);assert.equal(share.value,copied);assert.equal(d.activeElement,share);assert.equal(share.selectionEnd,share.value.length);
  w.history.pushState({},'','?q=MIT&level='+encodeURIComponent('基础'));w.dispatchEvent(new w.PopStateEvent('popstate'));assert.equal(search.value,'MIT');assert.equal(track.value,'');assert.equal(d.querySelector('[aria-label="难度"]').value,'基础');assert(d.querySelector('.learning-share-fallback').hidden);
@@ -37,3 +37,7 @@ const button=(d,text)=>[...d.querySelectorAll('button')].find(b=>b.textContent==
  const route=page('roadmap/','learning-route');assert(route.d.querySelector('.learning-route-list'));route.dom.window.close();
  console.log('Learning UI passed: shared filters, full-width search, paging, reset without data loss, original links, clipboard fallback, history, reload and course/route regression.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
+const migration=fs.readFileSync(path.join(root,'site/catalog/index.html'),'utf8').match(/<script id="catalog-filter-legacy-url">([\s\S]*?)<\/script>/)[1];
+for(const [query,expected]of [['?q=MIT&keep=1','MIT'],['?q=old&courseQuery=CMOS&keep=1','CMOS']]){const dom=new JSDOM('',{url:'https://example.test/study-garden/catalog/'+query+'#courses',runScripts:'outside-only'});dom.window.eval(migration);const url=new URL(dom.window.location.href);assert.equal(url.searchParams.get('courseQuery'),expected);assert.equal(url.searchParams.get('q'),null);assert.equal(url.searchParams.get('keep'),'1');assert.equal(url.hash,'#courses');dom.window.close();}
+console.log('Legacy catalog links passed: early query migration avoids global-search query collisions and preserves the selected course query.');

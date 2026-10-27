@@ -11,3 +11,15 @@ const rollback=storage();P.save(rollback,local);const original=rollback.getItem(
 const empty=storage(),setEmpty=empty.setItem;empty.setItem=function(key,value){if(key===R.KEY)throw Error('quota');setEmpty.call(this,key,value);};assert.throws(()=>M.apply(empty,prepared,['planner','review'],courses,base));assert.equal(empty.getItem(P.KEY),null);
 const full=storage(),fullCards={version:1,cards:Array.from({length:1000},(_,i)=>({...prepared.sections.review.cards[0],id:'full-'+i}))};R.save(full,fullCards);assert.throws(()=>M.apply(full,prepared,['planner','review'],courses,base));assert.equal(full.getItem(P.KEY),null,'capacity validation must happen before any category is written');
 console.log('Backup passed: selected round trip, portable URLs, local precedence, active timer preservation, invalid-data refusal, scope isolation, preflight capacity and write rollback.');
+
+// Current records must remain recoverable even when this catalog cannot identify a course.
+const unknownCurrent=storage(),unknownRaw=JSON.stringify({version:1,entries:{python:'learning','removed-course':'done'}});
+unknownCurrent.setItem(L.KEY,unknownRaw);P.save(unknownCurrent,local);
+const beforeUnknown=[...unknownCurrent.values];let unknownWrites=0;const writeUnknown=unknownCurrent.setItem;
+unknownCurrent.setItem=function(k,v){unknownWrites++;writeUnknown.call(this,k,v);};
+assert(M.inspect(unknownCurrent,courses,base).find(s=>s.name==='learning').error);
+assert.throws(()=>M.pack(unknownCurrent,['learning'],courses,base));
+assert.throws(()=>M.apply(unknownCurrent,prepared,['planner','learning'],courses,base));
+assert.equal(unknownWrites,0,'all selected current records must validate before any write');
+assert.deepEqual([...unknownCurrent.values],beforeUnknown);assert.equal(unknownCurrent.getItem(L.KEY),unknownRaw);
+console.log('Course backup guard passed: unknown current IDs stay exact, raw recovery remains available, export and merge refuse before any write.');

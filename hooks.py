@@ -170,7 +170,12 @@ def on_page_context(context, page, config, nav):
         context['chip_courses'] = json.dumps({'courses': [{key: course[key] for key in ('id', 'title', 'path', 'url', 'prerequisites')} for course in data['courses']]}, ensure_ascii=False).replace('<', r'\u003c')
     paths = {c['path'] for c in data['courses']} | {'catalog.md', 'roadmap.md', 'dashboard.md', 'backup.md'}
     if page.file.src_uri in paths:
-        context['learning_catalog'] = json.dumps(data, ensure_ascii=False).replace('<', '\u003c')
+        exercise_counts = {}
+        for question in load_exercises(config['docs_dir'])['questions']:
+            cid = question['course']
+            exercise_counts[cid] = exercise_counts.get(cid, 0) + 1
+        public_catalog = {**data, 'exerciseCounts': exercise_counts}
+        context['learning_catalog'] = json.dumps(public_catalog, ensure_ascii=False).replace('<', '\u003c')
     return context
 
 
