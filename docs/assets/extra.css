@@ -201,3 +201,5 @@ body[data-md-color-scheme=default] .appearance-choices button{background:linear-
 .study-focus-history{scroll-margin-top:90px}.study-focus-history:focus-visible{outline:2px solid var(--md-accent-fg-color);outline-offset:5px}
 
 .study-focus-history>select{margin:0 8px 10px 0}.study-focus-history>button:not([hidden]),.focus-history-actions button{min-height:44px}.study-focus-history>[hidden]{display:none!important}
+
+.site-quick-feedback{min-height:1.6em}.site-quick-results span{overflow-wrap:anywhere;min-width:0}.site-quick input:focus-visible{outline:2px solid var(--md-accent-fg-color);outline-offset:2px}@media(max-width:700px){.site-quick input{font-size:16px}.site-quick-results a,.site-quick button{min-height:44px}.site-quick{box-sizing:border-box;padding:16px}.site-quick-results small{white-space:normal;flex-shrink:0;max-width:5em}}

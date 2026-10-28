@@ -226,6 +226,12 @@ class PageAssetsTest(unittest.TestCase):
         self.assertIn('回看与整理专注记录', html)
         self.assertNotIn('assets/planner.js', (SITE / 'courses/ee-circuits/index.html').read_text(encoding='utf-8'))
 
+    def test_global_quick_tools_have_one_content_version(self):
+        expected = hashlib.sha256((ROOT / 'docs/assets/site-tools.js').read_bytes()).hexdigest()[:12]
+        for page in ['index.html', 'dashboard/index.html', 'courses/ee-circuits/index.html']:
+            html = (SITE / page).read_text(encoding='utf-8')
+            self.assertEqual(html.count('assets/site-tools.js?v=' + expected), 1)
+
     def test_backup_dependencies_and_scope(self):
         scripts = [name for name, _ in self.scripts('backup/index.html')]
         expected = ['assets/reading-model.js', 'assets/review-model.js', 'assets/learning-model.js', 'assets/practice-model.js', 'assets/planner-model.js', 'assets/backup-model.js', 'assets/backup.js']

@@ -2,7 +2,7 @@
  'use strict';
  const script=document.currentScript,base=new URL('../',script.src),heading=document.querySelector('.md-content h1');if(!heading)return;
  const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback;}catch{return fallback;}},write=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value));return true;}catch{return false;}};
- const internal=value=>{try{const u=new URL(value,base);return u.origin===base.origin&&u.pathname.startsWith(base.pathname)&&!u.search&&(/\/$|\.html$/.test(u.pathname))?u:null;}catch{return null;}};
+ const internal=(value,allowQuery=false)=>{try{const u=new URL(value,base);return u.origin===base.origin&&u.pathname.startsWith(base.pathname)&&!u.username&&!u.password&&(allowQuery||!u.search)&&(/\/$|\.html$/.test(u.pathname))?u:null;}catch{return null;}};
  const tools=document.createElement('div');tools.className='site-tools';tools.setAttribute('aria-label','阅读与快捷操作');
  const status=document.createElement('span');status.className='site-tools-status';status.setAttribute('role','status');
  const button=(text,fn)=>{const b=document.createElement('button');b.type='button';b.textContent=text;b.onclick=fn;tools.append(b);return b;};
@@ -12,27 +12,27 @@
  const close=document.createElement('button');close.type='button';close.textContent='关闭 Esc';close.onclick=()=>dialog.close();top.append(label,close);
  const input=document.createElement('input');input.id='site-quick-input';input.type='search';input.placeholder='搜索页面标题、书签或最近阅读…';input.autocomplete='off';
  const result=document.createElement('div');result.className='site-quick-results';const hint=document.createElement('p');hint.textContent='↑ ↓ 选择 · Enter 打开 · Ctrl / ⌘ + K 呼出';dialog.append(top,input,hint,result);document.body.append(dialog);
- let results=[],cursor=-1;
+ input.setAttribute('aria-controls','site-quick-results');result.id='site-quick-results';const feedback=document.createElement('p');feedback.className='site-quick-feedback';feedback.setAttribute('role','status');feedback.setAttribute('aria-live','polite');input.after(feedback);let results=[],cursor=-1,returnFocus=null;const normalize=value=>String(value).normalize('NFKC').toLowerCase();
  function entries(){
   const items=[],seen=new Set(),reading=read('study-garden-reading-v1',{});
   const add=(title,url,group)=>{const u=internal(url);if(!u||seen.has(u.pathname)||typeof title!=='string')return;seen.add(u.pathname);items.push({title:title.trim(),url:u.href,group});};
-  for(const [key,name]of [['bookmarks','收藏'],['recent','最近阅读']])for(const item of Array.isArray(reading[key])?reading[key].slice(0,200):[])if(item)add(item.title,item.url,name);
+  for(const [key,name]of [['bookmarks','收藏'],['recent','最近阅读']])for(const item of Array.isArray(reading?.[key])?[...reading[key]].slice(0,200).sort((a,b)=>key==='bookmarks'?Number(Boolean(b?.pinned))-Number(Boolean(a?.pinned)):0):[])if(item)add(item.title,item.url,name);
   for(const a of document.querySelectorAll('.md-sidebar--primary a[href]'))add(a.textContent,a.href,'站内页面');return items;
  }
- function highlight(){results.forEach((a,i)=>{a.classList.toggle('is-current',i===cursor);if(i===cursor)a.scrollIntoView?.({block:'nearest'});});}
+ function highlight(){results.forEach((a,i)=>{a.classList.toggle('is-current',i===cursor);if(i===cursor){a.scrollIntoView?.({block:'nearest'});feedback.textContent='第 '+(i+1)+' 项，共 '+results.length+' 项：'+a.textContent;}});}
  function render(){
-  result.replaceChildren();cursor=-1;const q=input.value.trim().toLowerCase(),matches=entries().filter(x=>x.title.toLowerCase().includes(q)).slice(0,40);results=[];
+  result.replaceChildren();cursor=-1;const terms=normalize(input.value).trim().split(/\s+/).filter(Boolean),all=entries().filter(x=>terms.every(term=>normalize(x.title+' '+new URL(x.url).pathname).includes(term))),matches=all.slice(0,40);feedback.textContent='匹配 '+all.length+' 项'+(all.length>40?'，先显示 40 项，请缩小关键词':'');results=[];
   for(const item of matches){const a=document.createElement('a');a.href=item.url;const title=document.createElement('span'),group=document.createElement('small');title.textContent=item.title;group.textContent=item.group;a.append(title,group);result.append(a);results.push(a);}
   if(!results.length){const p=document.createElement('p');p.textContent='没有匹配页面，可使用顶部全文搜索查找正文。';result.append(p);}
  }
- function open(){if(dialog.open){dialog.close();return;}input.value='';render();dialog.showModal();input.focus();}
- button('快速打开 · Ctrl K',open);input.oninput=render;
- input.onkeydown=e=>{if(['ArrowDown','ArrowUp'].includes(e.key)){e.preventDefault();if(results.length){cursor=cursor<0?(e.key==='ArrowDown'?0:results.length-1):(cursor+(e.key==='ArrowDown'?1:results.length-1))%results.length;highlight();}}else if(e.key==='Enter'&&results.length){e.preventDefault();results[Math.max(0,cursor)].click();}};
+ function open(){if(dialog.open){dialog.close();return;}returnFocus=document.activeElement;input.value='';render();dialog.showModal();input.focus();}
+ const quickTrigger=button('快速打开 · Ctrl K',open);dialog.addEventListener('close',()=>{(returnFocus?.isConnected&&typeof returnFocus.focus==='function'?returnFocus:quickTrigger).focus();});input.oninput=render;
+ input.onkeydown=e=>{if(e.isComposing||e.keyCode===229)return;if(e.key==='Escape'){e.preventDefault();dialog.close();return;}if(['ArrowDown','ArrowUp'].includes(e.key)){e.preventDefault();if(results.length){cursor=cursor<0?(e.key==='ArrowDown'?0:results.length-1):(cursor+(e.key==='ArrowDown'?1:results.length-1))%results.length;highlight();}}else if(e.key==='Enter'&&results.length){e.preventDefault();results[Math.max(0,cursor)].click();}};
  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();open();}});
  dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
- const prefs=read('study-garden-reader-prefs',{});let size=[.9,1,1.1,1.2].includes(prefs.size)?prefs.size:1;
- function apply(){document.documentElement.style.setProperty('--reader-scale',size);write('study-garden-reader-prefs',{size});}
- button('字 −',()=>{size=Math.max(.9,Math.round((size-.1)*10)/10);apply();status.textContent='字号 '+Math.round(size*100)+'%';});button('字 +',()=>{size=Math.min(1.2,Math.round((size+.1)*10)/10);apply();status.textContent='字号 '+Math.round(size*100)+'%';});apply();
+ const storedPrefs=read('study-garden-reader-prefs',{}),prefs=storedPrefs&&typeof storedPrefs==='object'?storedPrefs:{};let size=[.9,1,1.1,1.2].includes(prefs.size)?prefs.size:1;
+ function apply(save=false){document.documentElement.style.setProperty('--reader-scale',size);if(save)write('study-garden-reader-prefs',{size});}
+ button('字 −',()=>{size=Math.max(.9,Math.round((size-.1)*10)/10);apply(true);status.textContent='字号 '+Math.round(size*100)+'%';});button('字 +',()=>{size=Math.min(1.2,Math.round((size+.1)*10)/10);apply(true);status.textContent='字号 '+Math.round(size*100)+'%';});apply();
  const special=/^(private|graph|library|contribute|workbench|dashboard|catalog|review|backup)(\/|$)/.test(location.pathname.slice(base.pathname.length));
  if(!special&&location.pathname!==base.pathname){button('制作复习卡',()=>{
   const selection=getSelection(),content=document.querySelector('.md-content');let excerpt='';
@@ -55,11 +55,11 @@
  function warm(a){
   const connection=navigator.connection;if(connection?.saveData||/^(slow-)?2g$/.test(connection?.effectiveType||''))return;
   if(!a||a.hasAttribute('download')||a.target||prefetched.size>=4)return;const u=internal(a.href);if(!u||u.pathname===location.pathname||/^(private|workbench)(\/|$)/.test(u.pathname.slice(base.pathname.length))||prefetched.has(u.href))return;
-  prefetched.add(u.href);const link=document.createElement('link');link.rel='prefetch';link.href=u.href;document.head.append(link);
+  u.hash='';if(prefetched.has(u.href))return;prefetched.add(u.href);const link=document.createElement('link');link.rel='prefetch';link.href=u.href;document.head.append(link);
  }
  document.addEventListener('pointerover',e=>{clearTimeout(warmTimer);const a=e.target.closest('a[href]');if(a)warmTimer=setTimeout(()=>warm(a),100);},{passive:true});
  document.addEventListener('pointerout',()=>clearTimeout(warmTimer),{passive:true});document.addEventListener('focusin',e=>warm(e.target.closest('a[href]')));
  const loading=document.createElement('div');loading.className='site-navigation-status';loading.setAttribute('role','status');loading.hidden=true;document.body.append(loading);let loadTimer;
- document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(e.defaultPrevented||e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey||!a||a.target||a.hasAttribute('download'))return;const u=internal(a.href);if(!u||u.pathname===location.pathname)return;loading.textContent='正在打开页面…';loading.hidden=false;clearTimeout(loadTimer);loadTimer=setTimeout(()=>{loading.textContent='页面仍在连接中，可以使用浏览器返回后重试。';},8000);});
+ document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(e.defaultPrevented||e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey||!a||a.target||a.hasAttribute('download'))return;const u=internal(a.href,true);if(!u||(u.pathname===location.pathname&&u.search===location.search))return;loading.textContent='正在打开页面…';loading.hidden=false;clearTimeout(loadTimer);loadTimer=setTimeout(()=>{loading.textContent='页面仍在连接中，可以使用浏览器返回后重试。';},8000);});
  addEventListener('pageshow',()=>{loading.hidden=true;clearTimeout(loadTimer);});
 })();

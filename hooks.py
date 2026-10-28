@@ -54,7 +54,7 @@ def on_config(config):
     scripts = []
     for item in config.get('extra_javascript', []):
         path = str(item).split('?')[0]
-        if path in ['assets/reading-model.js', 'assets/reading.js']:
+        if path in ['assets/reading-model.js', 'assets/reading.js', 'assets/site-tools.js']:
             version = hashlib.sha256((Path(config['docs_dir']) / path).read_bytes()).hexdigest()[:12]
             if isinstance(item, str):
                 item = f'{path}?v={version}'
