@@ -223,7 +223,7 @@ class PageAssetsTest(unittest.TestCase):
         for name in ['planner-model.js', 'planner.js']:
             expected = hashlib.sha256((ROOT / 'docs/assets' / name).read_bytes()).hexdigest()[:12]
             self.assertEqual(html.count('assets/' + name + '?v=' + expected), 1)
-        self.assertIn('最近 7 天的专注记录', html)
+        self.assertIn('回看与整理专注记录', html)
         self.assertNotIn('assets/planner.js', (SITE / 'courses/ee-circuits/index.html').read_text(encoding='utf-8'))
 
     def test_backup_dependencies_and_scope(self):
