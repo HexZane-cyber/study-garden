@@ -1,9 +1,9 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 function dep(name){try{return require(name);}catch{return require('../.tooling/node_modules/'+name);}}
 const {JSDOM}=dep('jsdom'),source=fs.readFileSync(path.join(__dirname,'../docs/assets/site-tools.js'),'utf8');
-function setup(page='guide/',connection={}){
- const dom=new JSDOM('<div class="md-sidebar--primary"><a href="/study-garden/guide/">使用说明</a><a href="/study-garden/graph/">知识图谱</a><a href="/study-garden/private/">个人私密空间</a><a href="/study-garden/library/">我的书签</a><a href="/study-garden/courses/python/">Python</a></div><div class="md-content"><h1>测试文章</h1></div>',{url:'https://example.test/study-garden/'+page,runScripts:'outside-only',pretendToBeVisual:true});
- const w=dom.window,d=w.document;Object.defineProperty(d,'currentScript',{value:{src:'https://example.test/study-garden/assets/site-tools.js'}});
+function setup(page='guide/',connection={},origin='https://example.test'){
+ const dom=new JSDOM('<div class="md-sidebar--primary"><a href="/study-garden/guide/">使用说明</a><a href="/study-garden/graph/">知识图谱</a><a href="/study-garden/private/">个人私密空间</a><a href="/study-garden/library/">我的书签</a><a href="/study-garden/courses/python/">Python</a></div><div class="md-content"><h1>测试文章</h1></div>',{url:origin+'/study-garden/'+page,runScripts:'outside-only',pretendToBeVisual:true});
+ const w=dom.window,d=w.document;Object.defineProperty(d,'currentScript',{value:{src:origin+'/study-garden/assets/site-tools.js'}});
  Object.defineProperty(w.navigator,'connection',{value:connection});w.HTMLDialogElement.prototype.showModal=function(){this.open=true;};w.HTMLDialogElement.prototype.close=function(){this.open=false;this.dispatchEvent(new w.Event('close'));};w.HTMLElement.prototype.scrollIntoView=function(){};
  w.matchMedia=()=>({matches:true});w.scrollTo=()=>{};return {dom,w,d,start(){w.eval(source);}};
 }
@@ -74,3 +74,8 @@ function reader(initial,page='guide/'){
  const fresh=setup();fresh.start();assert.equal(fresh.w.localStorage.getItem('study-garden-reader-prefs'),null,'reading a page must not create a preference record');fresh.dom.window.close();
  console.log('Quick navigation refinement passed: normalized multi-keyword matches, pin priority, credential rejection, IME keys, close focus, zero-write initial preferences, query navigation and anchor-deduplicated prefetch.');
 }
+
+for(const origin of ['http://127.0.0.1:8080','http://localhost:8080','http://[::1]:8080','https://hexzane-cyber.github.io','https://127.0.0.1.example.org']){
+ const t=setup('guide/',{},origin);t.start();const help=t.d.querySelector('.site-local-help');const local=new URL(origin).hostname==='127.0.0.1'||new URL(origin).hostname==='localhost'||new URL(origin).hostname==='[::1]';assert.equal(Boolean(help),local);if(help){assert(!help.open);assert(help.textContent.includes(origin));assert(help.textContent.includes('start-preview.cmd'));assert(help.textContent.includes('不会自动同步'));assert.equal(help.querySelector('a').href,'https://hexzane-cyber.github.io/study-garden/');assert.equal(help.querySelector('a').target,'_blank');assert.equal(t.w.localStorage.length,0);}t.dom.window.close();
+}
+console.log('Local access help passed: exact loopback hosts only, no storage writes, explicit separate public link and collapsed startup guidance.');
