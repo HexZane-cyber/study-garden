@@ -21,3 +21,13 @@ console.log('Task focus model passed: explicit starts, stale/completed/deleted t
  const range={...state,sessions:[a,{...b,date:P.shiftDay(today,-20)},{...extra,date:P.shiftDay(today,-60)}]};assert.equal(P.sessionHistory(range,'',now).minutes,12);assert.equal(P.sessionHistory(range,'',now,30).minutes,20);assert.equal(P.sessionHistory(range,'',now,0).minutes,23);assert.throws(()=>P.sessionHistory(range,'',now,99));
  console.log('Focus record management passed: stale-delete refusal, isolated removal, timer preservation, merge-safe undo, no eviction and 7/30/all-date ranges.');
 }
+
+{
+ const session={id:'reflect',date:P.day(),minutes:25,course:'python'},state={...P.blank(),sessions:[session],timer:{id:'still-running',elapsed:1,started:Date.now(),course:'python'}},reflection={learned:'能解释采样条件',blocker:'混叠频率还容易出错',next:'重做一道采样题'};
+ const next=P.saveReflection(state,session,reflection);assert(!state.sessions[0].reflection);assert.deepEqual(next.sessions[0].reflection,reflection);assert.equal(next.timer,state.timer);
+ const round=P.merge(P.blank(),P.backup(next),['python']);assert.deepEqual(round.sessions[0].reflection,reflection);const removed=P.removeSession(next,next.sessions[0]);assert.deepEqual(P.restoreSession(removed,next.sessions[0],0).sessions[0].reflection,reflection);
+ assert.throws(()=>P.removeSession(next,session),/变化/);assert.throws(()=>P.saveReflection(next,session,reflection),/其他页面/);assert.throws(()=>P.saveReflection({...state,sessions:[]},session,reflection),/删除/);
+ for(const invalid of [null,[],{...reflection,learned:3},{...reflection,next:'a'.repeat(121)},{...reflection,future:'unknown'}])assert.throws(()=>P.clean({...state,sessions:[{...session,reflection:invalid}]},['python']));
+ const full={...P.blank(),sessions:Array.from({length:1500},(_,i)=>({...session,id:'reflection-'+i,reflection:{learned:'中'.repeat(400),blocker:'文'.repeat(400),next:'下一步'}}))};const text=P.backup(full);assert(text.length>1024*1024);assert.equal(P.merge(P.blank(),text,['python']).sessions.length,1500);
+ console.log('Learning reflection model passed: strict optional schema, legacy compatibility, unchanged timer, backup/undo preservation, conflict guards and large valid backups.');
+}

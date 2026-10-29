@@ -23,3 +23,8 @@ assert.throws(()=>M.apply(unknownCurrent,prepared,['planner','learning'],courses
 assert.equal(unknownWrites,0,'all selected current records must validate before any write');
 assert.deepEqual([...unknownCurrent.values],beforeUnknown);assert.equal(unknownCurrent.getItem(L.KEY),unknownRaw);
 console.log('Course backup guard passed: unknown current IDs stay exact, raw recovery remains available, export and merge refuse before any write.');
+
+{
+ const local=storage(),state={...P.blank(),sessions:[{id:'reflect',date:P.day(),minutes:25,course:'python',reflection:{learned:'已理解',blocker:'待核对',next:'做一道题'}}]};P.save(local,state);const exported=M.pack(local,['planner'],courses,base),prepared=M.prepare(exported,courses,base),target=storage();M.apply(target,prepared,['planner'],courses,base);assert.deepEqual(P.load(target,['python']).sessions[0].reflection,state.sessions[0].reflection);
+ console.log('Unified backup preserves learning reflection fields.');
+}
