@@ -2,7 +2,9 @@
 
 **正式网站：[https://hexzane-cyber.github.io/study-garden/](https://hexzane-cyber.github.io/study-garden/)**
 
-`127.0.0.1:8080` 是当前电脑的本地预览，只有预览服务运行时才能访问。已安装 Python 的 Windows 电脑可双击仓库根目录的 `start-preview.cmd` 启动并打开页面；保持启动窗口运行，按 `Ctrl+C` 停止。重新双击会复用本项目已运行的服务，不会结束占用端口的其他程序。
+`http://127.0.0.1:8080/` 是当前电脑的本地预览，只有预览服务运行时才能访问。已安装 Python 的 Windows 电脑可双击仓库根目录的 `start-preview.cmd`：检查首页就绪后自动打开浏览器，预览在后台运行，启动窗口可以关闭。重复双击会复用本项目服务；双击 `stop-preview.cmd` 可以停止预览。重启电脑后需要重新启动，本工具不会设置开机自启，也不会结束占用端口的其他程序。
+
+如果打不开，先双击 `start-preview.cmd`，不要只刷新失效的网址。仍有问题可运行 `python tools/preview.py --status` 检查服务与首页，启动日志位于 `.tooling/preview-8080.log`。使用完整的 `http://` 地址；本机预览和上面的正式网站是两个入口，浏览器中的个人记录也分别存储。
 
 之芯是整理课程、记录笔记与连接知识的个人学习网站，基于 Material for MkDocs，采用红黑渐变与深色阅读界面。
 
