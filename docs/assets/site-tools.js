@@ -44,11 +44,49 @@
  button('复制链接',async()=>{try{await navigator.clipboard.writeText(location.href);status.textContent='链接已复制';}catch{status.textContent='无法自动复制，请从地址栏复制链接。';}});
  tools.append(status);
  if(!special){
-  const key='study-garden-reading-position',positions=read(key,{}),saved=positions[location.pathname];let scheduled=false,timer;
+  const key='study-garden-reading-position';let scheduled=false,timer,dirty=false,pending=0,resume;
+  const positionStatus=document.createElement('span');positionStatus.className='site-tools-status';positionStatus.setAttribute('role','status');tools.append(positionStatus);
+  function positions(){
+   try{
+    const raw=localStorage.getItem(key);if(raw===null)return {};
+    if(raw.length>200000)throw new Error();const value=JSON.parse(raw);
+    if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).length>200)throw new Error();
+    for(const [path,amount]of Object.entries(value)){const u=internal(path);if(!u||u.pathname!==path||!Number.isFinite(amount)||amount<0||amount>1)throw new Error();}
+    return value;
+   }catch{positionStatus.textContent='阅读位置暂时无法读取，已保留原记录并停止覆盖；其他阅读工具仍可使用。';return null;}
+  }
   const progress=document.createElement('div');progress.className='site-reading-progress';progress.setAttribute('aria-hidden','true');document.body.append(progress);
   const fraction=()=>Math.max(0,Math.min(1,scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight)));
-  if(!location.hash&&Number.isFinite(saved)&&saved>.03&&saved<.99){const resume=button('继续上次阅读',()=>{scrollTo({top:saved*Math.max(0,document.documentElement.scrollHeight-innerHeight),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});resume.remove();});}
-  addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(()=>{progress.style.transform='scaleX('+fraction()+')';scheduled=false;});}clearTimeout(timer);timer=setTimeout(()=>{const value={...positions,[location.pathname]:fraction()};write(key,Object.fromEntries(Object.entries(value).slice(-200)));},400);},{passive:true});
+  function updateResume(){
+   const value=positions(),saved=value?.[location.pathname];if(value)positionStatus.textContent='';
+   if(!value||location.hash||!Number.isFinite(saved)||saved<=.03||saved>=.99){resume?.remove();resume=null;return;}
+   positionStatus.textContent='';
+   if(!resume)resume=button('',()=>{
+    // Read again: another tab may have updated this article since the button appeared.
+    const latest=positions()?.[location.pathname];if(!Number.isFinite(latest)){updateResume();return;}
+    scrollTo({top:latest*Math.max(0,document.documentElement.scrollHeight-innerHeight),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});resume.remove();resume=null;
+   });
+   resume.textContent='继续上次阅读 · '+Math.round(saved*100)+'%';
+  }
+  function savePosition(){
+   clearTimeout(timer);if(!dirty)return;
+   const latest=positions();if(!latest)return;
+   if(latest[location.pathname]===pending){dirty=false;positionStatus.textContent='';return;}
+   // Merge into the current record, not the snapshot taken when the page loaded.
+   const entries=Object.entries(latest).filter(([path])=>path!==location.pathname);entries.push([location.pathname,pending]);
+   if(write(key,Object.fromEntries(entries.slice(-200)))){dirty=false;positionStatus.textContent='';}
+   else positionStatus.textContent='阅读位置未能保存，请检查浏览器存储；原记录保持不变。';
+  }
+  updateResume();
+  addEventListener('scroll',()=>{
+   if(!scheduled){scheduled=true;requestAnimationFrame(()=>{progress.style.transform='scaleX('+fraction()+')';scheduled=false;});}
+   if(document.hidden||document.documentElement.scrollHeight<=innerHeight)return;
+   pending=fraction();dirty=true;clearTimeout(timer);timer=setTimeout(savePosition,400);
+  },{passive:true});
+  // Keep the last scroll sample: browsers may reset scrollY while leaving a page.
+  addEventListener('pagehide',savePosition);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)savePosition();else if(!dirty)updateResume();});
+  addEventListener('storage',event=>{if((event.key===key||event.key===null)&&!dirty)updateResume();});
  }
  // Only warm links the user indicates; never scan or download the entire site.
  const prefetched=new Set();let warmTimer;
