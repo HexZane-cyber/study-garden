@@ -85,6 +85,11 @@ class PreviewTests(unittest.TestCase):
         self.assertEqual(self.run_preview('--background').returncode, 0)
         self.assertEqual(state.read_text(encoding='utf-8'), original, 'repeat launch must reuse the same server and token')
         self.assertEqual(self.run_preview('--status').returncode, 0)
+        report = self.run_preview('--diagnose')
+        self.assertEqual(report.returncode, 0)
+        self.assertIn('可以访问', report.stdout)
+        self.assertNotIn(json.loads(original)['token'], report.stdout)
+        self.assertEqual(state.read_text(encoding='utf-8'), original)
         self.fetch('?private-search=not-for-logs')
         log = (self.root / '.tooling' / f'preview-{self.port}.log').read_text(encoding='utf-8')
         self.assertNotIn('not-for-logs', log)
@@ -116,6 +121,9 @@ class PreviewTests(unittest.TestCase):
                 self.end_headers()
                 self.wfile.write(b'{"app":"another-application"}')
         with self.fake_server(Foreign):
+            report = self.run_preview('--diagnose')
+            self.assertNotEqual(report.returncode, 0)
+            self.assertIn('未识别为本项目服务', report.stdout)
             self.assertNotEqual(self.run_preview('--background').returncode, 0)
             self.assertNotEqual(self.run_preview('--stop').returncode, 0)
             self.assertEqual(self.fetch()[0], 200)
@@ -129,7 +137,16 @@ class PreviewTests(unittest.TestCase):
         self.assertFalse((self.root / '.tooling').exists())
 
     def test_status_is_read_only_and_port_is_validated(self):
+        report = self.run_preview('--diagnose')
+        self.assertNotEqual(report.returncode, 0)
+        self.assertIn('页面已构建，服务未运行', report.stdout)
+        self.assertFalse((self.root / '.tooling').exists())
+        (self.root / 'site/index.html').unlink()
+        report = self.run_preview('--diagnose')
+        self.assertIn('尚未构建页面', report.stdout)
+        self.assertFalse((self.root / '.tooling').exists())
         self.assertNotEqual(self.run_preview('--status').returncode, 0)
+
         self.assertFalse((self.root / '.tooling').exists())
         self.assertEqual(self.run_preview('--port', '0').returncode, 2)
         self.assertEqual(self.run_preview('--background', '--stop').returncode, 2)

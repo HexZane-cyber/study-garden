@@ -191,6 +191,29 @@ def serve(port, no_open):
     return 0
 
 
+def diagnose(port):
+    """Read-only local checks; never start, rebuild, stop, or inspect personal records."""
+    built = (ROOT / 'site/index.html').is_file()
+    existing = running(port)
+    if existing and page_ready(port):
+        label, advice = '可以访问', '请在浏览器中打开上面的完整 http:// 地址。若只有某个浏览器打不开，可先用另一个浏览器核对。'
+        code = 0
+    elif existing:
+        label, advice = '服务存在，但首页未就绪', '在项目目录运行 python build.py，确认构建成功后刷新页面。'
+        code = 1
+    elif port_busy(port):
+        label, advice = '端口有响应，但未识别为本项目服务', '先检查占用端口的程序；本工具不会结束它，也不会自动更换端口。'
+        code = 1
+    elif not built:
+        label, advice = '尚未构建页面，服务未运行', '双击 start-preview.cmd 尝试构建并启动；失败时查看启动窗口的依赖或构建错误。'
+        code = 1
+    else:
+        label, advice = '页面已构建，服务未运行', '双击 start-preview.cmd，等待首页就绪后打开浏览器。'
+        code = 1
+    print(f'之芯本机访问检查\n地址：{address(port)}\n结果：{label}\n下一步：{advice}\n正式网站：{PUBLIC_URL}\n本检查不会更改服务、网络设置或浏览器个人资料。', flush=True)
+    return code
+
+
 def main():
     parser = argparse.ArgumentParser(description='之芯本机预览，只监听 127.0.0.1。')
     parser.add_argument('--port', type=int, default=8080)
@@ -199,10 +222,13 @@ def main():
     mode.add_argument('--background', action='store_true', help='启动独立后台预览，检查就绪后打开浏览器')
     mode.add_argument('--stop', action='store_true', help='只停止本项目可验证的预览服务')
     mode.add_argument('--status', action='store_true', help='检查预览身份和首页响应，不启动服务')
+    mode.add_argument('--diagnose', action='store_true', help='只读检查本机访问，显示原因和下一步')
     args = parser.parse_args()
     if not 1 <= args.port <= 65535:
         parser.error('端口需要在 1–65535 之间')
     try:
+        if args.diagnose:
+            return diagnose(args.port)
         if args.stop:
             return stop(args.port)
         existing = running(args.port)

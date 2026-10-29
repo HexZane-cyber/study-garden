@@ -10,7 +10,7 @@
  if(['127.0.0.1','localhost','[::1]'].includes(location.hostname)){
   const help=document.createElement('details');help.className='site-local-help';
   const summary=document.createElement('summary');summary.textContent='本机预览 · 连接与启动帮助';help.append(summary);
-  const text=document.createElement('p');text.textContent='当前地址：'+location.origin+'。这份预览需要电脑上的服务保持运行；无法连接时，在项目文件夹双击 start-preview.cmd。重启电脑后需重新启动，停止服务请用 stop-preview.cmd。';
+  const text=document.createElement('p');text.textContent='当前地址：'+location.origin+'。这份预览需要电脑上的服务保持运行；无法连接时，在项目文件夹双击 start-preview.cmd。重启电脑后需重新启动，停止服务请用 stop-preview.cmd。仍打不开时，双击 check-preview.cmd 查看检查结果和下一步。';
   const note=document.createElement('p');note.textContent='本机预览与正式网站的个人记录分别保存在浏览器中，不会自动同步。切换地址后看不到记录，请先返回原地址；不要清除浏览器数据。';
   const link=document.createElement('a');link.href='https://hexzane-cyber.github.io/study-garden/';link.target='_blank';link.rel='noopener noreferrer';link.textContent='在新标签页打开正式网站 ↗';help.append(text,note,link);tools.after(help);
  }
