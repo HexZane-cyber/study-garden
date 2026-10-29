@@ -21,3 +21,12 @@ const newer={...P.blank(),tasks:[{id:'same',title:'本机更新的任务',date:P
 const older={...P.blank(),tasks:[{id:'same',title:'旧备份里的任务',date:P.day(),course:'python',done:false}],sessions:[{id:'session-same',date:P.day(),minutes:5,course:'python'}]};
 const preserved=P.merge(newer,P.backup(older),['python']);assert.equal(preserved.tasks[0].title,'本机更新的任务');assert(preserved.tasks[0].done);assert.equal(preserved.sessions[0].minutes,25);assert.equal(preserved.timer.id,'running');
 const fullSessions={...P.blank(),sessions:Array.from({length:2000},(_,i)=>({id:'full-'+i,date:P.day(),minutes:1,course:''}))};assert.throws(()=>P.merge(fullSessions,P.backup({...P.blank(),sessions:[{id:'extra',date:P.day(),minutes:1,course:''}]}),[]),/2000/);assert.equal(fullSessions.sessions.length,2000);
+
+{
+ const source={...taskState,timer:{id:'secret-timer',elapsed:0,started:1,course:'python'},sessions:[{id:'private-session',date:'2026-10-24',minutes:20,course:'python'}]},before=JSON.stringify(source);
+ const report=P.taskMarkdown(source,{filter:'all',course:'python',query:'read',today:'2026-10-24'},[{id:'python',title:'Python 课程'}]);
+ assert.equal(report.count,2);assert(report.text.includes('- [x] Read tests'));assert(report.text.includes('- [ ] Read Python'));assert(!report.text.includes('Read C'));assert(report.text.includes('Python 课程'));assert(!report.text.includes('secret-timer'));assert(!report.text.includes('private-session'));assert.equal(JSON.stringify(source),before);
+ const hostile=P.taskMarkdown({...P.blank(),tasks:[{id:'a',title:'[[链接]]\n<script> & [click](javascript:x)',date:'2026-10-29',course:'',done:false}]},{filter:'all'}).text;assert(!hostile.includes('<script>'));assert(!hostile.includes('[[链接]]'));assert(!hostile.includes('\n<script>'));assert(hostile.includes('\\['));assert.equal(P.taskMarkdown(P.blank()).count,0);
+ const many={...P.blank(),tasks:Array.from({length:120},(_,i)=>({id:String(i),title:'任务'+i,date:'2026-10-29',course:'',done:false}))};assert.equal(P.taskMarkdown(many).count,120);assert.equal(P.taskMarkdown(many).text.match(/^- \[ \]/gm).length,120);
+ console.log('Task Markdown passed: filters, checkbox/date/course output, all matching pages, escaping, empty state and no state mutation or focus-record leakage.');
+}

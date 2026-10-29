@@ -608,3 +608,6 @@ node tests/local-ai.test.cjs
 
 
 本机访问检查：在项目文件夹双击 `check-preview.cmd`，窗口会保留检查结果，区分服务未启动、尚未构建、端口未识别和首页可访问，并给出下一步。也可运行 `python tools/preview.py --diagnose`。检查不会启动或停止服务，不更改代理、防火墙或浏览器数据；它只能验证本机 HTTP 响应，不能替代对具体浏览器的实际检查。
+
+
+任务清单导出：`StudyPlanner.taskMarkdown` 复用 `tasksFor` 的筛选与排序，输出全部匹配任务的 Markdown 快照，不受 UI 分页限制。文本先合并换行并转义 Markdown/HTML 特殊字符，避免任务名称变成可执行内容或 Obsidian 内链。界面点击后先读取最新工作台；空结果和不可读记录不下载，失败不清空输入或改写记录。导出不包含草稿、计时器、专注会话或私密资料，文件中的勾选不回写网站。修改后运行 planner 模型、navigation UI 和相关工作台回归。
