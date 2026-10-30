@@ -619,3 +619,6 @@ node tests/local-ai.test.cjs
 
 
 收尾转复习卡：`reflectionReviewDraft` 只投影已保存的 learned，生成受限长度问题和已关联课程的站内路径；卡点、下一步、计时及其他会话不进入草稿。工作台明确点击后重读最新会话，使用现有 ReviewModel.DRAFT 会话暂存键；待处理草稿、未保存收尾或任务草稿会阻止跳转，存储失败或原记录删除也不跳转。临时 kind=reflection 仅用于复习页显示核对提示，不持久化到卡片。复习页仍需明确保存才创建卡片；使用现有复习调度，不自动评级。修改后核对 planner-focus 模型与UI、review-integration 和旧摘录行为。
+
+
+学习记录导出：`StudyPlanner.sessionMarkdown` 复用 `sessionHistory` 的 7/30/0 日期范围和课程筛选，输出全部匹配会话及分钟总数，不依赖界面已显示的 5 条记录。收尾按行转义并保留换行；运行中计时、任务列表和编辑草稿不进入文件。点击导出先读取最新工作台，不写入存储；空结果、损坏记录和下载失败均保留现有数据。文件是明文快照，不能代替 JSON 恢复备份，Obsidian 编辑不回写网站。修改后运行 planner、planner-focus 模型与 UI、导航和备份回归。

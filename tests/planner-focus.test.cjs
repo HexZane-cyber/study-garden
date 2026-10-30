@@ -38,3 +38,11 @@ console.log('Task focus model passed: explicit starts, stale/completed/deleted t
  assert.equal(P.reflectionReviewDraft(session,{id:'python',url:'https://other.example/'}).source,'dashboard/');assert.equal(P.reflectionReviewDraft(session,{id:'other',url:'courses/python/'}).source,'dashboard/');assert.throws(()=>P.reflectionReviewDraft({...session,reflection:{...session.reflection,learned:'  '}}));
  console.log('Reflection review draft passed: bounded question, saved learning only, safe source and no blocker/task leakage.');
 }
+
+{
+ const reflection={learned:'第一行\n第二行 <script>',blocker:'还没理解 [[链接]]',next:'下一次练习'},state={...P.blank(),timer:{id:'not-exported',elapsed:500,started:now,course:'python'},tasks:[{id:'private-task',title:'不包含的待办',date:today,course:'',done:false}],sessions:[{id:'a',date:today,minutes:25,course:'python',taskTitle:'学习Python',reflection},{id:'b',date:P.shiftDay(today,-20),minutes:15,course:'python'},{id:'c',date:today,minutes:10,course:'ee-circuits'},{id:'future',date:P.shiftDay(today,1),minutes:10,course:'python'}]},before=JSON.stringify(state),courses=[{id:'python',title:'Python'}];
+ const report=P.sessionMarkdown(state,{course:'python',days:7,now},courses);assert.equal(report.count,1);assert.equal(report.minutes,25);assert(report.text.includes('> 第一行\n> 第二行'));assert(!report.text.includes('<script>'));assert(!report.text.includes('[[链接]]'));assert(!report.text.includes('not-exported'));assert(!report.text.includes('不包含的待办'));assert(report.text.includes('已写学习收尾：1 次'));assert.equal(JSON.stringify(state),before);
+ assert.equal(P.sessionMarkdown(state,{course:'python',days:30,now},courses).count,2);assert.equal(P.sessionMarkdown(state,{days:0,now},courses).minutes,50);assert.equal(P.sessionMarkdown(P.blank(),{now}).count,0);assert.throws(()=>P.sessionMarkdown(state,{days:3,now}));
+ const many={...P.blank(),sessions:Array.from({length:8},(_,i)=>({id:String(i),date:today,minutes:1,course:''}))};assert.equal(P.sessionMarkdown(many,{now}).text.match(/^## /gm).length,8);
+ console.log('Learning-record Markdown passed: course/date scope, accurate totals, multiline escaped reflections, future/timer/task exclusion and all matching records.');
+}

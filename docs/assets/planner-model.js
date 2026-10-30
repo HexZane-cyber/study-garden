@@ -40,8 +40,15 @@
  function shiftDay(date,offset){if(!validDay(date)||!Number.isInteger(offset))throw Error('日期无效');const d=new Date(date+'T12:00:00');d.setDate(d.getDate()+offset);return day(d.getTime());}
  function tasksFor(state,{filter='open',query='',course='',order='date',today=day()}={}){const q=query.trim().toLowerCase();return state.tasks.filter(t=>(filter==='all'||(filter==='done'?t.done:!t.done&&(filter==='today'?t.date===today:filter==='overdue'?t.date<today:filter==='future'?t.date>today:true)))&&(!course||t.course===course)&&(!q||t.title.toLowerCase().includes(q))).sort(order==='date'?(a,b)=>a.date.localeCompare(b.date):()=>0);}
 
+ const markdownText=value=>String(value??'').replace(/[\u0000-\u001f\u007f\s]+/g,' ').trim().replace(/[\\`*_{}\[\]<>()#!|~]/g,'\\$&');
+ function sessionMarkdown(state,{course='',days=7,now=Date.now()}={},courses=[]){
+  const report=sessionHistory(state,course,now,days),names=new Map(courses.map(c=>[c.id,c.title])),reflected=report.sessions.filter(s=>s.reflection&&Object.values(s.reflection).some(v=>v.trim())).length;
+  const lines=['# 之芯学习记录','',report.from?'日期范围：'+report.from+' 至 '+report.to:'日期范围：截至 '+report.to+' 的全部已记录日期','课程范围：'+markdownText(course?(names.get(course)||course):'全部课程'),'已结束专注：'+report.sessions.length+' 次，共 '+report.minutes+' 分钟','已写学习收尾：'+reflected+' 次','','本文件是已保存记录的快照，不含正在计时或未保存的编辑；在 Obsidian 中修改不会自动同步回网站。',''];
+  for(const session of report.sessions){lines.push('## '+session.date+' · '+markdownText(session.taskTitle||'自主专注'),'','课程：'+markdownText(names.get(session.course)||'未关联课程')+'；专注：'+session.minutes+' 分钟','');let hasText=false;for(const [key,label]of [['learned','这次学会'],['blocker','仍有疑问'],['next','下次先做']]){const value=session.reflection?.[key];if(!value?.trim())continue;hasText=true;lines.push('**'+label+'**','',...value.split(/\r\n?|\n/).map(line=>'> '+markdownText(line)),'');}if(!hasText)lines.push('未记录学习收尾。','');}
+  return {count:report.sessions.length,minutes:report.minutes,text:lines.join('\n')+'\n'};
+ }
  function taskMarkdown(state,options={},courses=[]){
-  const escape=value=>String(value??'').replace(/[\u0000-\u001f\u007f\s]+/g,' ').trim().replace(/[\\`*_{}\[\]<>()#!|~]/g,'\\$&');
+  const escape=markdownText;
   const rows=tasksFor(state,options),names=new Map(courses.map(c=>[c.id,c.title])),labels={open:'待办',today:'今天',overdue:'已逾期',future:'以后',done:'已完成',all:'全部'};
   const lines=['# 之芯学习任务','','导出日期：'+escape(options.today||day()),'范围：'+(labels[options.filter||'open']||'待办')+' · '+(options.course?escape(names.get(options.course)||options.course):'全部课程'),'搜索：'+(options.query?.trim()?escape(options.query):'未限定'),'排序：'+(options.order==='added'?'按添加顺序':'按计划日期'),'任务数：'+rows.length,'','这是当前筛选结果的本地快照；修改此文件不会自动同步回网站。',''];
   for(const task of rows){lines.push('- ['+(task.done?'x':' ')+'] '+escape(task.title));lines.push('  - 计划日期：'+escape(task.date)+'；课程：'+escape(names.get(task.course)||'未关联课程'));}
@@ -56,5 +63,5 @@
  function matchingOpenTask(state,draft){return state.tasks.find(task=>!task.done&&task.date===draft.date&&(validExercise(draft.exercise)?task.exercise===draft.exercise:task.course===draft.course&&task.title.trim()===draft.title.trim()))||null;}
  function exerciseDraft(question,date=day()){if(!question||!validExercise(question.id)||typeof question.title!=='string'||!question.title.trim()||typeof question.course!=='string'||!validDay(date))throw Error('习题任务参数无效');return {title:((question.kind==='explain'?'自查解释 · ':'重做练习 · ')+question.title).slice(0,120),date,course:question.course,exercise:question.id};}
  function exerciseRequest(search,questions,date=day()){if(typeof search!=='string'||search.length>1024)return null;const params=new URLSearchParams(search);if(params.getAll('exercise').length!==1)return null;const question=questions.find(q=>q.id===params.get('exercise'));return question?exerciseDraft(question,date):null;}
- return {KEY,MAX,reflectionInfo,reflectionReviewDraft,saveReflection,day,blank,clean,load,save,elapsed,toggleTimer,startTask,sessionHistory,removeSession,restoreSession,finish,addTask,updateTask,shiftDay,tasksFor,taskMarkdown,week,backup,merge,activities,courseDraft,courseRequest,matchingOpenTask,exerciseDraft,exerciseRequest,validExercise};
+ return {KEY,MAX,reflectionInfo,reflectionReviewDraft,saveReflection,day,blank,clean,load,save,elapsed,toggleTimer,startTask,sessionHistory,sessionMarkdown,removeSession,restoreSession,finish,addTask,updateTask,shiftDay,tasksFor,taskMarkdown,week,backup,merge,activities,courseDraft,courseRequest,matchingOpenTask,exerciseDraft,exerciseRequest,validExercise};
 });
