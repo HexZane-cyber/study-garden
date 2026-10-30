@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="180" viewBox="0 0 900 180" role="img" aria-labelledby="title desc">
+  <title id="title">从问题到验证的学习流程</title>
+  <desc id="desc">明确问题，再记录推导，最后验证结论。</desc>
+  <rect width="900" height="180" rx="20" fill="#eef4ff"/>
+  <g fill="#ffffff" stroke="#5367a0" stroke-width="2">
+    <rect x="30" y="50" width="230" height="80" rx="12"/>
+    <rect x="335" y="50" width="230" height="80" rx="12"/>
+    <rect x="640" y="50" width="230" height="80" rx="12"/>
+  </g>
+  <g stroke="#5367a0" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M275 90H320M310 80L320 90L310 100"/>
+    <path d="M580 90H625M615 80L625 90L615 100"/>
+  </g>
+  <g fill="#253253" font-family="system-ui, sans-serif" font-size="27" text-anchor="middle">
+    <text x="145" y="100">明确问题</text>
+    <text x="450" y="100">记录推导</text>
+    <text x="755" y="100">验证结论</text>
+  </g>
+</svg>

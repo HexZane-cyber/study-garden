@@ -9,6 +9,8 @@ comments: false
 
 最容易上手的方法是：**在 GitHub 修改 Markdown 文件，提交后等待网站部署完成。** 如果只是改几句话，直接从第二节开始；新增笔记看第三节；新增正式课程看第六节。
 
+想直接动手，可以先用文末的“可下载模板与完整练习”。模板文件单独保存，不会自动发布成你的笔记。
+
 ## 1. 先找到要改的文件
 
 [正式网站](https://hexzane-cyber.github.io/study-garden/)是阅读入口，[GitHub 仓库](https://github.com/HexZane-cyber/study-garden)保存公开内容的源文件。下表路径都从仓库根目录开始。
@@ -272,3 +274,48 @@ python -m venv .venv
 - 等对应提交部署成功，再打开正式页面查看文字、图片和手机宽度下的排版。
 
 第一次建议只改首页的一句话，走完“编辑 → 提交 → 部署 → 正式站核对”。完成这一次后，日常改文字和链接就是同一套操作。
+
+## 11. 可下载模板与完整练习
+
+### 选择模板
+
+| 文件 | 适合做什么 | 使用位置 |
+| --- | --- | --- |
+| [下载笔记模板](assets/content-templates/note.md.txt){ download="my-study-note.md" } | 写一篇带图片、例题和复盘的学习笔记 | 改好后放入 `docs/notes/` |
+| [下载课程正文模板](assets/content-templates/course.md.txt){ download="my-course.md" } | 为一门课写先修、重点、资源和自查 | 改好后放入 `docs/courses/`，并完成第六节的数据注册和导航 |
+| [下载资源条目模板](assets/content-templates/resource.md.txt){ download="resource-entry.md" } | 补充一个课程、讲义或作业入口 | 复制填写后的段落到对应资源汇总页 |
+| [下载示例配图](assets/content-templates/study-flow.svg){ download="study-flow.svg" } | 练习上传附件和引用图片 | 放入 `docs/attachments/` |
+
+模板下载使用普通静态文件，不读取你的笔记。若浏览器直接展示文字，可右键链接“另存为”，或复制内容到文本编辑器。保存时选择 UTF-8，检查文件最终扩展名是 `.md`，不是 `.md.txt`；Windows 可在资源管理器开启“文件扩展名”显示。
+
+模板中的“填写……”是操作提示，发布前换成自己的内容或删去。课程模板只生成正文，不会单独创建目录卡片；资源条目也不会自动变成课程。
+
+### 跟做一次：新增带图的学习笔记
+
+下面用 `my-study-note.md` 演示；如果你已经使用这个文件名，换一个新名称，避免覆盖旧文章。
+
+1. 下载“笔记模板”和“示例配图”，把笔记保存为 `my-study-note.md`，图片保留为 `study-flow.svg`。
+2. 用文本编辑器打开笔记，将一级标题改成自己的标题，填写问题、过程和结论。先保留模板中的图片行，体验相对路径怎样工作。
+3. 在 GitHub 仓库的分支选择器中，从 `main` 创建一个内容分支，例如 `notes/my-study-note`。下面几次上传都选择这个分支，最后一起合并，避免正式站暂时缺少附件。
+4. 在该分支的 `docs/notes/` 目录选择 **Add file → Upload files**，上传 `my-study-note.md` 并提交。
+5. 在同一分支的 `docs/` 目录上传本地准备好的 `attachments` 文件夹，里面放 `study-flow.svg`。提交前确认页面显示的最终路径是 `docs/attachments/study-flow.svg`。如果目标目录已经存在，也可以直接进入其中上传图片。
+6. 再打开笔记，确认图片行是 `![从问题到验证的学习流程](../attachments/study-flow.svg)`。如果换了自己的图片名称或格式，这里也要同步修改。
+7. 创建从该分支到 `main` 的 Pull Request。在 **Files changed** 检查修改范围：本次练习应只有新笔记和示例图，不应包含整个项目副本或私人库。按仓库权限与检查要求合并。
+8. 合并后等待 **Deploy Study Garden** 成功，打开正式站的“我的笔记”找到新标题，再打开 `https://hexzane-cyber.github.io/study-garden/notes/my-study-note/` 验证正文和图片。如果文件另取了名字，网址也要使用对应名称。
+
+这次练习中，文件应对应为：
+
+```text
+study-garden/
+└─ docs/
+   ├─ notes/
+   │  └─ my-study-note.md
+   └─ attachments/
+      └─ study-flow.svg
+```
+
+**完成后检查三件事：** 新笔记出现在“我的笔记”，文章能显示配图，相关课程链接能打开。笔记标题负责页面显示，文件名决定网址，因此修改显示标题通常不需要改文件名。
+
+### 以后更新这篇笔记
+
+回到 `docs/notes/my-study-note.md` 编辑并提交即可，不必删除后重新上传。补一张新图片时，先上传附件，再在正文中引用；换掉图片名称则同步修改路径。只修改这些源文件，不手动修改 `site/` 或 `graph-data.json`。
