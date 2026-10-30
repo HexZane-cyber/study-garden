@@ -138,6 +138,74 @@
       ]
     },
     {
+      "id": "content-editing.md",
+      "title": "之芯内容修改操作手册",
+      "group": "guide",
+      "url": "content-editing/",
+      "sections": [
+        {
+          "id": "1",
+          "title": "1. 先找到要改的文件",
+          "level": 2
+        },
+        {
+          "id": "2",
+          "title": "2. 第一次操作：修改现有文章的一句话",
+          "level": 2
+        },
+        {
+          "id": "3",
+          "title": "3. 新增一篇自己的笔记",
+          "level": 2
+        },
+        {
+          "id": "4-pdf",
+          "title": "4. 插入图片、PDF 和其他附件",
+          "level": 2
+        },
+        {
+          "id": "5-obsidian",
+          "title": "5. 常用写作语法，以及 Obsidian 笔记怎么搬过来",
+          "level": 2
+        },
+        {
+          "id": "6",
+          "title": "6. 修改课程，或添加一门正式课程",
+          "level": 2
+        },
+        {
+          "id": "_2",
+          "title": "修改现有课程",
+          "level": 3
+        },
+        {
+          "id": "_3",
+          "title": "新增正式课程",
+          "level": 3
+        },
+        {
+          "id": "7",
+          "title": "7. 更改左侧目录，以及文章里的章节目录",
+          "level": 2
+        },
+        {
+          "id": "8",
+          "title": "8. 在自己电脑上编辑和预览",
+          "level": 2
+        },
+        {
+          "id": "9",
+          "title": "9. 发布没成功，或发现改错了",
+          "level": 2
+        },
+        {
+          "id": "10",
+          "title": "10. 每次修改的收尾检查",
+          "level": 2
+        }
+      ]
+    },
+    {
       "id": "contribute.md",
       "title": "共建课程",
       "group": "guide",
@@ -3704,6 +3772,10 @@
     {
       "source": "communications-roadmap.md",
       "target": "university-courses.md"
+    },
+    {
+      "source": "content-editing.md",
+      "target": "editor-manual.md"
     },
     {
       "source": "contribute.md",
