@@ -56,5 +56,5 @@
  addEventListener('storage',event=>{if(event.key===R.KEY||event.key===null){if(read())render();}});
  document.addEventListener('visibilitychange',()=>{clearTimeout(wake);if(!document.hidden&&read())render();});addEventListener('pagehide',()=>clearTimeout(wake));
  read();render();
- try{const draft=JSON.parse(sessionStorage.getItem(R.DRAFT)||'null');if(draft&&typeof draft.question==='string'&&typeof draft.answer==='string'){question.value=draft.question.slice(0,300);answer.value=draft.answer.slice(0,4000);sourcePath=R.source(draft.source);showEditorSource();syncEditorState();status.textContent='文章摘录已带入草稿，补充问题后点击保存；尚未创建卡片。';sessionStorage.removeItem(R.DRAFT);}}catch{}
+ try{const draft=JSON.parse(sessionStorage.getItem(R.DRAFT)||'null');if(draft&&typeof draft.question==='string'&&typeof draft.answer==='string'){question.value=draft.question.slice(0,300);answer.value=draft.answer.slice(0,4000);sourcePath=R.source(draft.source);showEditorSource();syncEditorState();status.textContent=draft.kind==='reflection'?'学习收尾已带入草稿，请核对总结、把问题改得具体，再点击保存；尚未创建卡片。':'文章摘录已带入草稿，补充问题后点击保存；尚未创建卡片。';sessionStorage.removeItem(R.DRAFT);}}catch{}
 })();

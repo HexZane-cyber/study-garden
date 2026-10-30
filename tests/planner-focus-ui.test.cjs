@@ -42,3 +42,15 @@ console.log('Task focus UI passed: read-only history, safe task starts, pause/re
  open();next.value='新的下一步';next.dispatchEvent(new w.Event('input',{bubbles:true}));const stored=w.localStorage.getItem(P.KEY),original=w.Storage.prototype.setItem;w.Storage.prototype.setItem=function(){throw Error('quota');};d.querySelector('.study-reflection form').dispatchEvent(new w.Event('submit',{cancelable:true}));assert.equal(w.localStorage.getItem(P.KEY),stored);assert.equal(next.value,'新的下一步');assert(!d.querySelector('.study-reflection').hidden);w.Storage.prototype.setItem=original;t.dom.window.close();
  console.log('Learning reflection UI passed: optional editor, literal text, save/leave guard, next-task draft only, concurrent conflict and failed-save preservation.');
 }
+
+{
+ const session={id:'card-source',date:P.day(now),minutes:25,course:'ee-circuits',reflection:{learned:'旧收获',blocker:'卡点不混入答案',next:'继续练习'}};
+ const t=setup({...P.blank(),sessions:[session]}),{w,d}=t,key='zhixin-review-draft-v1';const a=d.querySelector('[aria-label="用收获创建复习卡草稿 card-source"]');assert(a.href.endsWith('/review/'));assert.equal(w.sessionStorage.getItem(key),null);let blocked;
+ d.addEventListener('click',e=>{if(e.target===a){blocked=e.defaultPrevented;e.preventDefault();}});
+ let latest=read(w);latest.sessions[0].reflection.learned='别的页面更新的收获';w.localStorage.setItem(P.KEY,JSON.stringify(latest));const before=w.localStorage.getItem(P.KEY);a.click();assert(!blocked);let draft=JSON.parse(w.sessionStorage.getItem(key));assert.equal(draft.answer,'别的页面更新的收获');assert.equal(draft.source,'courses/ee-circuits/');assert.equal(w.localStorage.getItem(P.KEY),before);assert.equal(w.localStorage.getItem('zhixin-review-v1'),null);
+ const pending=w.sessionStorage.getItem(key);a.click();assert(blocked);assert.equal(w.sessionStorage.getItem(key),pending);w.sessionStorage.removeItem(key);
+ d.querySelector('[aria-label="记录学习收尾 card-source"]').click();const editing=d.querySelector('[aria-label="这次学会了什么"]');editing.value='尚未保存';editing.dispatchEvent(new w.Event('input',{bubbles:true}));a.click();assert(blocked);assert.equal(w.sessionStorage.getItem(key),null);button(d,'放弃本次编辑').click();const taskDraft=d.querySelector('[aria-label="新任务"]');taskDraft.value='未提交的待办';a.click();assert(blocked);assert.equal(w.sessionStorage.getItem(key),null);taskDraft.value='';
+ const set=w.Storage.prototype.setItem;w.Storage.prototype.setItem=function(k,v){if(k===key)throw Error('quota');return set.call(this,k,v);};a.click();assert(blocked);assert.equal(w.sessionStorage.getItem(key),null);w.Storage.prototype.setItem=set;
+ latest=read(w);latest.sessions=[];w.localStorage.setItem(P.KEY,JSON.stringify(latest));a.click();assert(blocked);assert.equal(w.sessionStorage.getItem(key),null);t.dom.window.close();
+ console.log('Reflection-to-review UI passed: explicit handoff, latest saved content, existing-draft protection, failure/deletion refusal and unchanged task/card records.');
+}

@@ -9,6 +9,11 @@
   if(!r||typeof r!=='object'||Array.isArray(r)||Object.keys(r).some(k=>!['learned','blocker','next'].includes(k)))throw Error('学习收尾格式不正确，已保留原始数据');
   const result={};for(const [key,max]of [['learned',400],['blocker',400],['next',120]]){if(typeof r[key]!=='string'||r[key].length>max)throw Error('学习收尾文字格式不正确，已保留原始数据');result[key]=r[key];}return {reflection:result};
  }
+ function reflectionReviewDraft(session,course){
+  const learned=reflectionInfo(session).reflection?.learned.trim();if(!learned)throw Error('请先保存这次学会的内容，再创建复习卡草稿。');
+  const matched=course&&course.id===session.course,topic=String(session.taskTitle||(matched?course.title:'这次学习')).replace(/\s+/g,' ').trim().slice(0,200);
+  return {kind:'reflection',question:'不看笔记，解释「'+topic+'」的核心结论，并举一个例子。',answer:learned,source:matched&&typeof course.url==='string'&&/^[a-z0-9][a-z0-9/_-]*\/$/i.test(course.url)?course.url:'dashboard/'};
+ }
  function saveReflection(state,expected,reflection){
   const current=state.sessions.find(s=>s.id===expected.id);if(!current)throw Error('这次专注记录已删除，收尾草稿仍保留。');
   if(['date','minutes','course','taskId','taskTitle'].some(k=>current[k]!==expected[k])||JSON.stringify(reflectionInfo(current))!==JSON.stringify(reflectionInfo(expected)))throw Error('这次记录已在其他页面修改，请保留草稿后重新打开。');
@@ -51,5 +56,5 @@
  function matchingOpenTask(state,draft){return state.tasks.find(task=>!task.done&&task.date===draft.date&&(validExercise(draft.exercise)?task.exercise===draft.exercise:task.course===draft.course&&task.title.trim()===draft.title.trim()))||null;}
  function exerciseDraft(question,date=day()){if(!question||!validExercise(question.id)||typeof question.title!=='string'||!question.title.trim()||typeof question.course!=='string'||!validDay(date))throw Error('习题任务参数无效');return {title:((question.kind==='explain'?'自查解释 · ':'重做练习 · ')+question.title).slice(0,120),date,course:question.course,exercise:question.id};}
  function exerciseRequest(search,questions,date=day()){if(typeof search!=='string'||search.length>1024)return null;const params=new URLSearchParams(search);if(params.getAll('exercise').length!==1)return null;const question=questions.find(q=>q.id===params.get('exercise'));return question?exerciseDraft(question,date):null;}
- return {KEY,MAX,reflectionInfo,saveReflection,day,blank,clean,load,save,elapsed,toggleTimer,startTask,sessionHistory,removeSession,restoreSession,finish,addTask,updateTask,shiftDay,tasksFor,taskMarkdown,week,backup,merge,activities,courseDraft,courseRequest,matchingOpenTask,exerciseDraft,exerciseRequest,validExercise};
+ return {KEY,MAX,reflectionInfo,reflectionReviewDraft,saveReflection,day,blank,clean,load,save,elapsed,toggleTimer,startTask,sessionHistory,removeSession,restoreSession,finish,addTask,updateTask,shiftDay,tasksFor,taskMarkdown,week,backup,merge,activities,courseDraft,courseRequest,matchingOpenTask,exerciseDraft,exerciseRequest,validExercise};
 });

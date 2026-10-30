@@ -31,3 +31,10 @@ console.log('Task focus model passed: explicit starts, stale/completed/deleted t
  const full={...P.blank(),sessions:Array.from({length:1500},(_,i)=>({...session,id:'reflection-'+i,reflection:{learned:'中'.repeat(400),blocker:'文'.repeat(400),next:'下一步'}}))};const text=P.backup(full);assert(text.length>1024*1024);assert.equal(P.merge(P.blank(),text,['python']).sessions.length,1500);
  console.log('Learning reflection model passed: strict optional schema, legacy compatibility, unchanged timer, backup/undo preservation, conflict guards and large valid backups.');
 }
+
+{
+ const session={id:'reflection',course:'python',taskTitle:'理解函数',reflection:{learned:'函数把输入映射到输出',blocker:'尚未解决的问题',next:'下一步任务'}};
+ const draft=P.reflectionReviewDraft(session,{id:'python',title:'Python',url:'courses/python/'});assert.equal(draft.kind,'reflection');assert.equal(draft.source,'courses/python/');assert.equal(draft.answer,session.reflection.learned);assert(!JSON.stringify(draft).includes('尚未解决的问题'));assert(!JSON.stringify(draft).includes('下一步任务'));assert(draft.question.length<=300);
+ assert.equal(P.reflectionReviewDraft(session,{id:'python',url:'https://other.example/'}).source,'dashboard/');assert.equal(P.reflectionReviewDraft(session,{id:'other',url:'courses/python/'}).source,'dashboard/');assert.throws(()=>P.reflectionReviewDraft({...session,reflection:{...session.reflection,learned:'  '}}));
+ console.log('Reflection review draft passed: bounded question, saved learning only, safe source and no blocker/task leakage.');
+}
